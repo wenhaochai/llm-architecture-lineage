@@ -420,7 +420,11 @@
    "primary_parent": "gpt-2-xl-1-5b",
    "changes": [
     {
-     "field": "norm_type",
+     "field": "attention_kind",
+     "kind": "change"
+    },
+    {
+     "field": "position_encoding_type",
      "kind": "change"
     },
     {
@@ -428,11 +432,7 @@
      "kind": "change"
     },
     {
-     "field": "attention_kind",
-     "kind": "change"
-    },
-    {
-     "field": "position_encoding_type",
+     "field": "norm_type",
      "kind": "change"
     }
    ],
@@ -2280,14 +2280,6 @@
    "primary_parent": "olmo-2-7b",
    "changes": [
     {
-     "field": "activation",
-     "kind": "change"
-    },
-    {
-     "field": "attention_kind",
-     "kind": "change"
-    },
-    {
      "field": "local_global_ratio",
      "kind": "add"
     },
@@ -2300,8 +2292,16 @@
      "kind": "add"
     },
     {
+     "field": "attention_kind",
+     "kind": "change"
+    },
+    {
      "field": "rope_scaling",
      "kind": "add"
+    },
+    {
+     "field": "activation",
+     "kind": "change"
     }
    ],
    "scale_copy": false,
@@ -2561,12 +2561,8 @@
    "primary_parent": "llama-3-8b",
    "changes": [
     {
-     "field": "norm_extra_placement",
-     "kind": "add"
-    },
-    {
-     "field": "activation",
-     "kind": "drop"
+     "field": "sequence_mixer",
+     "kind": "change"
     },
     {
      "field": "attention_kind",
@@ -2581,8 +2577,12 @@
      "kind": "add"
     },
     {
-     "field": "sequence_mixer",
-     "kind": "change"
+     "field": "activation",
+     "kind": "drop"
+    },
+    {
+     "field": "norm_extra_placement",
+     "kind": "add"
     }
    ],
    "scale_copy": false,
@@ -3427,12 +3427,12 @@
    "primary_parent": "llama-4-maverick",
    "changes": [
     {
-     "field": "qk_norm",
-     "kind": "add"
-    },
-    {
      "field": "chunked_attention_size",
      "kind": "drop"
+    },
+    {
+     "field": "qk_norm",
+     "kind": "add"
     },
     {
      "field": "nope_layers",
@@ -6257,11 +6257,11 @@
    "primary_parent": "glm-4-5-air",
    "changes": [
     {
-     "field": "local_global_ratio",
+     "field": "layer_types",
      "kind": "add"
     },
     {
-     "field": "layer_types",
+     "field": "local_global_ratio",
      "kind": "add"
     },
     {
@@ -6834,12 +6834,12 @@
    "primary_parent": "gemma-3-27b",
    "changes": [
     {
-     "field": "attention_kind",
-     "kind": "change"
-    },
-    {
      "field": "layer_types",
      "kind": "add"
+    },
+    {
+     "field": "attention_kind",
+     "kind": "change"
     },
     {
      "field": "rope_scaling",
@@ -7103,10 +7103,6 @@
    "primary_parent": "llama-3-8b",
    "changes": [
     {
-     "field": "activation",
-     "kind": "drop"
-    },
-    {
      "field": "sliding_window",
      "kind": "add"
     },
@@ -7117,6 +7113,10 @@
     {
      "field": "rope_scaling_type",
      "kind": "add"
+    },
+    {
+     "field": "activation",
+     "kind": "drop"
     },
     {
      "field": "moe",
@@ -7403,10 +7403,6 @@
    "primary_parent": "qwen3-235b-a22b",
    "changes": [
     {
-     "field": "gated_attention",
-     "kind": "add"
-    },
-    {
      "field": "sequence_mixer",
      "kind": "change"
     },
@@ -7416,6 +7412,10 @@
     },
     {
      "field": "hybrid_attention_interval",
+     "kind": "add"
+    },
+    {
+     "field": "gated_attention",
      "kind": "add"
     },
     {
@@ -7714,11 +7714,11 @@
    "primary_parent": "qwen3-235b-a22b",
    "changes": [
     {
-     "field": "qk_norm_type",
+     "field": "layer_types",
      "kind": "add"
     },
     {
-     "field": "layer_types",
+     "field": "qk_norm_type",
      "kind": "add"
     },
     {
@@ -7984,12 +7984,12 @@
    "primary_parent": "olmo-2-7b",
    "changes": [
     {
-     "field": "qk_norm",
-     "kind": "drop"
-    },
-    {
      "field": "layer_types",
      "kind": "add"
+    },
+    {
+     "field": "qk_norm",
+     "kind": "drop"
     },
     {
      "field": "loop_passes",
@@ -8356,6 +8356,14 @@
    "primary_parent": "kimi-k2",
    "changes": [
     {
+     "field": "sequence_mixer",
+     "kind": "change"
+    },
+    {
+     "field": "mixer_attention_ratio",
+     "kind": "add"
+    },
+    {
      "field": "gated_attention",
      "kind": "add"
     },
@@ -8365,6 +8373,10 @@
     },
     {
      "field": "mla_nope",
+     "kind": "add"
+    },
+    {
+     "field": "linear_attention_config",
      "kind": "add"
     },
     {
@@ -8378,18 +8390,6 @@
     {
      "field": "router_topk_method",
      "kind": "change"
-    },
-    {
-     "field": "sequence_mixer",
-     "kind": "change"
-    },
-    {
-     "field": "mixer_attention_ratio",
-     "kind": "add"
-    },
-    {
-     "field": "linear_attention_config",
-     "kind": "add"
     }
    ],
    "scale_copy": false,
@@ -8644,11 +8644,11 @@
    "primary_parent": "qwen3-32b",
    "changes": [
     {
-     "field": "local_global_ratio",
+     "field": "layer_types",
      "kind": "add"
     },
     {
-     "field": "layer_types",
+     "field": "local_global_ratio",
      "kind": "add"
     },
     {
@@ -10105,11 +10105,7 @@
    "primary_parent": "glm-4-5-air",
    "changes": [
     {
-     "field": "activation",
-     "kind": "change"
-    },
-    {
-     "field": "attention_bias",
+     "field": "sequence_mixer",
      "kind": "change"
     },
     {
@@ -10117,24 +10113,12 @@
      "kind": "add"
     },
     {
-     "field": "position_encoding_type",
-     "kind": "drop"
-    },
-    {
-     "field": "nope_layers",
-     "kind": "add"
-    },
-    {
-     "field": "dense_prefix_layers",
-     "kind": "drop"
-    },
-    {
-     "field": "sequence_mixer",
-     "kind": "change"
-    },
-    {
      "field": "mixer_attention_ratio",
      "kind": "add"
+    },
+    {
+     "field": "attention_bias",
+     "kind": "change"
     },
     {
      "field": "conv_bias",
@@ -10151,6 +10135,22 @@
     {
      "field": "mamba_activation",
      "kind": "add"
+    },
+    {
+     "field": "position_encoding_type",
+     "kind": "drop"
+    },
+    {
+     "field": "nope_layers",
+     "kind": "add"
+    },
+    {
+     "field": "activation",
+     "kind": "change"
+    },
+    {
+     "field": "dense_prefix_layers",
+     "kind": "drop"
     }
    ],
    "scale_copy": false,
@@ -10489,15 +10489,11 @@
    "primary_parent": "qwen3-235b-a22b",
    "changes": [
     {
-     "field": "qk_norm",
-     "kind": "drop"
-    },
-    {
-     "field": "local_global_ratio",
+     "field": "layer_types",
      "kind": "add"
     },
     {
-     "field": "layer_types",
+     "field": "local_global_ratio",
      "kind": "add"
     },
     {
@@ -10507,6 +10503,10 @@
     {
      "field": "chunked_attention_size",
      "kind": "add"
+    },
+    {
+     "field": "qk_norm",
+     "kind": "drop"
     },
     {
      "field": "attention_sinks",
@@ -11467,19 +11467,11 @@
    "primary_parent": "glm-4-5-355b",
    "changes": [
     {
-     "field": "attention_bias",
-     "kind": "drop"
-    },
-    {
-     "field": "gated_attention",
+     "field": "layer_types",
      "kind": "add"
     },
     {
      "field": "local_global_ratio",
-     "kind": "add"
-    },
-    {
-     "field": "layer_types",
      "kind": "add"
     },
     {
@@ -11488,6 +11480,14 @@
     },
     {
      "field": "sliding_window_pattern",
+     "kind": "add"
+    },
+    {
+     "field": "attention_bias",
+     "kind": "drop"
+    },
+    {
+     "field": "gated_attention",
      "kind": "add"
     },
     {
@@ -11777,16 +11777,16 @@
    "primary_parent": "mistral-large-3",
    "changes": [
     {
-     "field": "activation",
-     "kind": "drop"
-    },
-    {
      "field": "mla_scale_lora",
      "kind": "add"
     },
     {
      "field": "rope_scaling",
      "kind": "change"
+    },
+    {
+     "field": "activation",
+     "kind": "drop"
     },
     {
      "field": "num_shared_experts",
@@ -12246,20 +12246,12 @@
    "primary_parent": "arcee-ai-trinity-large-400b",
    "changes": [
     {
-     "field": "norm_zero_centered",
-     "kind": "add"
-    },
-    {
-     "field": "activation",
+     "field": "sliding_window_pattern",
      "kind": "drop"
     },
     {
      "field": "attention_impl_type",
      "kind": "add"
-    },
-    {
-     "field": "sliding_window_pattern",
-     "kind": "drop"
     },
     {
      "field": "swa_attention_config",
@@ -12278,6 +12270,10 @@
      "kind": "drop"
     },
     {
+     "field": "activation",
+     "kind": "drop"
+    },
+    {
      "field": "num_shared_experts",
      "kind": "drop"
     },
@@ -12291,6 +12287,10 @@
     },
     {
      "field": "router_expert_bias",
+     "kind": "add"
+    },
+    {
+     "field": "norm_zero_centered",
      "kind": "add"
     },
     {
@@ -13412,23 +13412,11 @@
    "primary_parent": "smollm3-3b",
    "changes": [
     {
-     "field": "parallel_block",
-     "kind": "add"
-    },
-    {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
-     "field": "activation_gated",
+     "field": "layer_types",
      "kind": "add"
     },
     {
      "field": "local_global_ratio",
-     "kind": "add"
-    },
-    {
-     "field": "layer_types",
      "kind": "add"
     },
     {
@@ -13446,6 +13434,18 @@
     {
      "field": "nope_layers",
      "kind": "change"
+    },
+    {
+     "field": "activation_gated",
+     "kind": "add"
+    },
+    {
+     "field": "norm_type",
+     "kind": "change"
+    },
+    {
+     "field": "parallel_block",
+     "kind": "add"
     }
    ],
    "scale_copy": false,
@@ -13776,6 +13776,18 @@
    "primary_parent": "kimi-k2-5",
    "changes": [
     {
+     "field": "sequence_mixer",
+     "kind": "change"
+    },
+    {
+     "field": "mixer_attention_ratio",
+     "kind": "add"
+    },
+    {
+     "field": "hybrid_attention_interval",
+     "kind": "add"
+    },
+    {
      "field": "attention_bias",
      "kind": "add"
     },
@@ -13805,18 +13817,6 @@
     },
     {
      "field": "router_expert_bias",
-     "kind": "add"
-    },
-    {
-     "field": "sequence_mixer",
-     "kind": "change"
-    },
-    {
-     "field": "mixer_attention_ratio",
-     "kind": "add"
-    },
-    {
-     "field": "hybrid_attention_interval",
      "kind": "add"
     }
    ],
@@ -14745,10 +14745,6 @@
    "primary_parent": "glm-4-5-355b",
    "changes": [
     {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
      "field": "attention_bias",
      "kind": "change"
     },
@@ -14759,6 +14755,10 @@
     {
      "field": "router_expert_bias",
      "kind": "add"
+    },
+    {
+     "field": "norm_type",
+     "kind": "change"
     }
    ],
    "scale_copy": false,
@@ -15096,12 +15096,12 @@
      "kind": "change"
     },
     {
-     "field": "moe_latent_size",
-     "kind": "add"
-    },
-    {
      "field": "mixer_attention_ratio",
      "kind": "change"
+    },
+    {
+     "field": "moe_latent_size",
+     "kind": "add"
     }
    ],
    "scale_copy": false,
@@ -15733,11 +15733,11 @@
      "kind": "drop"
     },
     {
-     "field": "router_normalize_weights",
+     "field": "moe_latent_size",
      "kind": "drop"
     },
     {
-     "field": "moe_latent_size",
+     "field": "router_normalize_weights",
      "kind": "drop"
     }
    ],
@@ -16330,19 +16330,19 @@
      "kind": "add"
     },
     {
-     "field": "attention_kind",
-     "kind": "change"
-    },
-    {
      "field": "sliding_window_pattern",
      "kind": "drop"
     },
     {
-     "field": "global_kv_unified",
+     "field": "bidirectional_attention",
      "kind": "add"
     },
     {
-     "field": "bidirectional_attention",
+     "field": "attention_kind",
+     "kind": "change"
+    },
+    {
+     "field": "global_kv_unified",
      "kind": "add"
     },
     {
@@ -17013,11 +17013,7 @@
    "primary_parent": "gemma-4-31b",
    "changes": [
     {
-     "field": "global_kv_unified",
-     "kind": "drop"
-    },
-    {
-     "field": "kv_shared_layers",
+     "field": "per_layer_embedding_dim",
      "kind": "add"
     },
     {
@@ -17025,7 +17021,11 @@
      "kind": "drop"
     },
     {
-     "field": "per_layer_embedding_dim",
+     "field": "global_kv_unified",
+     "kind": "drop"
+    },
+    {
+     "field": "kv_shared_layers",
      "kind": "add"
     }
    ],
@@ -17352,11 +17352,11 @@
    "primary_parent": "gemma-4-e4b",
    "changes": [
     {
-     "field": "attention_kind",
+     "field": "local_global_ratio",
      "kind": "change"
     },
     {
-     "field": "local_global_ratio",
+     "field": "attention_kind",
      "kind": "change"
     },
     {
@@ -20012,10 +20012,6 @@
    "primary_parent": "sarvam-30b",
    "changes": [
     {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
      "field": "attention_bias",
      "kind": "drop"
     },
@@ -20025,6 +20021,10 @@
     },
     {
      "field": "router_scoring",
+     "kind": "change"
+    },
+    {
+     "field": "norm_type",
      "kind": "change"
     }
    ],
@@ -20361,6 +20361,10 @@
    "primary_parent": "deepseek-v3-2",
    "changes": [
     {
+     "field": "sliding_window",
+     "kind": "add"
+    },
+    {
      "field": "attention_kind",
      "kind": "change"
     },
@@ -20373,11 +20377,11 @@
      "kind": "drop"
     },
     {
-     "field": "sliding_window",
+     "field": "compress_ratios",
      "kind": "add"
     },
     {
-     "field": "compress_ratios",
+     "field": "hash_layers",
      "kind": "add"
     },
     {
@@ -20395,10 +20399,6 @@
     {
      "field": "router_scoring",
      "kind": "change"
-    },
-    {
-     "field": "hash_layers",
-     "kind": "add"
     },
     {
      "field": "hyper_connections",
@@ -21084,10 +21084,6 @@
    "primary_parent": "olmo-3-32b",
    "changes": [
     {
-     "field": "activation",
-     "kind": "drop"
-    },
-    {
      "field": "gated_attention",
      "kind": "add"
     },
@@ -21098,6 +21094,10 @@
     {
      "field": "rope_scaling",
      "kind": "change"
+    },
+    {
+     "field": "activation",
+     "kind": "drop"
     },
     {
      "field": "moe",
@@ -21627,12 +21627,12 @@
    "primary_parent": "granite-4-1-30b",
    "changes": [
     {
-     "field": "attention_kind",
-     "kind": "change"
-    },
-    {
      "field": "layer_types",
      "kind": "add"
+    },
+    {
+     "field": "attention_kind",
+     "kind": "change"
     },
     {
      "field": "rope_scaling",
@@ -22264,11 +22264,7 @@
    "primary_parent": "zaya1-8b",
    "changes": [
     {
-     "field": "activation",
-     "kind": "drop"
-    },
-    {
-     "field": "attention_kind",
+     "field": "sequence_mixer",
      "kind": "change"
     },
     {
@@ -22276,8 +22272,20 @@
      "kind": "change"
     },
     {
+     "field": "mixer_attention_ratio",
+     "kind": "add"
+    },
+    {
+     "field": "attention_kind",
+     "kind": "change"
+    },
+    {
      "field": "rope_scaling",
      "kind": "change"
+    },
+    {
+     "field": "activation",
+     "kind": "drop"
     },
     {
      "field": "dense_prefix_layers",
@@ -22289,14 +22297,6 @@
     },
     {
      "field": "router_expert_bias",
-     "kind": "add"
-    },
-    {
-     "field": "sequence_mixer",
-     "kind": "change"
-    },
-    {
-     "field": "mixer_attention_ratio",
      "kind": "add"
     }
    ],
@@ -22575,15 +22575,15 @@
    "primary_parent": "granite-4-1-30b",
    "changes": [
     {
-     "field": "activation",
-     "kind": "drop"
-    },
-    {
-     "field": "activation_gated",
-     "kind": "add"
+     "field": "sequence_mixer",
+     "kind": "change"
     },
     {
      "field": "layer_types",
+     "kind": "add"
+    },
+    {
+     "field": "mixer_attention_ratio",
      "kind": "add"
     },
     {
@@ -22591,11 +22591,11 @@
      "kind": "change"
     },
     {
-     "field": "sequence_mixer",
-     "kind": "change"
+     "field": "activation",
+     "kind": "drop"
     },
     {
-     "field": "mixer_attention_ratio",
+     "field": "activation_gated",
      "kind": "add"
     }
    ],
@@ -23183,12 +23183,12 @@
    "primary_parent": "olmo-3-32b",
    "changes": [
     {
-     "field": "qk_norm",
-     "kind": "drop"
-    },
-    {
      "field": "sliding_window_enabled",
      "kind": "add"
+    },
+    {
+     "field": "qk_norm",
+     "kind": "drop"
     },
     {
      "field": "rope_scaling",
@@ -24191,14 +24191,6 @@
      "kind": "drop"
     },
     {
-     "field": "parallel_block",
-     "kind": "change"
-    },
-    {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
      "field": "layer_types",
      "kind": "change"
     },
@@ -24221,6 +24213,14 @@
     {
      "field": "router_normalize_weights",
      "kind": "drop"
+    },
+    {
+     "field": "norm_type",
+     "kind": "change"
+    },
+    {
+     "field": "parallel_block",
+     "kind": "change"
     }
    ],
    "scale_copy": false,
@@ -24937,24 +24937,20 @@
    "primary_parent": "minimax-m2-5-230b",
    "changes": [
     {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
-     "field": "activation",
-     "kind": "change"
+     "field": "layer_types",
+     "kind": "drop"
     },
     {
      "field": "qk_norm_type",
      "kind": "change"
     },
     {
-     "field": "layer_types",
-     "kind": "drop"
-    },
-    {
      "field": "sparse_attention",
      "kind": "add"
+    },
+    {
+     "field": "activation",
+     "kind": "change"
     },
     {
      "field": "num_shared_experts",
@@ -24963,6 +24959,10 @@
     {
      "field": "moe_layer_schedule",
      "kind": "add"
+    },
+    {
+     "field": "norm_type",
+     "kind": "change"
     }
    ],
    "scale_copy": false,
@@ -26687,32 +26687,20 @@
    "primary_parent": "sarvam-30b",
    "changes": [
     {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
-     "field": "norm_extra_placement",
+     "field": "layer_types",
      "kind": "add"
-    },
-    {
-     "field": "activation",
-     "kind": "drop"
-    },
-    {
-     "field": "attention_bias",
-     "kind": "change"
     },
     {
      "field": "local_global_ratio",
      "kind": "add"
     },
     {
-     "field": "layer_types",
+     "field": "sliding_window",
      "kind": "add"
     },
     {
-     "field": "sliding_window",
-     "kind": "add"
+     "field": "attention_bias",
+     "kind": "change"
     },
     {
      "field": "attention_sinks",
@@ -26721,6 +26709,10 @@
     {
      "field": "position_encoding_type",
      "kind": "change"
+    },
+    {
+     "field": "activation",
+     "kind": "drop"
     },
     {
      "field": "shared_expert_mode",
@@ -26732,6 +26724,14 @@
     },
     {
      "field": "moe_layer_schedule",
+     "kind": "add"
+    },
+    {
+     "field": "norm_type",
+     "kind": "change"
+    },
+    {
+     "field": "norm_extra_placement",
      "kind": "add"
     }
    ],
@@ -27404,22 +27404,6 @@
    "primary_parent": "kimi-k2-5",
    "changes": [
     {
-     "field": "activation",
-     "kind": "change"
-    },
-    {
-     "field": "attention_impl_type",
-     "kind": "add"
-    },
-    {
-     "field": "attention_differential",
-     "kind": "add"
-    },
-    {
-     "field": "gated_attention",
-     "kind": "add"
-    },
-    {
      "field": "local_global_ratio",
      "kind": "add"
     },
@@ -27436,7 +27420,23 @@
      "kind": "add"
     },
     {
+     "field": "attention_impl_type",
+     "kind": "add"
+    },
+    {
+     "field": "gated_attention",
+     "kind": "add"
+    },
+    {
+     "field": "attention_differential",
+     "kind": "add"
+    },
+    {
      "field": "rope_scaling",
+     "kind": "change"
+    },
+    {
+     "field": "activation",
      "kind": "change"
     },
     {
@@ -28373,10 +28373,6 @@
      "kind": "add"
     },
     {
-     "field": "rope_scaling",
-     "kind": "add"
-    },
-    {
      "field": "conv_bias",
      "kind": "add"
     },
@@ -28386,6 +28382,10 @@
     },
     {
      "field": "mamba_state_size",
+     "kind": "add"
+    },
+    {
+     "field": "rope_scaling",
      "kind": "add"
     }
    ],
@@ -28688,11 +28688,23 @@
    "primary_parent": "qwen3-next-80b-a3b",
    "changes": [
     {
-     "field": "activation",
-     "kind": "drop"
+     "field": "sequence_mixer",
+     "kind": "change"
+    },
+    {
+     "field": "hybrid_attention_interval",
+     "kind": "change"
     },
     {
      "field": "qk_norm",
+     "kind": "drop"
+    },
+    {
+     "field": "linear_attention_config",
+     "kind": "add"
+    },
+    {
+     "field": "linear_num_value_heads",
      "kind": "drop"
     },
     {
@@ -28704,27 +28716,15 @@
      "kind": "add"
     },
     {
+     "field": "activation",
+     "kind": "drop"
+    },
+    {
      "field": "num_shared_experts",
      "kind": "add"
     },
     {
      "field": "moe_layer_schedule",
-     "kind": "drop"
-    },
-    {
-     "field": "sequence_mixer",
-     "kind": "change"
-    },
-    {
-     "field": "linear_attention_config",
-     "kind": "add"
-    },
-    {
-     "field": "hybrid_attention_interval",
-     "kind": "change"
-    },
-    {
-     "field": "linear_num_value_heads",
      "kind": "drop"
     }
    ],
@@ -29328,15 +29328,15 @@
    "primary_parent": "kimi-linear-48b-a3b",
    "changes": [
     {
-     "field": "activation",
-     "kind": "change"
-    },
-    {
      "field": "q_lora_rank",
      "kind": "add"
     },
     {
-     "field": "router_topk_method",
+     "field": "linear_attention_config",
+     "kind": "change"
+    },
+    {
+     "field": "activation",
      "kind": "change"
     },
     {
@@ -29344,7 +29344,7 @@
      "kind": "add"
     },
     {
-     "field": "linear_attention_config",
+     "field": "router_topk_method",
      "kind": "change"
     },
     {
@@ -29759,22 +29759,6 @@
    "primary_parent": "ling-2-5-1t",
    "changes": [
     {
-     "field": "norm_extra_placement",
-     "kind": "add"
-    },
-    {
-     "field": "gated_attention_type",
-     "kind": "add"
-    },
-    {
-     "field": "q_lora_rank",
-     "kind": "drop"
-    },
-    {
-     "field": "router_normalize_weights",
-     "kind": "add"
-    },
-    {
      "field": "sequence_mixer",
      "kind": "change"
     },
@@ -29787,7 +29771,23 @@
      "kind": "change"
     },
     {
+     "field": "gated_attention_type",
+     "kind": "add"
+    },
+    {
+     "field": "q_lora_rank",
+     "kind": "drop"
+    },
+    {
      "field": "linear_activation",
+     "kind": "add"
+    },
+    {
+     "field": "router_normalize_weights",
+     "kind": "add"
+    },
+    {
+     "field": "norm_extra_placement",
      "kind": "add"
     }
    ],
@@ -31591,16 +31591,28 @@
    "primary_parent": "glm-5-2",
    "changes": [
     {
-     "field": "mla_nope",
-     "kind": "add"
+     "field": "sequence_mixer",
+     "kind": "change"
     },
     {
      "field": "layer_types",
      "kind": "add"
     },
     {
+     "field": "mixer_attention_ratio",
+     "kind": "add"
+    },
+    {
+     "field": "mla_nope",
+     "kind": "add"
+    },
+    {
      "field": "index_layer_types",
      "kind": "change"
+    },
+    {
+     "field": "linear_attention_config",
+     "kind": "add"
     },
     {
      "field": "rope_scaling",
@@ -31617,18 +31629,6 @@
     {
      "field": "moe_layer_schedule",
      "kind": "change"
-    },
-    {
-     "field": "sequence_mixer",
-     "kind": "change"
-    },
-    {
-     "field": "mixer_attention_ratio",
-     "kind": "add"
-    },
-    {
-     "field": "linear_attention_config",
-     "kind": "add"
     },
     {
      "field": "hyper_connections",
@@ -32035,6 +32035,18 @@
    "primary_parent": "qwen3-5-397b",
    "changes": [
     {
+     "field": "per_layer_embedding_dim",
+     "kind": "add"
+    },
+    {
+     "field": "per_layer_embedding_layers",
+     "kind": "add"
+    },
+    {
+     "field": "per_layer_embedding_conv",
+     "kind": "add"
+    },
+    {
      "field": "gated_attention_type",
      "kind": "add"
     },
@@ -32052,18 +32064,6 @@
     },
     {
      "field": "hyper_connection_streams",
-     "kind": "add"
-    },
-    {
-     "field": "per_layer_embedding_dim",
-     "kind": "add"
-    },
-    {
-     "field": "per_layer_embedding_layers",
-     "kind": "add"
-    },
-    {
-     "field": "per_layer_embedding_conv",
      "kind": "add"
     }
    ],
@@ -32432,15 +32432,15 @@
    "primary_parent": "mistral-small-4",
    "changes": [
     {
+     "field": "layer_types",
+     "kind": "add"
+    },
+    {
      "field": "gated_attention",
      "kind": "add"
     },
     {
      "field": "gated_attention_type",
-     "kind": "add"
-    },
-    {
-     "field": "layer_types",
      "kind": "add"
     },
     {
@@ -32920,15 +32920,23 @@
    "primary_parent": "deepseek-v4-pro",
    "changes": [
     {
+     "field": "engram_layers",
+     "kind": "add"
+    },
+    {
+     "field": "engram_size",
+     "kind": "add"
+    },
+    {
+     "field": "bidirectional_attention",
+     "kind": "add"
+    },
+    {
      "field": "attention_kind",
      "kind": "change"
     },
     {
      "field": "kv_shared_layers",
-     "kind": "add"
-    },
-    {
-     "field": "bidirectional_attention",
      "kind": "add"
     },
     {
@@ -32940,20 +32948,12 @@
      "kind": "change"
     },
     {
-     "field": "rope_scaling",
-     "kind": "change"
-    },
-    {
      "field": "hash_layers",
      "kind": "drop"
     },
     {
-     "field": "engram_layers",
-     "kind": "add"
-    },
-    {
-     "field": "engram_size",
-     "kind": "add"
+     "field": "rope_scaling",
+     "kind": "change"
     }
    ],
    "scale_copy": false,
@@ -33302,8 +33302,8 @@
    "target": "kimi-linear-48b-a3b",
    "type": "trait",
    "fields": [
-    "gated_attention",
-    "mixer_attention_ratio"
+    "mixer_attention_ratio",
+    "gated_attention"
    ],
    "n": 2
   },
@@ -33324,6 +33324,15 @@
    "n": 4
   },
   {
+   "source": "gpt-oss-120b",
+   "target": "olmo-3-32b",
+   "type": "trait",
+   "fields": [
+    "layer_types"
+   ],
+   "n": 1
+  },
+  {
    "source": "gemma-3-27b",
    "target": "olmo-3-32b",
    "type": "trait",
@@ -33332,15 +33341,6 @@
     "sliding_window"
    ],
    "n": 2
-  },
-  {
-   "source": "gpt-oss-120b",
-   "target": "olmo-3-32b",
-   "type": "trait",
-   "fields": [
-    "layer_types"
-   ],
-   "n": 1
   },
   {
    "source": "llama-3-2-3b",
@@ -33398,20 +33398,20 @@
    "n": 1
   },
   {
-   "source": "xlstm-7b",
-   "target": "nemotron-3-nano-30b-a3b",
-   "type": "trait",
-   "fields": [
-    "nope_layers"
-   ],
-   "n": 1
-  },
-  {
    "source": "qwen3-next-80b-a3b",
    "target": "nemotron-3-nano-30b-a3b",
    "type": "trait",
    "fields": [
     "mixer_attention_ratio"
+   ],
+   "n": 1
+  },
+  {
+   "source": "xlstm-7b",
+   "target": "nemotron-3-nano-30b-a3b",
+   "type": "trait",
+   "fields": [
+    "nope_layers"
    ],
    "n": 1
   },
@@ -33423,22 +33423,22 @@
    "n": 9
   },
   {
-   "source": "gemma-3-27b",
-   "target": "xiaomi-mimo-v2-flash-309b",
-   "type": "trait",
-   "fields": [
-    "local_global_ratio",
-    "sliding_window"
-   ],
-   "n": 2
-  },
-  {
    "source": "gpt-oss-120b",
    "target": "xiaomi-mimo-v2-flash-309b",
    "type": "trait",
    "fields": [
     "layer_types",
     "attention_sinks"
+   ],
+   "n": 2
+  },
+  {
+   "source": "gemma-3-27b",
+   "target": "xiaomi-mimo-v2-flash-309b",
+   "type": "trait",
+   "fields": [
+    "local_global_ratio",
+    "sliding_window"
    ],
    "n": 2
   },
@@ -33476,11 +33476,11 @@
    "n": 9
   },
   {
-   "source": "qwen3-next-80b-a3b",
+   "source": "gpt-oss-120b",
    "target": "arcee-ai-trinity-large-400b",
    "type": "trait",
    "fields": [
-    "gated_attention"
+    "layer_types"
    ],
    "n": 1
   },
@@ -33496,11 +33496,11 @@
    "n": 3
   },
   {
-   "source": "gpt-oss-120b",
+   "source": "qwen3-next-80b-a3b",
    "target": "arcee-ai-trinity-large-400b",
    "type": "trait",
    "fields": [
-    "layer_types"
+    "gated_attention"
    ],
    "n": 1
   },
@@ -33585,6 +33585,15 @@
    "n": 9
   },
   {
+   "source": "gpt-oss-120b",
+   "target": "tiny-aya-3-35b",
+   "type": "trait",
+   "fields": [
+    "layer_types"
+   ],
+   "n": 1
+  },
+  {
    "source": "gemma-3-27b",
    "target": "tiny-aya-3-35b",
    "type": "trait",
@@ -33594,15 +33603,6 @@
     "sliding_window_pattern"
    ],
    "n": 3
-  },
-  {
-   "source": "gpt-oss-120b",
-   "target": "tiny-aya-3-35b",
-   "type": "trait",
-   "fields": [
-    "layer_types"
-   ],
-   "n": 1
   },
   {
    "source": "arcee-ai-trinity-large-400b",
@@ -33619,6 +33619,16 @@
    "type": "parent",
    "fields": [],
    "n": 11
+  },
+  {
+   "source": "qwen3-next-80b-a3b",
+   "target": "ling-2-5-1t",
+   "type": "trait",
+   "fields": [
+    "mixer_attention_ratio",
+    "hybrid_attention_interval"
+   ],
+   "n": 2
   },
   {
    "source": "glm-4-5-355b",
@@ -33655,16 +33665,6 @@
     "router_expert_bias"
    ],
    "n": 1
-  },
-  {
-   "source": "qwen3-next-80b-a3b",
-   "target": "ling-2-5-1t",
-   "type": "trait",
-   "fields": [
-    "mixer_attention_ratio",
-    "hybrid_attention_interval"
-   ],
-   "n": 2
   },
   {
    "source": "qwen3-next-80b-a3b",
@@ -33856,20 +33856,20 @@
    "n": 3
   },
   {
-   "source": "gemma-3-270m",
-   "target": "gemma-4-e2b",
-   "type": "trait",
-   "fields": [
-    "attention_kind"
-   ],
-   "n": 1
-  },
-  {
    "source": "xiaomi-mimo-v2-flash-309b",
    "target": "gemma-4-e2b",
    "type": "trait",
    "fields": [
     "local_global_ratio"
+   ],
+   "n": 1
+  },
+  {
+   "source": "gemma-3-270m",
+   "target": "gemma-4-e2b",
+   "type": "trait",
+   "fields": [
+    "attention_kind"
    ],
    "n": 1
   },
@@ -33911,20 +33911,20 @@
    "n": 4
   },
   {
-   "source": "llama-3-8b",
-   "target": "tencent-hy3-preview-295b-a21b",
-   "type": "trait",
-   "fields": [
-    "norm_type"
-   ],
-   "n": 1
-  },
-  {
    "source": "llama-3-2-3b",
    "target": "tencent-hy3-preview-295b-a21b",
    "type": "trait",
    "fields": [
     "rope_scaling"
+   ],
+   "n": 1
+  },
+  {
+   "source": "llama-3-8b",
+   "target": "tencent-hy3-preview-295b-a21b",
+   "type": "trait",
+   "fields": [
+    "norm_type"
    ],
    "n": 1
   },
@@ -34059,6 +34059,15 @@
    "n": 9
   },
   {
+   "source": "qwen3-next-80b-a3b",
+   "target": "lfm2-5-8b-a1b",
+   "type": "trait",
+   "fields": [
+    "mixer_attention_ratio"
+   ],
+   "n": 1
+  },
+  {
    "source": "llama-3-8b",
    "target": "lfm2-5-8b-a1b",
    "type": "trait",
@@ -34087,15 +34096,6 @@
    "n": 1
   },
   {
-   "source": "qwen3-next-80b-a3b",
-   "target": "lfm2-5-8b-a1b",
-   "type": "trait",
-   "fields": [
-    "mixer_attention_ratio"
-   ],
-   "n": 1
-  },
-  {
    "source": "granite-4-1-30b",
    "target": "lfm2-5-1-2b",
    "type": "parent",
@@ -34103,11 +34103,11 @@
    "n": 6
   },
   {
-   "source": "tiny-aya-3-35b",
+   "source": "lfm2-5-8b-a1b",
    "target": "lfm2-5-1-2b",
    "type": "trait",
    "fields": [
-    "activation_gated"
+    "sequence_mixer"
    ],
    "n": 1
   },
@@ -34121,20 +34121,20 @@
    "n": 1
   },
   {
-   "source": "lfm2-5-8b-a1b",
-   "target": "lfm2-5-1-2b",
-   "type": "trait",
-   "fields": [
-    "sequence_mixer"
-   ],
-   "n": 1
-  },
-  {
    "source": "qwen3-next-80b-a3b",
    "target": "lfm2-5-1-2b",
    "type": "trait",
    "fields": [
     "mixer_attention_ratio"
+   ],
+   "n": 1
+  },
+  {
+   "source": "tiny-aya-3-35b",
+   "target": "lfm2-5-1-2b",
+   "type": "trait",
+   "fields": [
+    "activation_gated"
    ],
    "n": 1
   },
@@ -34197,15 +34197,6 @@
    "n": 9
   },
   {
-   "source": "gpt-2-xl-1-5b",
-   "target": "north-mini-code-30b-a3b",
-   "type": "trait",
-   "fields": [
-    "norm_type"
-   ],
-   "n": 1
-  },
-  {
    "source": "gpt-oss-120b",
    "target": "north-mini-code-30b-a3b",
    "type": "trait",
@@ -34242,20 +34233,20 @@
    "n": 1
   },
   {
-   "source": "minimax-m2-5-230b",
-   "target": "minimax-m3-428b",
-   "type": "parent",
-   "fields": [],
-   "n": 7
-  },
-  {
-   "source": "sarvam-30b",
-   "target": "minimax-m3-428b",
+   "source": "gpt-2-xl-1-5b",
+   "target": "north-mini-code-30b-a3b",
    "type": "trait",
    "fields": [
     "norm_type"
    ],
    "n": 1
+  },
+  {
+   "source": "minimax-m2-5-230b",
+   "target": "minimax-m3-428b",
+   "type": "parent",
+   "fields": [],
+   "n": 7
   },
   {
    "source": "deepseek-v3-2",
@@ -34275,6 +34266,15 @@
     "moe_layer_schedule"
    ],
    "n": 2
+  },
+  {
+   "source": "sarvam-30b",
+   "target": "minimax-m3-428b",
+   "type": "trait",
+   "fields": [
+    "norm_type"
+   ],
+   "n": 1
   },
   {
    "source": "granite-4-1-30b",
@@ -34323,22 +34323,14 @@
    "n": 12
   },
   {
-   "source": "llama-3-8b",
+   "source": "gpt-oss-120b",
    "target": "inkling",
    "type": "trait",
    "fields": [
-    "norm_type"
+    "layer_types",
+    "attention_sinks"
    ],
-   "n": 1
-  },
-  {
-   "source": "xlstm-7b",
-   "target": "inkling",
-   "type": "trait",
-   "fields": [
-    "norm_extra_placement"
-   ],
-   "n": 1
+   "n": 2
   },
   {
    "source": "gemma-3-27b",
@@ -34347,16 +34339,6 @@
    "fields": [
     "local_global_ratio",
     "sliding_window"
-   ],
-   "n": 2
-  },
-  {
-   "source": "gpt-oss-120b",
-   "target": "inkling",
-   "type": "trait",
-   "fields": [
-    "layer_types",
-    "attention_sinks"
    ],
    "n": 2
   },
@@ -34379,29 +34361,29 @@
    "n": 1
   },
   {
+   "source": "llama-3-8b",
+   "target": "inkling",
+   "type": "trait",
+   "fields": [
+    "norm_type"
+   ],
+   "n": 1
+  },
+  {
+   "source": "xlstm-7b",
+   "target": "inkling",
+   "type": "trait",
+   "fields": [
+    "norm_extra_placement"
+   ],
+   "n": 1
+  },
+  {
    "source": "kimi-k2-5",
    "target": "motif-3-beta",
    "type": "parent",
    "fields": [],
    "n": 12
-  },
-  {
-   "source": "step-3-5-flash-196b",
-   "target": "motif-3-beta",
-   "type": "trait",
-   "fields": [
-    "attention_impl_type"
-   ],
-   "n": 1
-  },
-  {
-   "source": "qwen3-next-80b-a3b",
-   "target": "motif-3-beta",
-   "type": "trait",
-   "fields": [
-    "gated_attention"
-   ],
-   "n": 1
   },
   {
    "source": "gemma-3-27b",
@@ -34420,6 +34402,24 @@
    "type": "trait",
    "fields": [
     "sliding_window_enabled"
+   ],
+   "n": 1
+  },
+  {
+   "source": "step-3-5-flash-196b",
+   "target": "motif-3-beta",
+   "type": "trait",
+   "fields": [
+    "attention_impl_type"
+   ],
+   "n": 1
+  },
+  {
+   "source": "qwen3-next-80b-a3b",
+   "target": "motif-3-beta",
+   "type": "trait",
+   "fields": [
+    "gated_attention"
    ],
    "n": 1
   },
@@ -34473,15 +34473,6 @@
    "n": 1
   },
   {
-   "source": "llama-3-2-3b",
-   "target": "antares-1b",
-   "type": "trait",
-   "fields": [
-    "rope_scaling"
-   ],
-   "n": 1
-  },
-  {
    "source": "nemotron-3-nano-30b-a3b",
    "target": "antares-1b",
    "type": "trait",
@@ -34493,11 +34484,30 @@
    "n": 3
   },
   {
+   "source": "llama-3-2-3b",
+   "target": "antares-1b",
+   "type": "trait",
+   "fields": [
+    "rope_scaling"
+   ],
+   "n": 1
+  },
+  {
    "source": "qwen3-next-80b-a3b",
    "target": "solar-open-2",
    "type": "parent",
    "fields": [],
    "n": 10
+  },
+  {
+   "source": "kimi-linear-48b-a3b",
+   "target": "solar-open-2",
+   "type": "trait",
+   "fields": [
+    "sequence_mixer",
+    "linear_attention_config"
+   ],
+   "n": 2
   },
   {
    "source": "xlstm-7b",
@@ -34516,16 +34526,6 @@
     "num_shared_experts"
    ],
    "n": 1
-  },
-  {
-   "source": "kimi-linear-48b-a3b",
-   "target": "solar-open-2",
-   "type": "trait",
-   "fields": [
-    "sequence_mixer",
-    "linear_attention_config"
-   ],
-   "n": 2
   },
   {
    "source": "kimi-linear-48b-a3b",
@@ -34560,11 +34560,20 @@
    "n": 8
   },
   {
-   "source": "xlstm-7b",
+   "source": "kimi-linear-48b-a3b",
    "target": "ling-3-0-flash",
    "type": "trait",
    "fields": [
-    "norm_extra_placement"
+    "sequence_mixer"
+   ],
+   "n": 1
+  },
+  {
+   "source": "nemotron-3-super-120b-a12b",
+   "target": "ling-3-0-flash",
+   "type": "trait",
+   "fields": [
+    "mixer_attention_ratio"
    ],
    "n": 1
   },
@@ -34587,20 +34596,11 @@
    "n": 1
   },
   {
-   "source": "kimi-linear-48b-a3b",
+   "source": "xlstm-7b",
    "target": "ling-3-0-flash",
    "type": "trait",
    "fields": [
-    "sequence_mixer"
-   ],
-   "n": 1
-  },
-  {
-   "source": "nemotron-3-super-120b-a12b",
-   "target": "ling-3-0-flash",
-   "type": "trait",
-   "fields": [
-    "mixer_attention_ratio"
+    "norm_extra_placement"
    ],
    "n": 1
   },
@@ -34648,8 +34648,8 @@
    "target": "glm-5-3-flash",
    "type": "trait",
    "fields": [
-    "mla_nope",
     "sequence_mixer",
+    "mla_nope",
     "linear_attention_config"
    ],
    "n": 3
@@ -34660,6 +34660,15 @@
    "type": "trait",
    "fields": [
     "layer_types"
+   ],
+   "n": 1
+  },
+  {
+   "source": "qwen3-next-80b-a3b",
+   "target": "glm-5-3-flash",
+   "type": "trait",
+   "fields": [
+    "mixer_attention_ratio"
    ],
    "n": 1
   },
@@ -34682,15 +34691,6 @@
    "n": 1
   },
   {
-   "source": "qwen3-next-80b-a3b",
-   "target": "glm-5-3-flash",
-   "type": "trait",
-   "fields": [
-    "mixer_attention_ratio"
-   ],
-   "n": 1
-  },
-  {
    "source": "deepseek-v4-pro",
    "target": "glm-5-3-flash",
    "type": "trait",
@@ -34706,6 +34706,15 @@
    "type": "parent",
    "fields": [],
    "n": 8
+  },
+  {
+   "source": "gemma-4-e2b",
+   "target": "qwen3-8-flash-next-125b-a6b",
+   "type": "trait",
+   "fields": [
+    "per_layer_embedding_dim"
+   ],
+   "n": 1
   },
   {
    "source": "qwen3-6-27b",
@@ -34737,20 +34746,21 @@
    "n": 2
   },
   {
-   "source": "gemma-4-e2b",
-   "target": "qwen3-8-flash-next-125b-a6b",
-   "type": "trait",
-   "fields": [
-    "per_layer_embedding_dim"
-   ],
-   "n": 1
-  },
-  {
    "source": "mistral-small-4",
    "target": "tencent-hy4-preview-770b-a49b",
    "type": "parent",
    "fields": [],
    "n": 12
+  },
+  {
+   "source": "gpt-oss-120b",
+   "target": "tencent-hy4-preview-770b-a49b",
+   "type": "trait",
+   "fields": [
+    "layer_types",
+    "attention_sinks"
+   ],
+   "n": 2
   },
   {
    "source": "qwen3-next-80b-a3b",
@@ -34769,16 +34779,6 @@
     "gated_attention_type"
    ],
    "n": 1
-  },
-  {
-   "source": "gpt-oss-120b",
-   "target": "tencent-hy4-preview-770b-a49b",
-   "type": "trait",
-   "fields": [
-    "layer_types",
-    "attention_sinks"
-   ],
-   "n": 2
   },
   {
    "source": "deepseek-v3-2",
@@ -34835,20 +34835,20 @@
    "n": 9
   },
   {
-   "source": "gemma-4-e2b",
-   "target": "deepseek-v4-1-flash",
-   "type": "trait",
-   "fields": [
-    "kv_shared_layers"
-   ],
-   "n": 1
-  },
-  {
    "source": "gemma-4-26b-a4b",
    "target": "deepseek-v4-1-flash",
    "type": "trait",
    "fields": [
     "bidirectional_attention"
+   ],
+   "n": 1
+  },
+  {
+   "source": "gemma-4-e2b",
+   "target": "deepseek-v4-1-flash",
+   "type": "trait",
+   "fields": [
+    "kv_shared_layers"
    ],
    "n": 1
   },

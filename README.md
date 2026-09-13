@@ -19,7 +19,7 @@ the graph is a deterministic function of the configs.
 fetch_gallery.py   gallery page  -> data/cards.json          (103 cards, config.json links)
 fetch_configs.py   Hugging Face  -> data/configs/<key>.json  (103 configs, provenance recorded)
 key_taxonomy.py    hand-made lists of the 143 non-architecture keys (dropped)
-schema.py          alias table: 429 architecture keys -> 174 canonical fields (+4 derived) in 14 sections; design/scale/tuning kinds
+schema.py          alias table: 429 architecture keys -> 174 canonical fields (+4 derived) in 6 sections; design/scale/tuning kinds
 extract.py         configs       -> data/metadata.json       (canonical config + derived traits per model)
 build_graph.py     metadata      -> data/graph.json          (online insertion: parents, trait edges, generations)
 export_web.py      graph.json    -> web/data.js              (trimmed data for the viewer)
@@ -51,7 +51,8 @@ architecture: 68 decoding defaults, tokenizer ids and Hugging Face bookkeeping; 
 kernel, parallelism and implementation switches; 26 training-only settings; 8 multimodal
 leftovers. `schema.py` renames the remaining 429 architecture keys into 174 canonical fields
 (100 of them merge several spellings: seven names for the number of active experts, six for
-the norm epsilon), each assigned to one of 14 sections. `KEYS.md` lists every key's fate.
+the norm epsilon), each assigned to one of six sections that follow the forward pass of a decoder
+block (token mixing and channel mixing carry subsections). `KEYS.md` lists every key's fate.
 Each canonical field is tagged design (67), scale (66) or tuning (41) in `schema.py`. The change
 line under a model compares canonical configs with the first parent: design fields count when
 their value differs (layer schedules by the kinds of layer they contain), scale fields never

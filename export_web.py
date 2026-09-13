@@ -42,6 +42,7 @@ out = {k: g[k] for k in ["generated", "source", "n_gallery", "origin_threshold"]
 out["nodes"], out["edges"] = nodes, edges
 import schema
 out["schema_groups"] = schema.GROUPS
+out["schema_sections"] = schema.SECTIONS
 out["schema_scale"] = sorted(schema.SCALE)
 out["schema_tuning"] = sorted(schema.TUNING)
 out["schema_not_a_change"] = sorted(schema.NOT_A_CHANGE)

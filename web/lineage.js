@@ -311,61 +311,27 @@
     var n = byKey[state.selected];
     if (!n) { panel.innerHTML = ''; return; }
     var dash = '–';
-    function row(label, value) { return value == null || value === '' ? '' : '<div class="sp-row"><span>' + esc(label) + '</span><b>' + esc(value) + '</b></div>'; }
-    function group(title, rows) { var body = rows.join(''); return body ? '<div class="sp-group"><h4>' + esc(title) + '</h4>' + body + '</div>' : ''; }
-    var isMLA = n.attention_class === 'MLA';
-    var attn = group(T('Attention', '注意力'), [
-      row(T('Mechanism', '机制'), n.attention_class === 'none (mLSTM)' ? T('none · mLSTM', '无 · mLSTM') : n.attention_class + (n.gated_attention ? T(', gated', '，门控') : '')),
-      row(T('Heads', '头数'), n.num_heads ? (isMLA ? n.num_heads : n.num_heads + ' / ' + (n.num_kv_heads || dash) + ' KV') : null),
-      row('head_dim', n.head_dim),
-      isMLA ? row(T('Latent ranks', '潜在秩'), 'kv ' + n.kv_lora_rank + (n.q_lora_rank ? ' · q ' + n.q_lora_rank : '')) : '',
-      isMLA && n.qk_rope_head_dim != null ? row(T('RoPE / NoPE dims', 'RoPE / NoPE 维'), n.qk_rope_head_dim + ' / ' + (n.qk_nope_head_dim == null ? dash : n.qk_nope_head_dim)) : '',
-      n.swa ? row(T('Local : global layers', '局部 : 全局层'), n.swa_local_layers ? n.swa_local_layers + ' : ' + n.swa_global_layers + (n.sliding_window ? T(', window ', '，窗口 ') + n.sliding_window : '') : T('yes', '有')) : '',
-      n.sparse_attention ? row(T('Sparse', '稀疏'), n.sparse_attention + (n.index_topk ? ' · top-' + n.index_topk : '')) : '',
-      row('QK-Norm', n.qk_norm ? T('yes', '有') : null),
-      n.attention_sinks ? row(T('Sinks', '注意力汇'), T('yes', '有')) : '',
-      n.chunked_attention ? row(T('Chunked', '分块'), T('yes', '有')) : ''
-    ]);
-    var mixer = n.hybrid_mixer ? group(T('Sequence mixer', '序列混合器'), [
-      row(T('Type', '类型'), MIXER_LABEL[n.hybrid_mixer] ? T(MIXER_LABEL[n.hybrid_mixer][0], MIXER_LABEL[n.hybrid_mixer][1]) : n.hybrid_mixer),
-      row(T('Mixer : attention layers', '混合层 : 注意力层'), n.linear_layers && n.full_attention_layers_in_hybrid ? n.linear_layers + ' : ' + n.full_attention_layers_in_hybrid : null),
-      row(T('Mixer heads', '混合器头'), n.linear_num_value_heads ? n.linear_num_value_heads + (n.linear_value_head_dim ? ' × ' + n.linear_value_head_dim : '') : (n.mamba_num_heads ? n.mamba_num_heads + (n.mamba_head_dim ? ' × ' + n.mamba_head_dim : '') : null)),
-      row(T('State size', '状态维'), n.ssm_state_size),
-      row(T('Conv kernel', '卷积核'), n.conv_kernel)
-    ]) : '';
-    var ffn = group(T('Feed-forward', '前馈'), n.is_moe ? [
-      row(T('Experts', '专家'), n.num_experts + T(' routed', ' 路由') + ' · top-' + n.experts_per_tok + (n.shared_experts ? ' · ' + n.shared_experts + T(' shared', ' 共享') : '')),
-      row(T('Expert width', '专家宽度'), n.moe_intermediate_size),
-      row(T('Dense prefix layers', '稠密前缀层'), n.dense_prefix_layers),
-      row(T('Router', '路由器'), [n.router_scoring, n.topk_method, n.expert_groups && n.expert_groups > 1 ? n.expert_groups + T(' groups', ' 组') : null].filter(Boolean).join(' · ') || null),
-      n.latent_moe ? row(T('Latent MoE', '潜在 MoE'), n.moe_latent_size || T('yes', '有')) : '',
-      row(T('Activation', '激活'), n.activation && n.activation !== 'silu' ? n.activation : null)
-    ] : [
-      row(T('Type', '类型'), T('dense', '稠密')),
-      row(T('Width', '宽度'), n.intermediate_size),
-      row(T('Activation', '激活'), n.activation)
-    ]);
-    var shapeG = group(T('Shape', '尺度'), [
-      row(T('Parameters', '参数量'), (n.gallery.scale || '') + (n.aliases && n.aliases.length ? n.aliases.map(function (a) { return '; ' + shortName(a) + ' ' + (a.gallery.scale || '').split(',')[0]; }).join('') : '') || null),
-      row(T('Other sizes', '其他尺寸'), n.size_variants ? n.size_variants.map(function (v) { return (v.scale || v.title).split(',')[0].replace(/ total$/, ''); }).join(', ') : null),
-      row(T('Layers', '层数'), n.num_layers + (n.looped && n.loop_passes ? ' × ' + n.loop_passes + T(' passes', ' 遍') : '')),
-      row('d_model', n.hidden_size),
-      row(T('Vocabulary', '词表'), n.vocab_size ? n.vocab_size.toLocaleString() : null),
-      row(T('Context', '上下文'), n.max_position_embeddings ? n.max_position_embeddings.toLocaleString() : null),
-      row(T('Embeddings', '嵌入'), n.tie_embeddings ? T('tied', '共享') : T('untied', '独立')),
-      row(T('Norm', '归一化'), (n.norm_type === 'layernorm' ? 'LayerNorm' : 'RMSNorm') + (n.post_norm ? T(', post-norm', '，后置') : ''))
-    ]);
-    var posG = group(T('Positions & residual', '位置与残差'), [
-      row(T('Encoding', '编码'), n.position_encoding === 'rope' ? 'RoPE' + (n.partial_rotary ? T(' (partial)', '（部分维度）') : '') : n.position_encoding),
-      row('θ', n.rope_theta ? Number(n.rope_theta).toLocaleString() : null),
-      row(T('Scaling', '缩放'), n.rope_scaling_type ? n.rope_scaling_type + (n.rope_scaling_factor ? ' × ' + n.rope_scaling_factor : '') : null),
-      n.nope && n.nope !== 'none' ? row('NoPE', n.nope) : '',
-      n.mtp ? row('MTP', n.mtp_layers > 1 ? n.mtp_layers + T(' heads', ' 个头') : T('1 head', '1 个头')) : '',
-      n.mhc ? row(T('Hyper-connections', '超连接'), n.hc_streams ? n.hc_streams + T(' streams', ' 路') : T('yes', '有')) : '',
-      n.kv_sharing ? row(T('Cross-layer KV', '跨层 KV'), n.kv_shared_layers ? n.kv_shared_layers + T(' layers shared', ' 层共享') : T('yes', '有')) : '',
-      n.per_layer_embeddings ? row(T('Per-layer embeddings', '逐层嵌入'), n.hidden_size_per_layer_input || T('yes', '有')) : '',
-      n.encoder_decoder ? row(T('Structure', '结构'), T('encoder-decoder', '编码器-解码器')) : ''
-    ]);
+    var cc = n.config_canonical || {}, rawOf = n.config_canonical_raw_key || {};
+    var changed = {};
+    n.changes.forEach(function (c) { changed[c.field] = c.kind; });
+    function val(v) {
+      if (v === true) return T('on', '开'); if (v === false) return T('off', '关');
+      if (typeof v === 'number') return Number.isInteger(v) && Math.abs(v) >= 10000 ? v.toLocaleString() : String(v);
+      return fmtVal(v);
+    }
+    function specRows(fields) {
+      return fields.filter(function (f) { return f in cc; }).map(function (f) {
+        var r = rawOf[f], mark = changed[f] ? '<em class="sp-chg">' + (changed[f] === 'add' ? '+' : '·') + '</em>' : '';
+        return '<div class="sp-row' + (changed[f] ? ' is-changed' : '') + '"><span>' + mark + esc(f) + (r && r !== f ? '<i>' + esc(r) + '</i>' : '') + '</span><b>' + esc(val(cc[f])) + '</b></div>';
+      }).join('');
+    }
+    var sections = D.schema_sections || {}, groups = D.schema_groups || {};
+    var body = '';
+    Object.keys(sections).forEach(function (sec) {
+      var subs = sections[sec].map(function (g) { return { name: g.indexOf(' › ') > 0 ? g.split(' › ')[1] : null, rows: specRows(groups[g]) }; }).filter(function (x) { return x.rows; });
+      if (!subs.length) return;
+      body += '<div class="sp-sec"><h4>' + esc(sec) + '</h4>' + subs.map(function (x) { return '<div class="sp-group">' + (x.name ? '<h5>' + esc(x.name) + '</h5>' : '') + x.rows + '</div>'; }).join('') + '</div>';
+    });
     function sameName(o) { return nodes.some(function (x) { return x !== o && shortName(x) === shortName(o); }); }
     function why(e) {
       if (e.type === 'origin') return T('origin · ' + e.n + ' changes, over the threshold', '起点 · ' + e.n + ' 项改动，超过阈值');
@@ -384,23 +350,13 @@
     }
     var ps = parentsOf[n.key].slice().sort(function (a, b) { return (a.type === 'trait') - (b.type === 'trait'); });
     var cs = childrenOf[n.key].slice().sort(function (a, b) { return byKey[a.target].date < byKey[b.target].date ? -1 : 1; });
-    var cc = n.config_canonical || {}, rawOf = n.config_canonical_raw_key || {};
+    var nCanon = Object.keys(cc).length;
     var h = '<div class="sp-head"><div><div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span>' + (n.gallery.scale ? '<span>' + esc(n.gallery.scale) + '</span>' : '') + '</div><h3>' + esc(shortName(n)) + '</h3>' + aliasHTML(n, 'sp-alias') + noveltyHTML(n, 'sp-sig') + '</div>' +
       '<div class="sp-links">' + (n.gallery.config_url ? '<a href="' + esc(n.gallery.config_url) + '" target="_blank" rel="noopener">config.json</a>' : '') +
       (n.gallery.report_url ? '<a href="' + esc(n.gallery.report_url) + '" target="_blank" rel="noopener">' + T('report', '技术报告') + '</a>' : '') +
       '<a href="' + esc(n.gallery.card_url) + '" target="_blank" rel="noopener">' + T('gallery', '图库') + '</a></div></div>';
-    h += '<div class="sp-grid">' + attn + mixer + ffn + shapeG + posG + '</div>';
     h += '<div class="sp-rels">' + rel(T('Parents', '父节点'), ps, 'up') + rel(T('Children', '子节点'), cs, 'down') + '</div>';
-    var nCanon = Object.keys(cc).length;
-    h += '<details class="lin-full"><summary>' + T('Config after key drop and renaming', '清理并统一命名后的 config') + ' <span>' + nCanon + ' ' + T('fields from ', '个字段，来自 ') + (n.num_architecture_keys || nCanon) + ' ' + T('architecture keys', '个架构 key') + '</span>' + (n.provenance ? '<em>' + esc(T('provenance: ', '来源：') + n.provenance) + '</em>' : '') + '</summary>';
-    Object.keys(D.schema_groups || {}).forEach(function (g) {
-      var fields = D.schema_groups[g].filter(function (f) { return f in cc; });
-      if (!fields.length) return;
-      h += '<div class="cf-group"><h5>' + esc(g) + '</h5><dl class="lin-raw">';
-      fields.forEach(function (f) { var r = rawOf[f]; h += '<div><dt>' + esc(f) + (r && r !== f ? '<i>' + esc(r) + '</i>' : '') + '</dt><dd>' + esc(fmtVal(cc[f])) + '</dd></div>'; });
-      h += '</dl></div>';
-    });
-    h += '</details>';
+    h += '<div class="sp-config"><div class="tp-eyebrow">' + T('Config after key drop and renaming', '清理并统一命名后的 config') + '<span>' + nCanon + ' ' + T('fields from ', '个字段，来自 ') + (n.num_architecture_keys || nCanon) + ' ' + T('architecture keys', '个架构 key') + '</span>' + (n.provenance ? '<span>' + esc(T('provenance: ', '来源：') + n.provenance) + '</span>' : '') + '</div>' + body + '</div>';
     panel.innerHTML = h;
     panel.querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { state.selected = b.getAttribute('data-go'); draw(); panel.scrollIntoView({ block: 'nearest' }); }); });
   }
