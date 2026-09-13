@@ -61,10 +61,14 @@ def absent(v):
 
 
 def shape(v):
+    """Compare values by what they describe: a schedule by its layer kinds and ratio, an index list by
+    the fact that it is one, and a merged group of spellings member by member."""
     if isinstance(v, dict) and v.get("_list_len"):
         return sorted(v["_counts"]) + [v.get("_ratio")]
     if isinstance(v, dict) and v.get("_indices"):
         return "indices"
+    if isinstance(v, dict) and "_raw" in v:
+        return {k: shape(x) for k, x in v["_raw"].items()}
     if isinstance(v, list):
         return sorted(v, key=str)
     return v

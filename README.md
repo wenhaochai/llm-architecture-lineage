@@ -2,7 +2,7 @@
 
 An interactive lineage graph of the open-weight models in Sebastian Raschka's
 [LLM Architecture Gallery](https://sebastianraschka.com/llm-architecture-gallery/),
-built from each model's `config.json` alone: 103 gallery models, 79 nodes once models that only
+built from each model's `config.json` alone: 103 gallery models, 69 nodes once models that only
 change scale fold into the design they copy.
 
 **Live page:** https://wenhaochai.com/blogs/llm-architecture-lineage.html
@@ -83,8 +83,8 @@ never be a parent. If even the closest placed model needs more than `ORIGIN_THRE
 (`trait`) comes from the earliest placed model that already carried it. Generation is one more
 than the largest generation among a node's parents and is the column in the figure.
 
-Result: 103 models, 33 folded as scale copies, 70 drawn nodes, 86 edges after reduction (63
-parent, 23 trait), 9 generations.
+Result: 103 models, 34 folded as scale copies, 69 drawn nodes, 84 edges after reduction (62
+parent, 22 trait), 10 generations.
 
 ## Caveats
 

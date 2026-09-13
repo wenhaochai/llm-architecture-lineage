@@ -12929,7 +12929,7 @@
    "generation": 7,
    "aliases": [],
    "merged_into": null,
-   "is_terminal": true
+   "is_terminal": false
   },
   {
    "key": "ling-2-5-1t",
@@ -21075,51 +21075,19 @@
    },
    "num_architecture_keys": 36,
    "is_root": false,
-   "primary_parent": "glm-4-5-air",
+   "primary_parent": "tiny-aya-3-35b",
    "changes": [
     {
-     "field": "tie_embeddings",
-     "kind": "add"
-    },
-    {
-     "field": "layer_types",
-     "kind": "add"
-    },
-    {
-     "field": "attention_bias",
-     "kind": "drop"
-    },
-    {
-     "field": "nope_layers",
-     "kind": "add"
-    },
-    {
-     "field": "activation_gated",
-     "kind": "add"
-    },
-    {
-     "field": "shared_expert_mode",
-     "kind": "add"
-    },
-    {
-     "field": "dense_prefix_layers",
-     "kind": "drop"
-    },
-    {
-     "field": "router_scoring",
+     "field": "position_encoding_type",
      "kind": "change"
     },
     {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
-     "field": "parallel_block",
+     "field": "moe",
      "kind": "add"
     }
    ],
    "scale_copy": false,
-   "generation": 7,
+   "generation": 8,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -23181,7 +23149,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 8,
+   "generation": 9,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -24904,7 +24872,15 @@
    ],
    "scale_copy": false,
    "generation": 8,
-   "aliases": [],
+   "aliases": [
+    {
+     "key": "laguna-s-2-1",
+     "title": "Laguna S 2.1 (118B)",
+     "date": "2026-07-21",
+     "org": "Poolside",
+     "scale": "118B total, 8B active (6.8% active)"
+    }
+   ],
    "merged_into": null,
    "is_terminal": true
   },
@@ -26665,17 +26641,12 @@
    },
    "num_architecture_keys": 28,
    "is_root": false,
-   "primary_parent": "laguna-xs-2",
-   "changes": [
-    {
-     "field": "gated_attention_type",
-     "kind": "add"
-    }
-   ],
-   "scale_copy": false,
-   "generation": 8,
+   "primary_parent": "laguna-xs-2-1",
+   "changes": [],
+   "scale_copy": true,
+   "generation": 9,
    "aliases": [],
-   "merged_into": null,
+   "merged_into": "laguna-xs-2-1",
    "is_terminal": true
   },
   {
@@ -31901,22 +31872,12 @@
    "mech": 2
   },
   {
-   "source": "glm-4-5-air",
+   "source": "tiny-aya-3-35b",
    "target": "command-a-218b-a25b",
    "type": "parent",
    "fields": [],
-   "n": 10,
+   "n": 2,
    "mech": 2
-  },
-  {
-   "source": "arcee-ai-trinity-large-400b",
-   "target": "command-a-218b-a25b",
-   "type": "trait",
-   "fields": [
-    "nope_layers"
-   ],
-   "n": 1,
-   "mech": null
   },
   {
    "source": "glm-4-5-air",
@@ -32011,14 +31972,6 @@
    ],
    "n": 1,
    "mech": null
-  },
-  {
-   "source": "laguna-xs-2",
-   "target": "laguna-s-2-1",
-   "type": "parent",
-   "fields": [],
-   "n": 1,
-   "mech": 0
   },
   {
    "source": "llama-3-8b",

@@ -73,6 +73,8 @@ html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 18
 .sp-vs { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-4); margin-right: 10px; }
 .tp-sig .sp-vs, .tp-alias .sp-vs { display: block; margin: 0 0 3px; }
 .ar-main .tp-alias, .ar-main .sp-alias { font-family: var(--font-sans); font-size: 12px; line-height: 1.5; color: var(--ink-3); margin: 0 0 8px; max-width: none; }
+.sp-alias-row { display: block; }
+.tp-alias .sp-alias-row { padding-left: 0; }
 .ar-main .sp-alias { font-size: 15px; margin: 8px 0 0; }
 .tp-alias i, .sp-alias i { font-style: normal; font-family: var(--font-mono); font-size: 0.8em; color: var(--ink-4); }
 .sp-node button i { font-style: normal; font-family: var(--font-mono); font-size: 11px; color: var(--ink-4); margin-left: 6px; }

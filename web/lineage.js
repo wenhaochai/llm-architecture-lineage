@@ -35,8 +35,11 @@
       (typeof v === 'object' && !Array.isArray(v) && !v._list_len && !v._raw && !Object.keys(v).length);
   }
   function shape(v) {
-    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).sort().concat([v._ratio]); // a longer copy of the same schedule is no change
+    // compare values by what they describe: a schedule by its layer kinds and ratio, an index list by
+    // the fact that it is one, and a merged group of spellings member by member
+    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).sort().concat([v._ratio]);
     if (v && typeof v === 'object' && v._indices) return 'indices';
+    if (v && typeof v === 'object' && v._raw) { var o = {}; Object.keys(v._raw).forEach(function (k) { o[k] = shape(v._raw[k]); }); return o; }
     if (Array.isArray(v)) return v.slice().sort();
     return v;
   }
@@ -234,7 +237,7 @@
   }
   function aliasHTML(n, cls) {
     if (!n.aliases || !n.aliases.length) return '';
-    return '<p class="' + cls + '"><span class="sp-vs">' + T('same design', '同一设计') + '</span>' + n.aliases.map(function (a) { return esc(shortName(a)) + ' <i>' + esc(a.date) + '</i>'; }).join(' · ') + '</p>';
+    return '<p class="' + cls + '"><span class="sp-vs">' + T('same design', '同一设计') + '</span>' + n.aliases.map(function (a) { return '<span class="sp-alias-row">' + esc(shortName(a)) + ' <i>' + esc((a.scale || '').split(',')[0] || a.date) + '</i></span>'; }).join('') + '</p>';
   }
   function noveltyHTML(n, cls, limit) {
     var items;
