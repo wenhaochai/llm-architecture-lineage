@@ -26,7 +26,7 @@ import json, os, collections
 import schema
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ORIGIN_THRESHOLD = 12
+ORIGIN_THRESHOLD = 32
 
 M_ALL = json.load(open(f"{ROOT}/data/metadata.json"))
 

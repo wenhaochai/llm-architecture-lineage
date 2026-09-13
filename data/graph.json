@@ -1669,16 +1669,8 @@
    },
    "num_architecture_keys": 33,
    "is_root": false,
-   "primary_parent": "gpt-2-xl-1-5b",
+   "primary_parent": "llama-3-8b",
    "changes": [
-    {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
-     "field": "activation",
-     "kind": "change"
-    },
     {
      "field": "attention_kind",
      "kind": "change"
@@ -1694,10 +1686,6 @@
     {
      "field": "kv_lora_rank",
      "kind": "add"
-    },
-    {
-     "field": "position_encoding_type",
-     "kind": "change"
     },
     {
      "field": "rope_scaling",
@@ -12255,12 +12243,8 @@
    },
    "num_architecture_keys": 40,
    "is_root": false,
-   "primary_parent": "gpt-2-xl-1-5b",
+   "primary_parent": "arcee-ai-trinity-large-400b",
    "changes": [
-    {
-     "field": "norm_type",
-     "kind": "change"
-    },
     {
      "field": "norm_zero_centered",
      "kind": "add"
@@ -12270,40 +12254,16 @@
      "kind": "drop"
     },
     {
-     "field": "attention_kind",
-     "kind": "change"
-    },
-    {
      "field": "attention_impl_type",
      "kind": "add"
     },
     {
-     "field": "gated_attention",
-     "kind": "add"
-    },
-    {
-     "field": "qk_norm",
-     "kind": "add"
-    },
-    {
-     "field": "local_global_ratio",
-     "kind": "add"
-    },
-    {
-     "field": "layer_types",
-     "kind": "add"
-    },
-    {
-     "field": "sliding_window",
-     "kind": "add"
+     "field": "sliding_window_pattern",
+     "kind": "drop"
     },
     {
      "field": "swa_attention_config",
      "kind": "add"
-    },
-    {
-     "field": "position_encoding_type",
-     "kind": "change"
     },
     {
      "field": "rope_scaling",
@@ -12314,28 +12274,28 @@
      "kind": "add"
     },
     {
-     "field": "moe",
-     "kind": "add"
+     "field": "nope_layers",
+     "kind": "drop"
     },
     {
-     "field": "num_experts",
-     "kind": "add"
+     "field": "num_shared_experts",
+     "kind": "drop"
+    },
+    {
+     "field": "dense_prefix_layers",
+     "kind": "drop"
     },
     {
      "field": "moe_layer_schedule",
      "kind": "add"
     },
     {
-     "field": "router_scoring",
-     "kind": "add"
-    },
-    {
-     "field": "router_normalize_weights",
-     "kind": "add"
-    },
-    {
      "field": "router_expert_bias",
      "kind": "add"
+    },
+    {
+     "field": "mup",
+     "kind": "drop"
     }
    ],
    "scale_copy": false,
@@ -33035,22 +32995,11 @@
    "n": 1
   },
   {
-   "source": "gpt-2-xl-1-5b",
-   "target": "deepseek-v3",
-   "type": "origin",
-   "fields": [],
-   "n": 16
-  },
-  {
    "source": "llama-3-8b",
    "target": "deepseek-v3",
-   "type": "trait",
-   "fields": [
-    "norm_type",
-    "activation",
-    "position_encoding_type"
-   ],
-   "n": 3
+   "type": "parent",
+   "fields": [],
+   "n": 13
   },
   {
    "source": "llama-3-2-3b",
@@ -33581,59 +33530,11 @@
    "n": 7
   },
   {
-   "source": "gpt-2-xl-1-5b",
+   "source": "arcee-ai-trinity-large-400b",
    "target": "step-3-5-flash-196b",
-   "type": "origin",
+   "type": "parent",
    "fields": [],
-   "n": 20
-  },
-  {
-   "source": "llama-3-8b",
-   "target": "step-3-5-flash-196b",
-   "type": "trait",
-   "fields": [
-    "norm_type",
-    "attention_kind",
-    "position_encoding_type"
-   ],
-   "n": 3
-  },
-  {
-   "source": "qwen3-next-80b-a3b",
-   "target": "step-3-5-flash-196b",
-   "type": "trait",
-   "fields": [
-    "gated_attention"
-   ],
-   "n": 1
-  },
-  {
-   "source": "olmo-2-7b",
-   "target": "step-3-5-flash-196b",
-   "type": "trait",
-   "fields": [
-    "qk_norm"
-   ],
-   "n": 1
-  },
-  {
-   "source": "gemma-3-27b",
-   "target": "step-3-5-flash-196b",
-   "type": "trait",
-   "fields": [
-    "local_global_ratio",
-    "sliding_window"
-   ],
-   "n": 2
-  },
-  {
-   "source": "gpt-oss-120b",
-   "target": "step-3-5-flash-196b",
-   "type": "trait",
-   "fields": [
-    "layer_types"
-   ],
-   "n": 1
+   "n": 13
   },
   {
    "source": "llama-3-2-3b",
@@ -33649,13 +33550,9 @@
    "target": "step-3-5-flash-196b",
    "type": "trait",
    "fields": [
-    "moe",
-    "num_experts",
-    "moe_layer_schedule",
-    "router_scoring",
-    "router_normalize_weights"
+    "moe_layer_schedule"
    ],
-   "n": 5
+   "n": 1
   },
   {
    "source": "minimax-m2-230b",
@@ -34966,7 +34863,7 @@
   }
  ],
  "n_gallery": 103,
- "origin_threshold": 12,
+ "origin_threshold": 32,
  "generated": "2026-09-13",
  "source": "https://sebastianraschka.com/llm-architecture-gallery/ (card list + config.json links); HuggingFace config.json per model"
 }

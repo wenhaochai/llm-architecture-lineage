@@ -20,10 +20,6 @@ h3 { font-family: var(--font-serif); font-weight: 500; font-size: 21px; margin: 
 :root { --lin-node: #C9C4B8; --lin-edge: rgba(120, 115, 105, 0.24); }
 html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 185, 0.2); }
 .lin { margin: 24px 0 8px; }
-/* temporary tuning control for the origin threshold; remove once the value is fixed */
-.lin-thr { display: flex; align-items: center; gap: 14px; margin: 0 0 10px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-4); }
-.lin-thr input { width: 220px; accent-color: var(--accent); }
-.lin-thr-val { text-transform: none; letter-spacing: 0.02em; }
 .lin-svg { position: relative; width: 100vw; margin-left: calc(50% - 50vw); padding: 8px var(--gutter) 0; }
 .lin-svg svg { width: 100%; height: auto; display: block; overflow: visible; }
 .lin-n { cursor: pointer; }
@@ -65,7 +61,10 @@ html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 18
 .cf-group h5 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin: 0 0 6px; }
 .lin-raw dt i { display: block; font-style: normal; color: var(--ink-4); font-size: 11px; }
 .sp-vs { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-4); margin-right: 10px; }
-.tp-sig .sp-vs { display: block; margin: 0 0 3px; }
+.tp-sig .sp-vs, .tp-alias .sp-vs { display: block; margin: 0 0 3px; }
+.ar-main .tp-alias, .ar-main .sp-alias { font-family: var(--font-sans); font-size: 12px; line-height: 1.5; color: var(--ink-3); margin: 0 0 8px; max-width: none; }
+.ar-main .sp-alias { font-size: 15px; margin: 8px 0 0; }
+.tp-alias i, .sp-alias i { font-style: normal; font-family: var(--font-mono); font-size: 0.8em; color: var(--ink-4); }
 .sp-node button i { font-style: normal; font-family: var(--font-mono); font-size: 11px; color: var(--ink-4); margin-left: 6px; }
 .lin-full summary em { display: block; font-style: normal; text-transform: none; letter-spacing: 0; font-family: var(--font-sans); font-size: 12.5px; color: var(--ink-4); margin-top: 6px; }
 .lin-full summary { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); cursor: pointer; list-style: none; }

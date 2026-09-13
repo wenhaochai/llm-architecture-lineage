@@ -6,7 +6,7 @@
    already placed (except scale copies), attaches under the one that needs the fewest
    design changes, gets one extra edge from the earliest model that already carried each
    mechanism it adds, and hangs off GPT-2 XL when even the closest design needs more
-   changes than the threshold. build_graph.py mirrors this for the repository data. */
+   changes than the threshold (32). build_graph.py mirrors this for the repository data. */
 (function () {
   'use strict';
   var D = window.LLM_LINEAGE;
@@ -60,7 +60,7 @@
   }
 
   /* ---------- online construction ---------- */
-  var state = { selected: 'kimi-k3', threshold: D.origin_threshold || 12 };
+  var state = { selected: 'kimi-k3', threshold: D.origin_threshold || 32 };
   try { var q = /[?&]model=([a-z0-9-]+)/.exec(location.search); if (q && byKey[q[1]]) state.selected = q[1]; } catch (e) {}
   var edges, parentsOf, childrenOf, visible = nodes;
   function computeGraph(thr) {
@@ -222,19 +222,11 @@
   }
 
   /* ---------- render ---------- */
-  var root, svgHost, panel, tip, thrLabel;
+  var root, svgHost, panel, tip;
   function build(container) {
     root = container;
     root.innerHTML = '';
     root.className = 'lin';
-    // temporary control: how many design changes still count as "close enough" to attach under an existing model
-    var ctl = el('div', { 'class': 'lin-thr' });
-    var slider = el('input', { type: 'range', id: 'lin-threshold', min: 0, max: 40, step: 1, value: state.threshold });
-    thrLabel = el('span', { 'class': 'lin-thr-val' });
-    slider.addEventListener('input', function () { state.threshold = +slider.value; rebuild(); });
-    ctl.appendChild(el('label', { 'for': 'lin-threshold', text: T('origin threshold', '起点阈值') }));
-    ctl.appendChild(slider); ctl.appendChild(thrLabel);
-    root.appendChild(ctl);
     svgHost = el('div', { 'class': 'lin-svg' });
     root.appendChild(svgHost);
     tip = el('div', { 'class': 'lin-tip', hidden: '' });
@@ -246,9 +238,6 @@
   function rebuild() {
     computeGraph(state.threshold);
     layout();
-    var nOrigin = edges.filter(function (e) { return e.type === 'origin'; }).length;
-    var nCopies = nodes.filter(function (n) { return n.scale_copy; }).length;
-    if (thrLabel) thrLabel.textContent = state.threshold + ' · ' + T(visible.length + ' nodes · ' + nCopies + ' scale copies folded in · ' + nOrigin + ' attached to origin · ' + edges.length + ' edges · ' + gens.length + ' generations', visible.length + ' 个节点 · ' + nCopies + ' 个规模副本已合并 · ' + nOrigin + ' 个挂在起点 · ' + edges.length + ' 条边 · ' + gens.length + ' 代');
     draw();
   }
 
