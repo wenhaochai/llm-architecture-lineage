@@ -17,7 +17,7 @@ the graph is a deterministic function of the configs.
 ```
 fetch_gallery.py   gallery page  -> data/cards.json          (103 cards, config.json links)
 fetch_configs.py   Hugging Face  -> data/configs/<key>.json  (103 configs, provenance recorded)
-extract.py         configs       -> data/metadata.json       (one normalized schema, ~60 fields)
+extract.py         configs       -> data/metadata.json       (one normalized schema, ~110 fields)
 build_graph.py     metadata      -> data/graph.json          (nodes, edges, generations)
 export_web.py      graph.json    -> web/data.js              (trimmed data for the viewer)
 ```
@@ -43,19 +43,21 @@ into the saved file under `_provenance`.
 ### 2. Normalized metadata
 
 Config keys differ by model family: the 103 files use 571 distinct keys. `extract.py`
-maps them onto one schema: depth, width, heads, KV heads, head dimension, FFN size, MoE
+maps them onto one schema of about 110 fields: depth, width, heads, KV heads, head dimension, FFN size, MoE
 expert counts and shared experts, MLA latent ranks, sliding-window layer schedules,
 hybrid mixer type and ratio (Gated DeltaNet, Kimi Delta Attention, Mamba-2, Lightning
 Attention, LIV convolution, mLSTM), sparse-attention indexers, MTP heads, QK-Norm, gated
 attention, NoPE, cross-layer KV sharing, per-layer embeddings, looped depth sharing,
-hyper-connections, and more. Where the modeling class fixes a trait that the config does
+hyper-connections, RoPE parameters, router settings, and more. The complete original
+config is kept per model (`config_full`, long lists summarised as value counts, checkpoint
+quantization blocks reduced to method and bit width). Where the modeling class fixes a trait that the config does
 not spell out (QK-Norm in Gemma 3, for example), the trait is attached by `model_type`
 in the `IMPLIED` table and marked as implied. The gallery's own attention / layer-mix
 text is stored only as a cross-check and never used to build edges.
 
-### 3. Edges
+### 3. Parents
 
-Each model becomes a set of about 30 categorical traits. For a candidate parent `a`
+Every edge means the same thing: the child's config is one step away from the parent's. Parents are chosen as follows. Each model becomes a set of about 30 categorical traits. For a candidate parent `a`
 released strictly before `b`:
 
 ```
@@ -67,23 +69,26 @@ score(a -> b) = 10 * weighted Jaccard(traits(a), traits(b))
               +  1 if same organisation
 ```
 
-* **nearest** / **same-code**: the highest-scoring earlier model is the primary parent
-  when trait overlap reaches 0.62 (0.45 within the same organisation); otherwise the model
-  is a root. The edge is `same-code` when both load into the same modeling class.
-* **variant**: same-day siblings of one modeling class attach to the largest sibling.
-* **trait**: for every notable trait a model carries that its primary parent lacks, one
-  edge from the earliest gallery model that carried it.
+* The highest-scoring earlier model is the first parent when trait overlap reaches 0.62
+  (0.45 within the same organisation); otherwise the model is a root. `graph.json` tags
+  such an edge `nearest`, or `same-code` when both configs load into the same modeling class.
+* Same-day siblings of one modeling class attach to the largest sibling (`variant`).
+* For every notable trait a model carries that its first parent lacks, one more edge comes
+  from the earliest gallery model that carried it (`trait`).
+
+The tags record how an edge was derived and are exposed in the detail panel; the figure
+draws every edge the same way.
 
 Every edge runs forward in release time, so the graph is acyclic. Generation is 0 for a
 root and one more than the largest generation among a node's parents.
 
-Result: 103 nodes, 162 edges (60 nearest, 26 same-code, 14 variant, 62 trait), 11
-generations, 3 roots (GPT-2 XL, DeepSeek V3, xLSTM 7B).
+Result: 103 nodes, 162 edges, 11 generations, 3 roots (GPT-2 XL, DeepSeek V3, xLSTM 7B).
 
 ## Caveats
 
-The gallery is a curated sample, so a trait's "origin" is its first appearance in this set,
-not in the literature. A nearest-config edge states similarity, not what a team read.
+The gallery is a curated sample, so a trait's "origin" is its first appearance among these
+103 models; the literature may hold earlier ones. A nearest-config edge measures similarity
+between two configs; which papers a team actually read is a separate question.
 
 ## Layout of the repository
 

@@ -344,6 +344,74 @@ def extract(card):
     m["encoder_decoder"] = bool(imp.get("encoder_decoder")) or bool(first(tc, "is_encoder_decoder")) and mt != "gpt2"
     m["activation"] = imp.get("act") or (m["hidden_act"] or "").lower() or None
     m["multimodal"] = tc is not c  # text config nested inside a multimodal wrapper
+
+    # ---- more normalised fields (kept for the metadata table) ----------------------
+    rs = first(tc, "rope_scaling") or first(tc, "rope_parameters") or {}
+    m["rope_scaling_factor"] = rs.get("factor") if isinstance(rs, dict) else None
+    m["original_max_position_embeddings"] = rs.get("original_max_position_embeddings") if isinstance(rs, dict) else None
+    m["partial_rotary_factor"] = first(tc, "partial_rotary_factor", "rotary_pct")
+    m["rotary_dim"] = first(tc, "rotary_dim")
+    m["attention_dropout"] = first(tc, "attention_dropout")
+    m["initializer_range"] = first(tc, "initializer_range")
+    m["mlp_bias"] = first(tc, "mlp_bias")
+    m["moe_layer_freq"] = first(tc, "moe_layer_freq") if not isinstance(first(tc, "moe_layer_freq"), list) else None
+    m["routed_scaling_factor"] = first(tc, "routed_scaling_factor", "route_scale", "moe_router_scaling_factor", "router_scaling_factor")
+    m["norm_topk_prob"] = first(tc, "norm_topk_prob", "moe_renormalize", "norm_expert_weight")
+    m["topk_method"] = first(tc, "topk_method")
+    m["topk_group"] = first(tc, "topk_group", "num_expert_groups_per_tok")
+    m["router_aux_loss_coef"] = first(tc, "router_aux_loss_coef", "aux_loss_alpha", "load_balance_coeff")
+    m["shared_expert_intermediate_size"] = first(tc, "shared_expert_intermediate_size", "moe_shared_expert_intermediate_size", "share_expert_dim", "shared_intermediate_size")
+    m["moe_latent_size"] = first(tc, "moe_latent_size")
+    m["index_n_heads"] = first(tc, "index_n_heads", "indexer_n_heads")
+    m["index_head_dim"] = first(tc, "index_head_dim", "indexer_head_dim")
+    m["compress_ratios"] = sorted(set(first(tc, "compress_ratios") or [])) or None
+    m["mamba_num_heads"] = first(tc, "mamba_num_heads", "mamba_n_heads")
+    m["mamba_head_dim"] = first(tc, "mamba_head_dim", "mamba_d_head")
+    m["ssm_state_size"] = first(tc, "ssm_state_size", "mamba_d_state")
+    m["mamba_n_groups"] = first(tc, "n_groups", "mamba_n_groups")
+    m["conv_kernel"] = first(tc, "conv_kernel", "mamba_d_conv", "linear_conv_kernel_dim", "short_conv_kernel_size", "conv_L_cache", "sconv_kernel_size")
+    m["linear_num_key_heads"] = first(tc, "linear_num_key_heads")
+    m["linear_num_value_heads"] = first(tc, "linear_num_value_heads")
+    m["linear_key_head_dim"] = first(tc, "linear_key_head_dim")
+    m["linear_value_head_dim"] = first(tc, "linear_value_head_dim")
+    lac = first(tc, "linear_attn_config")
+    if isinstance(lac, dict):
+        m["linear_num_value_heads"] = m["linear_num_value_heads"] or lac.get("num_heads")
+        m["linear_value_head_dim"] = m["linear_value_head_dim"] or lac.get("head_dim")
+    m["kv_shared_layers"] = first(tc, "num_kv_shared_layers") or (len(first(tc, "kv_source_layer_ids") or []) or None)
+    m["hidden_size_per_layer_input"] = first(tc, "hidden_size_per_layer_input", "ple_embed_dim")
+    m["final_logit_softcapping"] = first(tc, "final_logit_softcapping", "output_logit_soft_cap")
+    m["attn_logit_softcapping"] = first(tc, "attn_logit_softcapping")
+    m["query_pre_attn_scalar"] = first(tc, "query_pre_attn_scalar")
+    m["swiglu_limit"] = first(tc, "swiglu_limit")
+    m["dtype"] = first(tc, "torch_dtype", "dtype") or first(c, "torch_dtype", "dtype")
+    m["transformers_version"] = first(tc, "transformers_version") or first(c, "transformers_version")
+    m["bos_token_id"] = first(tc, "bos_token_id"); m["eos_token_id"] = first(tc, "eos_token_id"); m["pad_token_id"] = first(tc, "pad_token_id")
+    m["num_config_keys"] = len(tc)
+
+    # ---- the complete text config, long lists summarised as value counts -------------
+    def compact(v):
+        if isinstance(v, list) and len(v) > 12 and all(isinstance(x, (str, int, float, bool)) or x is None for x in v):
+            cnt = collections.Counter(str(x) for x in v)
+            return {"_list_len": len(v), "_counts": dict(cnt.most_common())}
+        if isinstance(v, dict):
+            return {k: compact(x) for k, x in v.items()}
+        if isinstance(v, list):
+            return [compact(x) for x in v]
+        return v
+    def quant_summary(q):
+        if not isinstance(q, dict):
+            return q
+        bits = None
+        for g in (q.get("config_groups") or {}).values():
+            if isinstance(g, dict) and isinstance(g.get("weights"), dict):
+                bits = g["weights"].get("num_bits")
+        return {"quant_method": q.get("quant_method") or q.get("format"), "weight_bits": bits or q.get("bits"), "_note": "checkpoint quantization, not architecture; details omitted"}
+    DROP = ("architectures", "auto_map", "transformers.js_config", "chat_template", "processor_config")
+    m["config_full"] = {k: (quant_summary(v) if k == "quantization_config" else compact(v)) for k, v in tc.items() if k not in DROP}
+    if tc is not c:
+        m["config_wrapper"] = {k: compact(v) for k, v in c.items() if not isinstance(v, dict) or k in ("vision_config", "audio_config")}
+        m["config_wrapper"] = {k: ("<omitted sub-config>" if isinstance(v, dict) and k in ("vision_config", "audio_config") else v) for k, v in m["config_wrapper"].items()}
     return m
 
 

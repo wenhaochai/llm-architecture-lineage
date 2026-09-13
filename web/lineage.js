@@ -16,7 +16,7 @@
   edges.forEach(function (e) { parentsOf[e.target].push(e); childrenOf[e.source].push(e); });
 
   /* ---------- state ---------- */
-  var state = { selected: 'kimi-k3', color: 'lineage', types: { variant: true, nearest: true, 'same-code': true, trait: true }, labels: false, hover: null };
+  var state = { selected: 'kimi-k3', hover: null };
   try { var q = /[?&]model=([a-z0-9-]+)/.exec(location.search); if (q && byKey[q[1]]) state.selected = q[1]; } catch (e) {}
 
   /* ---------- layout: generation columns, rows ordered by parent position ----------
@@ -39,7 +39,7 @@
       var ps = parentsOf[n.key].filter(function (e) { return pos[e.source]; });
       if (ps.length) {
         var w = 0, s = 0;
-        ps.forEach(function (e) { var wt = e.type === 'trait' ? 0.35 : 1; s += pos[e.source].y * wt; w += wt; });
+        ps.forEach(function (e) { var wt = e.type === 'trait' ? 0.35 : 1; s += pos[e.source].y * wt; w += wt; }); // primary parents pull harder than trait origins
         n._want = s / w;
       } else {
         n._want = H / 2 + (laneOrder[n.lane_root] - (Object.keys(laneOrder).length - 1) / 2) * ROW * 2;
@@ -69,7 +69,6 @@
       if (seen[k]) continue;
       seen[k] = true;
       (dir === 'up' ? parentsOf[k] : childrenOf[k]).forEach(function (e) {
-        if (!state.types[e.type]) return;
         out[e.source + '>' + e.target] = true;
         stack.push(dir === 'up' ? e.source : e.target);
       });
@@ -77,21 +76,8 @@
     return { nodes: seen, edges: out };
   }
 
-  /* ---------- palettes ---------- */
-  var PAL = {
-    attention: { GQA: '#4285F4', MLA: '#EA4335', MHA: '#F29900', MQA: '#188038', 'CSA/HCA': '#A142F4', CSA2: '#A142F4', CCA: '#00897B', 'none (mLSTM)': '#8A8791' },
-    mixer: { 'attention-only': '#B9B4A6', gated_deltanet: '#4285F4', kda: '#EA4335', mamba2: '#188038', lightning: '#F29900', liv_conv: '#A142F4', mlstm: '#00897B' },
-    ffn: { dense: '#B9B4A6', 'MoE': '#4285F4', 'MoE + shared expert': '#EA4335' }
-  };
   var MIXER_LABEL = { 'attention-only': ['attention only', '纯注意力'], gated_deltanet: ['Gated DeltaNet', 'Gated DeltaNet'], kda: ['Kimi Delta Attention', 'Kimi Delta Attention'], mamba2: ['Mamba-2', 'Mamba-2'], lightning: ['Lightning Attention', 'Lightning Attention'], liv_conv: ['LIV convolution', 'LIV 卷积'], mlstm: ['mLSTM', 'mLSTM'] };
-  function ffnClass(n) { return !n.is_moe ? 'dense' : (n.shared_experts ? 'MoE + shared expert' : 'MoE'); }
-  function catOf(n) {
-    if (state.color === 'attention') return n.attention_class;
-    if (state.color === 'mixer') return n.hybrid_mixer || 'attention-only';
-    if (state.color === 'ffn') return ffnClass(n);
-    return null;
-  }
-  var BLUE = '#4285F4', DARK = '#1B4FB4', GREY = 'var(--lin-node, #C9C4B8)', GREY_EDGE = 'var(--lin-edge, rgba(120, 115, 105, 0.24))';
+  var ACCENT = 'var(--accent, #7A1A1A)', ACCENT_DEEP = 'var(--accent-hover, #5C1212)', GREY = 'var(--lin-node, #C9C4B8)', GREY_EDGE = 'var(--lin-edge, rgba(120, 115, 105, 0.24))';
 
   /* ---------- helpers ---------- */
   var T = function (en, zh) { return (window.ArticleCharts && window.ArticleCharts.t) ? window.ArticleCharts.t(en, zh) : en; };
@@ -125,9 +111,6 @@
     if (n.linear_layers && n.full_attention_layers_in_hybrid) s += ' ' + n.linear_layers + ' : ' + n.full_attention_layers_in_hybrid + ' ' + T('attention', '注意力');
     return s;
   }
-  var EDGE_LABEL = {
-    variant: ['same-day variant', '同日变体'], nearest: ['nearest config', '最近 config'], 'same-code': ['same modeling class', '同一建模类'], trait: ['trait origin', '特征来源']
-  };
 
   /* ---------- render ---------- */
   var root, svgHost, panel, tip;
@@ -147,30 +130,7 @@
       if (hit) { state.selected = hit.key; draw(); }
     });
     bar.appendChild(el('div', { 'class': 'lin-ctl' }, [search, dl]));
-    // color mode
-    var sel = el('select', { 'class': 'lin-select', id: 'lin-color', 'aria-label': T('Color by', '着色') });
-    [['lineage', T('Color: lineage', '着色：谱系')], ['attention', T('Color: attention', '着色：注意力')], ['mixer', T('Color: sequence mixer', '着色：序列混合器')], ['ffn', T('Color: FFN', '着色：FFN')]].forEach(function (o) {
-      var op = el('option', { value: o[0], text: o[1] }); if (o[0] === state.color) op.selected = true; sel.appendChild(op);
-    });
-    sel.addEventListener('change', function () { state.color = sel.value; draw(); });
-    bar.appendChild(el('div', { 'class': 'lin-ctl' }, [sel]));
-    // edge types
-    var types = el('div', { 'class': 'lin-ctl lin-types' });
-    ['same-code', 'nearest', 'variant', 'trait'].forEach(function (t) {
-      var id = 'lin-t-' + t;
-      var cb = el('input', { type: 'checkbox', id: id }); cb.checked = state.types[t];
-      cb.addEventListener('change', function () { state.types[t] = cb.checked; draw(); });
-      types.appendChild(el('label', { 'for': id, 'class': 'lin-type lin-type-' + t }, [cb, el('i'), el('span', { text: T(EDGE_LABEL[t][0], EDGE_LABEL[t][1]) })]));
-    });
-    bar.appendChild(types);
-    // labels toggle
-    var lb = el('input', { type: 'checkbox', id: 'lin-labels' }); lb.checked = state.labels;
-    lb.addEventListener('change', function () { state.labels = lb.checked; draw(); });
-    bar.appendChild(el('div', { 'class': 'lin-ctl' }, [el('label', { 'for': 'lin-labels', 'class': 'lin-type' }, [lb, el('span', { text: T('All names', '显示全部名称') })])]));
     root.appendChild(bar);
-
-    var legend = el('div', { 'class': 'lin-legend', id: 'lin-legend' });
-    root.appendChild(legend);
 
     svgHost = el('div', { 'class': 'lin-svg' });
     root.appendChild(svgHost);
@@ -181,25 +141,6 @@
     draw();
   }
 
-  function legendHTML() {
-    var h = '';
-    if (state.color === 'lineage') {
-      h += item(DARK, 'sq', T('selected model', '选中模型')) + item(BLUE, 'c', T('its lineage: ancestors and descendants', '其谱系：祖先与后代')) + item(GREY, 'c', T('other models', '其他模型')) + item(GREY, 'sq', T('terminal node: no descendant in the gallery yet', '终端节点：图库中尚无后代'));
-    } else {
-      var pal = PAL[state.color];
-      var used = {};
-      nodes.forEach(function (n) { used[catOf(n)] = true; });
-      Object.keys(pal).forEach(function (k) {
-        if (!used[k]) return;
-        var lab = state.color === 'mixer' && MIXER_LABEL[k] ? T(MIXER_LABEL[k][0], MIXER_LABEL[k][1]) : (state.color === 'ffn' ? T(k, { dense: '稠密', MoE: 'MoE', 'MoE + shared expert': 'MoE + 共享专家' }[k]) : k);
-        h += item(pal[k], 'c', lab);
-      });
-      h += item(GREY, 'sq', T('square: terminal node', '方块：终端节点'));
-    }
-    return h;
-    function item(color, shape, label) { return '<span class="li"><i class="' + shape + '" style="background:' + color + '"></i>' + esc(label) + '</span>'; }
-  }
-
   function draw() {
     var lin = { nodes: {}, edges: {} };
     if (state.selected && byKey[state.selected]) {
@@ -207,27 +148,17 @@
       Object.keys(up.nodes).forEach(function (k) { lin.nodes[k] = true; }); Object.keys(down.nodes).forEach(function (k) { lin.nodes[k] = true; });
       Object.keys(up.edges).forEach(function (k) { lin.edges[k] = true; }); Object.keys(down.edges).forEach(function (k) { lin.edges[k] = true; });
     }
-    document.getElementById('lin-legend').innerHTML = legendHTML();
 
     var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': T('Lineage graph of 103 open-weight LLM architectures', '103 个开源 LLM 架构的谱系图') });
-    // generation axis
-    gens.forEach(function (g) {
-      var x = colX[g];
-      svg.appendChild(el('line', { x1: x, y1: MT - 14, x2: x, y2: H - MB + 4, stroke: 'var(--rule-2)', 'stroke-width': 1 }));
-      svg.appendChild(el('text', { x: x, y: 14, 'text-anchor': 'middle', 'font-size': 10, 'font-family': 'var(--font-mono)', fill: 'var(--ink-4)', text: g === 0 ? T('gen 0 · roots', '第 0 代 · 根') : T('gen ' + g, '第 ' + g + ' 代') }));
-    });
     // edges: grey first, lineage on top
     var gEdges = el('g'), gEdgesHi = el('g');
     edges.forEach(function (e) {
-      if (!state.types[e.type]) return;
       var a = pos[e.source], b = pos[e.target];
       if (!a || !b) return;
       var hi = lin.edges[e.source + '>' + e.target];
       var dx = Math.max(24, (b.x - a.x) * 0.5);
       var d = 'M' + a.x + ',' + a.y + ' C' + (a.x + dx) + ',' + a.y + ' ' + (b.x - dx) + ',' + b.y + ' ' + b.x + ',' + b.y;
-      var p = el('path', { d: d, fill: 'none', 'class': 'lin-e lin-e-' + e.type + (hi ? ' hi' : ''),
-        stroke: hi ? BLUE : GREY_EDGE, 'stroke-width': hi ? (e.type === 'trait' ? 1.4 : 1.8) : (e.type === 'same-code' ? 1.2 : 0.9),
-        'stroke-dasharray': e.type === 'trait' ? '3 3' : (e.type === 'variant' ? '1.5 2.5' : 'none') });
+      var p = el('path', { d: d, fill: 'none', 'class': 'lin-e' + (hi ? ' hi' : ''), stroke: hi ? ACCENT : GREY_EDGE, 'stroke-width': hi ? 1.6 : 1, 'stroke-opacity': hi ? 0.85 : 1 });
       (hi ? gEdgesHi : gEdges).appendChild(p);
     });
     svg.appendChild(gEdges); svg.appendChild(gEdgesHi);
@@ -236,9 +167,7 @@
     nodes.forEach(function (n) {
       var p = pos[n.key];
       var isSel = n.key === state.selected, inLin = !!lin.nodes[n.key];
-      var fill, stroke;
-      if (state.color === 'lineage') { fill = isSel ? DARK : inLin ? BLUE : GREY; stroke = isSel ? DARK : inLin ? '#fff' : 'var(--paper)'; }
-      else { fill = PAL[state.color][catOf(n)] || GREY; stroke = isSel ? DARK : inLin ? BLUE : 'var(--paper)'; }
+      var fill = isSel ? ACCENT_DEEP : inLin ? ACCENT : GREY, stroke = isSel ? ACCENT_DEEP : 'var(--paper)';
       var r = isSel ? 7 : inLin ? 5.5 : 4.5;
       var g = el('g', { 'class': 'lin-n' + (isSel ? ' sel' : '') + (inLin ? ' lin' : ''), 'data-key': n.key, tabindex: 0, role: 'button', 'aria-label': n.title });
       var shape = n.is_terminal
@@ -246,7 +175,7 @@
         : el('circle', { cx: p.x, cy: p.y, r: r, fill: fill, stroke: stroke, 'stroke-width': isSel ? 2 : inLin ? 1.5 : 1 });
       g.appendChild(el('circle', { cx: p.x, cy: p.y, r: 11, fill: 'transparent' })); // hit target
       g.appendChild(shape);
-      if (state.labels || isSel || (inLin && state.color === 'lineage')) {
+      if (isSel || inLin) {
         var right = p.x < W * 0.86;
         g.appendChild(el('text', { x: p.x + (right ? 9 : -9), y: p.y + 3.5, 'text-anchor': right ? 'start' : 'end', 'font-size': isSel ? 11 : 9.5, 'font-weight': isSel ? 600 : 400,
           fill: isSel ? 'var(--ink)' : inLin ? 'var(--ink-2)' : 'var(--ink-4)', 'paint-order': 'stroke', stroke: 'var(--paper)', 'stroke-width': 3, 'stroke-linejoin': 'round', text: shortName(n) }));
@@ -265,13 +194,19 @@
   }
 
   /* ---------- tooltip ---------- */
+  function signature(n) {
+    var parts = [n.attention_class === 'none (mLSTM)' ? 'mLSTM' : n.attention_class];
+    if (n.swa && n.swa_local_layers) parts.push(T('local/global ', '局部/全局 ') + n.swa_local_layers + ':' + n.swa_global_layers);
+    if (n.sparse_attention) parts.push(n.sparse_attention);
+    if (n.hybrid_mixer && n.hybrid_mixer !== 'mlstm') parts.push((MIXER_LABEL[n.hybrid_mixer] ? T(MIXER_LABEL[n.hybrid_mixer][0], MIXER_LABEL[n.hybrid_mixer][1]) : n.hybrid_mixer) + (n.linear_layers && n.full_attention_layers_in_hybrid ? ' ' + n.linear_layers + ':' + n.full_attention_layers_in_hybrid : ''));
+    parts.push(n.is_moe ? 'MoE ' + n.num_experts + '/' + n.experts_per_tok + (n.shared_experts ? '+' + n.shared_experts : '') : T('dense', '稠密'));
+    return parts.join('  ·  ');
+  }
   function showTip(n, ev) {
-    tip.innerHTML = '<div class="th">' + esc(n.title) + '</div>' +
-      '<div class="tr">' + esc(n.org) + ' · ' + esc(n.date) + ' · ' + T('generation ', '第 ') + n.generation + T('', ' 代') + '</div>' +
-      '<div class="tr">' + esc(attnLabel(n)) + '</div>' +
-      '<div class="tr">' + esc(mixerLabel(n)) + ' · ' + esc(ffnLabel(n)) + '</div>' +
-      '<div class="tr">' + n.num_layers + ' ' + T('layers', '层') + ' · d=' + n.hidden_size + (n.num_heads ? ' · ' + n.num_heads + (n.num_kv_heads && n.attention_class !== 'MLA' ? '/' + n.num_kv_heads : '') + ' ' + T('heads', '头') : '') + '</div>' +
-      '<div class="tr tr-hint">' + T('click to trace its lineage', '点击查看谱系') + '</div>';
+    tip.innerHTML = '<div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span></div>' +
+      '<div class="tp-title">' + esc(n.title) + '</div>' +
+      '<div class="tp-sig">' + esc(signature(n)) + '</div>' +
+      '<div class="tp-foot"><span>' + n.num_layers + ' ' + T('layers', '层') + ' · d ' + n.hidden_size + '</span><span>' + T('generation ', '第 ') + n.generation + T('', ' 代') + '</span></div>';
     tip.hidden = false;
     moveTip(ev);
   }
@@ -290,35 +225,48 @@
     var n = byKey[state.selected];
     if (!n) { panel.innerHTML = ''; return; }
     var kv = [
-      [T('Organisation', '机构'), n.org], [T('Release', '发布'), n.date], [T('Generation', '代数'), n.generation + (n.is_root ? T(' (root)', '（根）') : '')],
       [T('Attention', '注意力'), attnLabel(n)], [T('Sequence mixer', '序列混合器'), mixerLabel(n)], [T('FFN', 'FFN'), ffnLabel(n)],
-      [T('Depth / width', '深度 / 宽度'), n.num_layers + ' ' + T('layers', '层') + ', d = ' + n.hidden_size + (n.intermediate_size ? ', FFN ' + n.intermediate_size : '')],
+      [T('Depth / width', '深度 / 宽度'), n.num_layers + ' ' + T('layers', '层') + ', d = ' + n.hidden_size + (n.intermediate_size ? ', FFN ' + n.intermediate_size : '') + (n.moe_intermediate_size ? ', ' + T('expert', '专家') + ' ' + n.moe_intermediate_size : '')],
       [T('Heads', '注意力头'), n.num_heads ? (n.num_heads + (n.num_kv_heads && n.attention_class !== 'MLA' ? ' query / ' + n.num_kv_heads + ' KV' : '') + (n.head_dim ? ', head_dim ' + n.head_dim : '')) : '–'],
+      n.kv_lora_rank ? [T('Latent ranks', '潜在秩'), 'kv ' + n.kv_lora_rank + (n.q_lora_rank ? ', q ' + n.q_lora_rank : '') + (n.qk_rope_head_dim != null ? ', rope ' + n.qk_rope_head_dim + ' / nope ' + n.qk_nope_head_dim : '') + (n.v_head_dim ? ', v ' + n.v_head_dim : '')] : null,
+      [T('Positions', '位置编码'), (n.position_encoding === 'rope' ? 'RoPE' + (n.rope_theta ? ' θ = ' + Number(n.rope_theta).toLocaleString() : '') + (n.rope_scaling_type ? ', ' + n.rope_scaling_type + (n.rope_scaling_factor ? ' ×' + n.rope_scaling_factor : '') : '') + (n.partial_rotary ? T(', partial', '，部分维度') : '') : n.position_encoding) + (n.nope && n.nope !== 'none' ? ' · NoPE ' + n.nope : '')],
       [T('Extras', '其他'), extras(n)],
-      [T('Vocab / context', '词表 / 上下文'), (n.vocab_size ? n.vocab_size.toLocaleString() : '–') + ' / ' + (n.max_position_embeddings ? n.max_position_embeddings.toLocaleString() : '–')],
+      [T('Vocab / context', '词表 / 上下文'), (n.vocab_size ? n.vocab_size.toLocaleString() : '–') + ' / ' + (n.max_position_embeddings ? n.max_position_embeddings.toLocaleString() : '–') + (n.tie_embeddings ? T(', tied embeddings', '，共享嵌入') : '')],
       [T('Modeling class', '建模类'), (n.architecture_class || '–') + (n.model_type ? ' · ' + n.model_type : '')]
-    ];
-    var h = '<div class="lin-ph"><h3>' + esc(n.title) + '</h3><div class="lin-links">' +
+    ].filter(Boolean);
+    var h = '<div class="lin-ph"><div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span><span>' + T('generation ', '第 ') + n.generation + T('', ' 代') + (n.is_root ? T(' · root', ' · 根') : '') + '</span></div>' +
+      '<h3>' + esc(n.title) + '</h3><p class="lin-sig">' + esc(signature(n)) + '</p><div class="lin-links">' +
       (n.gallery.config_url ? '<a href="' + esc(n.gallery.config_url) + '" target="_blank" rel="noopener">config.json</a>' : '') +
       (n.gallery.report_url ? '<a href="' + esc(n.gallery.report_url) + '" target="_blank" rel="noopener">' + T('tech report', '技术报告') + '</a>' : '') +
       '<a href="' + esc(n.gallery.card_url) + '" target="_blank" rel="noopener">' + T('gallery card', '图库卡片') + '</a></div></div>';
     h += '<div class="lin-cols"><dl class="lin-kv">' + kv.map(function (p) { return '<div><dt>' + esc(p[0]) + '</dt><dd>' + esc(p[1]) + '</dd></div>'; }).join('') + '</dl>';
     h += '<div class="lin-rel">';
-    h += '<h4>' + T('Parents', '父节点') + ' <span>' + parentsOf[n.key].filter(function (e) { return state.types[e.type]; }).length + '</span></h4>';
-    var ps = parentsOf[n.key].filter(function (e) { return state.types[e.type]; }).sort(function (a, b) { return b.score - a.score; });
-    if (!ps.length) h += '<p class="lin-note">' + esc(n.is_root ? T('Root node: ', '根节点：') + (n.root_reason || '') : T('No parent edge of the selected types.', '所选边类型下没有父节点。')) + '</p>';
-    ps.forEach(function (e) { h += edgeRow(e, byKey[e.source], 'from'); });
-    var cs = childrenOf[n.key].filter(function (e) { return state.types[e.type]; }).sort(function (a, b) { return byKey[a.target].date < byKey[b.target].date ? -1 : 1; });
+    var ps = parentsOf[n.key].slice().sort(function (a, b) { return b.score - a.score; });
+    h += '<h4>' + T('Parents', '父节点') + ' <span>' + ps.length + '</span></h4>';
+    if (!ps.length) h += '<p class="lin-note">' + esc(T('Root: ', '根节点：') + (n.root_reason || '')) + '</p>';
+    ps.forEach(function (e) { h += edgeRow(e, byKey[e.source]); });
+    var cs = childrenOf[n.key].slice().sort(function (a, b) { return byKey[a.target].date < byKey[b.target].date ? -1 : 1; });
     h += '<h4>' + T('Children', '子节点') + ' <span>' + cs.length + '</span></h4>';
-    if (!cs.length) h += '<p class="lin-note">' + T('Terminal node: nothing later in the gallery descends from it.', '终端节点：图库中尚无更晚的模型继承它。') + '</p>';
-    cs.forEach(function (e) { h += edgeRow(e, byKey[e.target], 'to'); });
+    if (!cs.length) h += '<p class="lin-note">' + T('Terminal node: nothing in the gallery descends from it yet.', '终端节点：图库中尚无模型继承它。') + '</p>';
+    cs.forEach(function (e) { h += edgeRow(e, byKey[e.target]); });
     if (n.introduces && n.introduces.length) h += '<h4>' + T('First in the gallery', '图库首见') + '</h4><p class="lin-note">' + esc(n.introduces.join('; ')) + '</p>';
     h += '</div></div>';
     if (n.provenance) h += '<p class="lin-prov">' + T('Config provenance: ', '配置来源：') + esc(n.provenance) + '</p>';
+    // the complete config, every key
+    var keys = Object.keys(n.config_full || {}).sort();
+    h += '<details class="lin-full"><summary>' + T('Full config', '完整 config') + ' <span>' + keys.length + ' ' + T('keys', '个字段') + '</span></summary><dl class="lin-raw">';
+    keys.forEach(function (k) { h += '<div><dt>' + esc(k) + '</dt><dd>' + esc(fmtVal(n.config_full[k])) + '</dd></div>'; });
+    h += '</dl></details>';
     var nl = Object.keys(lin.nodes).length;
     h += '<p class="lin-prov">' + T('Lineage shown: ' + nl + ' models, ' + Object.keys(lin.edges).length + ' edges.', '当前谱系：' + nl + ' 个模型，' + Object.keys(lin.edges).length + ' 条边。') + '</p>';
     panel.innerHTML = h;
     panel.querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { state.selected = b.getAttribute('data-go'); draw(); panel.scrollIntoView({ block: 'nearest' }); }); });
+  }
+  function fmtVal(v) {
+    if (v === null || v === undefined) return 'null';
+    if (typeof v === 'object' && v._list_len) return T('list of ' + v._list_len + ': ', '共 ' + v._list_len + ' 项：') + Object.keys(v._counts).map(function (k) { return k + ' ×' + v._counts[k]; }).join(', ');
+    if (typeof v === 'object') return JSON.stringify(v);
+    return String(v);
   }
   function extras(n) {
     var x = [];
@@ -338,28 +286,41 @@
     if (n.norm_type === 'layernorm') x.push('LayerNorm');
     return x.length ? x.join(', ') : '–';
   }
-  function edgeRow(e, other, dir) {
+  function edgeRow(e, other) {
     var why;
-    if (e.type === 'trait') why = T('earliest model with ', '最早具备 ') + (e.traits || []).join('; ');
+    if (e.type === 'trait') why = T('earliest gallery model with ', '图库中最早具备 ') + (e.traits || []).join('; ');
     else if (e.type === 'variant') why = T('same-day release, same modeling class', '同日发布，同一建模类');
-    else why = T('shares ', '共享 ') + (e.shared || []).length + ' / ' + Object.keys(other.traits).length + T(' traits', ' 个特征') + (e.bonus && Object.keys(e.bonus).length ? '; ' + Object.keys(e.bonus).join(', ') : '');
-    return '<div class="lin-edge lin-edge-' + e.type + '"><button type="button" data-go="' + esc(other.key) + '">' + esc(other.title) + '</button>' +
-      '<span class="lin-et">' + esc(T(EDGE_LABEL[e.type][0], EDGE_LABEL[e.type][1])) + ' · ' + e.score.toFixed(1) + '</span>' +
-      '<span class="lin-why">' + esc(why) + '</span></div>';
+    else if (e.type === 'same-code') why = T('closest config, same modeling class; shares ', '最近 config，同一建模类；共享 ') + (e.shared || []).length + ' / ' + Object.keys(other.traits).length + T(' traits', ' 个特征');
+    else why = T('closest config; shares ', '最近 config；共享 ') + (e.shared || []).length + ' / ' + Object.keys(other.traits).length + T(' traits', ' 个特征');
+    return '<div class="lin-edge"><button type="button" data-go="' + esc(other.key) + '">' + esc(other.title) + '</button><span class="lin-why">' + esc(why) + '</span></div>';
   }
 
   /* ---------- metadata table ---------- */
   function buildTable(container) {
+    function v(x) { return x === null || x === undefined || x === false ? '–' : (x === true ? '✓' : x); }
     var cols = [
       [T('Model', '模型'), function (n) { return n.title; }], [T('Org', '机构'), function (n) { return n.org; }], [T('Date', '日期'), function (n) { return n.date; }], [T('Gen', '代'), function (n) { return n.generation; }],
-      [T('Attention', '注意力'), function (n) { return n.attention_class; }], [T('Local:global', '局部:全局'), function (n) { return n.swa && n.swa_local_layers ? n.swa_local_layers + ':' + n.swa_global_layers : (n.swa ? 'yes' : '–'); }],
-      [T('Mixer', '混合器'), function (n) { return n.hybrid_mixer ? n.hybrid_mixer + (n.hybrid_ratio ? ' ' + n.linear_layers + ':' + n.full_attention_layers_in_hybrid : '') : '–'; }],
-      [T('Sparse', '稀疏'), function (n) { return n.sparse_attention || '–'; }],
+      [T('Class', '建模类'), function (n) { return v(n.architecture_class); }], ['model_type', function (n) { return v(n.model_type); }],
+      [T('Attention', '注意力'), function (n) { return n.attention_class; }], ['L', function (n) { return v(n.num_layers); }], ['d', function (n) { return v(n.hidden_size); }], ['FFN', function (n) { return v(n.intermediate_size); }],
+      ['H', function (n) { return v(n.num_heads); }], ['KV', function (n) { return n.attention_class === 'MLA' ? 'latent' : v(n.num_kv_heads); }], ['head_dim', function (n) { return v(n.head_dim); }],
+      ['q_lora', function (n) { return v(n.q_lora_rank); }], ['kv_lora', function (n) { return v(n.kv_lora_rank); }], ['rope/nope dim', function (n) { return n.qk_rope_head_dim != null ? n.qk_rope_head_dim + '/' + v(n.qk_nope_head_dim) : '–'; }],
+      [T('Local:global', '局部:全局'), function (n) { return n.swa && n.swa_local_layers ? n.swa_local_layers + ':' + n.swa_global_layers : (n.swa ? '✓' : '–'); }], [T('Window', '窗口'), function (n) { return v(n.sliding_window); }],
+      [T('Mixer', '混合器'), function (n) { return n.hybrid_mixer ? n.hybrid_mixer + (n.linear_layers && n.full_attention_layers_in_hybrid ? ' ' + n.linear_layers + ':' + n.full_attention_layers_in_hybrid : '') : '–'; }],
+      [T('Sparse', '稀疏'), function (n) { return v(n.sparse_attention) + (n.index_topk ? ' top-' + n.index_topk : ''); }],
       [T('Experts', '专家'), function (n) { return n.is_moe ? n.num_experts + '/' + n.experts_per_tok + (n.shared_experts ? '+' + n.shared_experts : '') : '–'; }],
-      ['MTP', function (n) { return n.mtp ? '✓' : '–'; }], ['QK-Norm', function (n) { return n.qk_norm ? '✓' : '–'; }], [T('Gated', '门控'), function (n) { return n.gated_attention ? '✓' : '–'; }],
-      ['NoPE', function (n) { return n.nope && n.nope !== 'none' ? n.nope : '–'; }],
-      ['L', function (n) { return n.num_layers; }], ['d', function (n) { return n.hidden_size; }], ['H/KV', function (n) { return n.num_heads ? n.num_heads + (n.num_kv_heads && n.attention_class !== 'MLA' ? '/' + n.num_kv_heads : '') : '–'; }],
-      [T('Vocab', '词表'), function (n) { return n.vocab_size || '–'; }], [T('Class', '建模类'), function (n) { return n.architecture_class || '–'; }]
+      [T('Expert FFN', '专家 FFN'), function (n) { return v(n.moe_intermediate_size); }], [T('Dense prefix', '稠密前缀'), function (n) { return v(n.dense_prefix_layers); }],
+      [T('Router', '路由'), function (n) { return n.is_moe ? [n.router_scoring, n.topk_method, n.expert_groups && n.expert_groups > 1 ? n.expert_groups + 'g/' + v(n.topk_group) : null, n.routed_scaling_factor != null ? '×' + n.routed_scaling_factor : null].filter(Boolean).join(' ') || '–' : '–'; }],
+      ['MTP', function (n) { return n.mtp ? (n.mtp_layers || 1) : '–'; }], ['QK-Norm', function (n) { return v(n.qk_norm); }], [T('Gated', '门控'), function (n) { return v(n.gated_attention); }],
+      ['NoPE', function (n) { return n.nope && n.nope !== 'none' ? n.nope : '–'; }], ['rope_theta', function (n) { return v(n.rope_theta); }], [T('RoPE scaling', 'RoPE 缩放'), function (n) { return n.rope_scaling_type ? n.rope_scaling_type + (n.rope_scaling_factor ? ' ×' + n.rope_scaling_factor : '') : '–'; }],
+      [T('Partial RoPE', '部分 RoPE'), function (n) { return n.partial_rotary_factor != null && n.partial_rotary_factor !== 1 ? n.partial_rotary_factor : (n.rotary_dim ? n.rotary_dim + 'd' : '–'); }],
+      [T('Activation', '激活'), function (n) { return v(n.activation); }], [T('Norm', '归一化'), function (n) { return v(n.norm_type) + (n.norm_eps ? ' ' + n.norm_eps : ''); }],
+      [T('Attn bias', '注意力偏置'), function (n) { return v(n.attention_bias); }], [T('Tied emb.', '共享嵌入'), function (n) { return v(n.tie_embeddings); }],
+      [T('Vocab', '词表'), function (n) { return v(n.vocab_size); }], [T('Context', '上下文'), function (n) { return v(n.max_position_embeddings); }],
+      ['mHC', function (n) { return n.mhc ? (n.hc_streams || '✓') : '–'; }], [T('KV share', 'KV 共享'), function (n) { return v(n.kv_shared_layers); }], ['PLE', function (n) { return v(n.hidden_size_per_layer_input); }],
+      [T('Loops', '循环'), function (n) { return v(n.loop_passes); }], [T('Sinks', '注意力汇'), function (n) { return v(n.attention_sinks); }], [T('Softcap', '软上限'), function (n) { return v(n.final_logit_softcapping); }],
+      ['Mamba', function (n) { return n.mamba_num_heads ? n.mamba_num_heads + 'h×' + v(n.mamba_head_dim) + ' s' + v(n.ssm_state_size) : '–'; }],
+      [T('Linear attn', '线性注意力'), function (n) { return n.linear_num_value_heads ? v(n.linear_num_key_heads) + '/' + n.linear_num_value_heads + 'h×' + v(n.linear_value_head_dim) : '–'; }],
+      [T('Conv', '卷积'), function (n) { return v(n.conv_kernel); }], ['dtype', function (n) { return v(n.dtype); }], [T('Keys', '字段数'), function (n) { return v(n.num_config_keys); }]
     ];
     var h = '<table><thead><tr>' + cols.map(function (c) { return '<th>' + esc(c[0]) + '</th>'; }).join('') + '</tr></thead><tbody>';
     nodes.forEach(function (n) { h += '<tr>' + cols.map(function (c, i) { return '<td' + (i === 0 ? ' class="m"' : '') + '>' + esc(c[1](n)) + '</td>'; }).join('') + '</tr>'; });

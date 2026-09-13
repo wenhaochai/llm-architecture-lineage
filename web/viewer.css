@@ -1,7 +1,7 @@
 /* Standalone viewer styles: tokens mirror wenhaochai.com's "Academic Journal" theme. */
 :root {
   --paper: #F6F3EC; --paper-2: #EFEBE1; --ink: #15141A; --ink-2: #2A2830; --ink-3: #5E5B66; --ink-4: #6A6674;
-  --rule: #D9D3C3; --rule-2: #E6E1D2; --accent: #7A1A1A;
+  --rule: #D9D3C3; --rule-2: #E6E1D2; --accent: #7A1A1A; --accent-hover: #5C1212;
   --font-serif: 'Iowan Old Style', 'Palatino', Georgia, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, Menlo, monospace;
@@ -22,22 +22,11 @@ html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 18
 .lin { margin: 24px 0 8px; }
 .lin-bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 0 0 12px; }
 .lin-ctl { display: inline-flex; align-items: center; gap: 12px; }
-.lin-search, .lin-select {
+.lin-search {
   font-family: var(--font-sans); font-size: 13.5px; color: var(--ink); background: var(--paper);
-  border: 1px solid var(--rule); border-radius: 2px; padding: 6px 9px; min-width: 190px;
+  border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; padding: 6px 0; min-width: 260px;
 }
-.lin-search:focus, .lin-select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.lin-types { gap: 4px 14px; flex-wrap: wrap; }
-.lin-type { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-sans); font-size: 13px; color: var(--ink-2); cursor: pointer; }
-.lin-type input { margin: 0; accent-color: var(--accent); }
-.lin-type i { display: inline-block; width: 18px; border-top: 2px solid var(--ink-3); }
-.lin-type-trait i { border-top-style: dashed; }
-.lin-type-variant i { border-top-style: dotted; }
-.lin-type-same-code i { border-top-width: 3px; }
-.lin-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-sans); font-size: 13px; color: var(--ink-2); margin: 0 0 8px; }
-.lin-legend .li { display: inline-flex; align-items: center; gap: 7px; }
-.lin-legend i { display: inline-block; width: 10px; height: 10px; border: 1px solid var(--paper); }
-.lin-legend i.c { border-radius: 50%; }
+.lin-search:focus { outline: none; border-bottom-color: var(--accent); }
 .lin-svg { position: relative; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 6px 0 4px; }
 .lin-svg svg { width: 100%; height: auto; display: block; overflow: visible; }
 .lin-n { cursor: pointer; }
@@ -46,16 +35,19 @@ html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 18
 .lin-n:hover > circle:nth-child(2), .lin-n:hover > rect { stroke: var(--accent); stroke-width: 2; }
 .lin-e { transition: stroke 0.15s; }
 .lin-tip {
-  position: absolute; pointer-events: none; z-index: 3; min-width: 200px; max-width: 320px;
-  background: var(--paper); color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; padding: 8px 11px;
-  font-family: var(--font-sans); font-size: 12.5px; line-height: 1.45; box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.35);
+  position: absolute; pointer-events: none; z-index: 3; width: 272px;
+  background: var(--paper); color: var(--ink); border: 1px solid var(--rule); border-radius: 2px; padding: 12px 14px 11px;
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.4);
 }
-.lin-tip .th { font-weight: 600; margin-bottom: 3px; }
-.lin-tip .tr { color: var(--ink-2); }
-.lin-tip .tr-hint { color: var(--ink-4); margin-top: 4px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; }
+.tp-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-4); display: flex; gap: 10px; flex-wrap: wrap; }
+.tp-eyebrow span::before { content: "·"; margin-right: 10px; }
+.tp-title { font-family: var(--font-serif); font-size: 19px; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin: 6px 0 8px; }
+.tp-sig { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; color: var(--ink-2); padding: 8px 0; border-top: 1px solid var(--rule-2); }
+.tp-foot { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-4); border-top: 1px solid var(--rule-2); padding-top: 8px; }
 .lin-panel { margin: 18px 0 0; }
-.lin-ph { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
-.lin-ph h3 { margin: 0; }
+.lin-ph { display: grid; gap: 4px; }
+.lin-ph h3 { margin: 4px 0 0; font-size: 26px; }
+.ar-main .lin-ph .lin-sig { font-family: var(--font-sans); font-size: 14px; line-height: 1.5; color: var(--ink-2); margin: 2px 0 6px; }
 .lin-links { display: flex; gap: 14px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
 .lin-cols { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 12px 40px; margin-top: 12px; }
 @media (max-width: 860px) { .lin-cols { grid-template-columns: minmax(0, 1fr); } }
@@ -66,15 +58,27 @@ html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 18
 .lin-rel h4 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-4); font-weight: 500; margin: 0 0 6px; padding: 8px 0 6px; border-top: 1px solid var(--rule); }
 .lin-rel h4:not(:first-child) { margin-top: 14px; }
 .lin-rel h4 span { color: var(--accent); margin-left: 6px; }
-.lin-edge { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 6px 0; border-bottom: 1px solid var(--rule-2); }
+.lin-edge { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; padding: 7px 0; border-bottom: 1px solid var(--rule-2); }
 .lin-edge button { font-family: var(--font-sans); font-size: 14px; font-weight: 600; color: var(--ink); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
 .lin-edge button:hover { color: var(--accent); }
 .lin-et { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-4); }
 .lin-why { font-family: var(--font-sans); font-size: 13px; color: var(--ink-3); line-height: 1.45; }
 .lin-note, .lin-prov { font-family: var(--font-sans) !important; font-size: 13px !important; line-height: 1.5 !important; color: var(--ink-3) !important; margin: 0 0 8px !important; }
 .lin-prov { margin-top: 14px !important; }
+.lin-full { margin-top: 18px; border-top: 1px solid var(--rule); padding-top: 10px; }
+.lin-full summary { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); cursor: pointer; list-style: none; }
+.lin-full summary::-webkit-details-marker { display: none; }
+.lin-full summary::before { content: "+"; color: var(--accent); margin-right: 8px; }
+.lin-full[open] summary::before { content: "−"; }
+.lin-full summary span { color: var(--ink-4); margin-left: 8px; }
+.lin-raw { margin: 10px 0 0; columns: 2; column-gap: 40px; }
+@media (max-width: 860px) { .lin-raw { columns: 1; } }
+.lin-raw > div { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 10px; padding: 3px 0; border-bottom: 1px solid var(--rule-2); break-inside: avoid; font-size: 12px; }
+.lin-raw dt { font-family: var(--font-mono); color: var(--ink-3); overflow-wrap: anywhere; }
+.lin-raw dd { margin: 0; font-family: var(--font-mono); color: var(--ink-2); overflow-wrap: anywhere; }
 .lin-table { overflow-x: auto; margin-top: 14px; }
 .lin-table table { border-collapse: collapse; font-family: var(--font-sans); font-size: 12.5px; white-space: nowrap; min-width: 100%; }
+.lin-table--wide { max-height: 70vh; overflow: auto; }
 .lin-table th { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; color: var(--ink-3); text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--ink); position: sticky; top: 0; background: var(--paper); }
 .lin-table td { padding: 5px 8px; border-bottom: 1px solid var(--rule-2); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .lin-table td.m { font-weight: 600; color: var(--ink); }

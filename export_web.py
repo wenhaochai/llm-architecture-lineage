@@ -10,7 +10,14 @@ KEEP = ["key", "title", "org", "date", "month", "generation", "model_type", "arc
         "position_encoding", "mhc", "kv_sharing", "per_layer_embeddings", "looped", "shortconv", "attention_sinks", "chunked_attention", "latent_moe",
         "encoder_decoder", "num_layers", "hidden_size", "num_heads", "num_kv_heads", "head_dim", "intermediate_size", "vocab_size",
         "max_position_embeddings", "tie_embeddings", "activation", "norm_type", "traits", "primary_parent", "is_terminal", "is_root", "root_reason",
-        "lane_root", "config_source", "provenance", "introduces"]
+        "lane_root", "config_source", "provenance", "introduces",
+        "rope_theta", "rope_scaling_type", "rope_scaling_factor", "original_max_position_embeddings", "partial_rotary_factor", "rotary_dim", "norm_eps", "hidden_act",
+        "attention_bias", "mlp_bias", "moe_intermediate_size", "shared_expert_intermediate_size", "moe_layers", "moe_layer_freq", "routed_scaling_factor", "norm_topk_prob",
+        "topk_method", "expert_groups", "topk_group", "router_scoring", "router_aux_loss_coef", "moe_latent_size", "zero_experts", "q_lora_rank", "kv_lora_rank", "qk_rope_head_dim",
+        "qk_nope_head_dim", "v_head_dim", "gqa_ratio", "sliding_window", "index_topk", "index_n_heads", "index_head_dim", "index_share", "compress_ratios", "hc_streams",
+        "mamba_num_heads", "mamba_head_dim", "ssm_state_size", "mamba_n_groups", "conv_kernel", "linear_num_key_heads", "linear_num_value_heads", "linear_key_head_dim",
+        "linear_value_head_dim", "kv_shared_layers", "hidden_size_per_layer_input", "loop_passes", "final_logit_softcapping", "attn_logit_softcapping", "query_pre_attn_scalar",
+        "swiglu_limit", "dtype", "transformers_version", "post_norm", "recurrent_only", "layer_schedule", "outer_model_type", "num_config_keys", "config_full", "config_wrapper"]
 ALWAYS = ["attention_class", "swa", "is_moe", "mtp", "qk_norm", "gated_attention", "is_terminal", "is_root", "generation"]
 nodes = []
 for m in g["nodes"]:
