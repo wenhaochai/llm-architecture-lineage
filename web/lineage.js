@@ -36,7 +36,12 @@
     if (Array.isArray(v)) return v.slice().sort();
     return v;
   }
-  function same(a, b) { return JSON.stringify(shape(a)) === JSON.stringify(shape(b)); }
+  function stable(v) { // JSON with sorted keys, so key order in a config never counts as a change
+    if (Array.isArray(v)) return '[' + v.map(stable).join(',') + ']';
+    if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map(function (k) { return JSON.stringify(k) + ':' + stable(v[k]); }).join(',') + '}';
+    return JSON.stringify(v);
+  }
+  function same(a, b) { return stable(shape(a)) === stable(shape(b)); }
   var changeCache = {};
   function changes(x, p) {
     // design changes of x relative to p, in schema order: {field, kind: add | drop | change}
