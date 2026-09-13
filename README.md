@@ -46,10 +46,10 @@ into the saved file under `_provenance`.
 
 ### 2. Key cleaning and renaming
 
-The 103 configs use 571 distinct keys. `key_taxonomy.py` lists by hand the 154 that carry no
+The 103 configs use 571 distinct keys. `key_taxonomy.py` lists by hand the 155 that carry no
 architecture: 68 decoding defaults, tokenizer ids and Hugging Face bookkeeping; 40 dtype,
 kernel, parallelism and implementation switches; 26 training-only settings; 8 multimodal
-leftovers, 10 multi-token-prediction heads, and the 2 keys naming the modeling code.
+leftovers, 11 multi-token-prediction heads, and the 2 keys naming the modeling code.
 `schema.py` renames the remaining 416 architecture keys into 170 canonical fields (98 of them
 merge several spellings: seven names for the number of active experts, six for
 the norm epsilon), each assigned to one of four sections that follow the forward pass of a decoder
