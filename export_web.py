@@ -9,8 +9,8 @@ KEEP = ["key", "title", "base_title", "org", "date", "month", "generation", "mod
         "sparse_attention", "swa", "swa_ratio", "swa_local_layers", "swa_global_layers", "mtp", "mtp_layers", "qk_norm", "gated_attention", "nope",
         "position_encoding", "mhc", "kv_sharing", "per_layer_embeddings", "looped", "shortconv", "attention_sinks", "chunked_attention", "latent_moe",
         "encoder_decoder", "num_layers", "hidden_size", "num_heads", "num_kv_heads", "head_dim", "intermediate_size", "vocab_size",
-        "max_position_embeddings", "tie_embeddings", "activation", "norm_type", "traits", "primary_parent", "is_terminal", "is_root", "root_reason",
-        "lane_root", "config_source", "provenance", "introduces", "size_variants",
+        "max_position_embeddings", "tie_embeddings", "activation", "norm_type", "primary_parent", "is_terminal", "is_root", "scale_copy",
+        "config_source", "provenance", "size_variants",
         "rope_theta", "rope_scaling_type", "rope_scaling_factor", "original_max_position_embeddings", "partial_rotary_factor", "rotary_dim", "norm_eps", "hidden_act",
         "attention_bias", "mlp_bias", "moe_intermediate_size", "shared_expert_intermediate_size", "moe_layers", "moe_layer_freq", "routed_scaling_factor", "norm_topk_prob",
         "topk_method", "expert_groups", "topk_group", "router_scoring", "router_aux_loss_coef", "moe_latent_size", "zero_experts", "q_lora_rank", "kv_lora_rank", "qk_rope_head_dim",
@@ -38,7 +38,7 @@ for m in g["nodes"]:
     n["gallery"] = {k: m["gallery"].get(k) for k in ["card_url", "config_url", "report_url", "scale", "attention", "layer_mix"]}
     nodes.append(n)
 edges = [{k: e[k] for k in ["source", "target", "type", "score", "jaccard", "shared", "traits", "why", "bonus"] if k in e} for e in g["edges"]]
-out = {k: g[k] for k in ["generated", "source", "trait_labels", "trait_weights", "jaccard_min", "jaccard_min_same_org", "n_gallery"]}
+out = {k: g[k] for k in ["generated", "source", "n_gallery", "origin_threshold"]}
 out["nodes"], out["edges"] = nodes, edges
 import schema
 out["schema_groups"] = schema.GROUPS

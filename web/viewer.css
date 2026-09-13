@@ -20,6 +20,10 @@ h3 { font-family: var(--font-serif); font-weight: 500; font-size: 21px; margin: 
 :root { --lin-node: #C9C4B8; --lin-edge: rgba(120, 115, 105, 0.24); }
 html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 185, 0.2); }
 .lin { margin: 24px 0 8px; }
+/* temporary tuning control for the origin threshold; remove once the value is fixed */
+.lin-thr { display: flex; align-items: center; gap: 14px; margin: 0 0 10px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-4); }
+.lin-thr input { width: 220px; accent-color: var(--accent); }
+.lin-thr-val { text-transform: none; letter-spacing: 0.02em; }
 .lin-svg { position: relative; width: 100vw; margin-left: calc(50% - 50vw); padding: 8px var(--gutter) 0; }
 .lin-svg svg { width: 100%; height: auto; display: block; overflow: visible; }
 .lin-n { cursor: pointer; }

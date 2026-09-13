@@ -21,7 +21,7 @@ fetch_configs.py   Hugging Face  -> data/configs/<key>.json  (103 configs, prove
 key_taxonomy.py    hand-made lists of the 143 non-architecture keys (dropped)
 schema.py          alias table: 429 architecture keys -> 174 canonical fields in 14 sections; design/scale/tuning kinds
 extract.py         configs       -> data/metadata.json       (canonical config + derived traits per model)
-build_graph.py     metadata      -> data/graph.json          (83 nodes, edges, generations)
+build_graph.py     metadata      -> data/graph.json          (online insertion: parents, trait edges, generations)
 export_web.py      graph.json    -> web/data.js              (trimmed data for the viewer)
 KEYS.md            every key's fate, generated
 ```
@@ -68,36 +68,20 @@ Twelve releases appear in several sizes (six Qwen3 models, two GPT-OSS, ...). `S
 in `build_graph.py` keeps the largest of each, so 103 cards become 83 nodes; folded sizes are
 recorded on the kept node.
 
-### 3. Parents
+### 3. The graph: online insertion in release order
 
-Every edge means the same thing: the child's config is one step away from the parent's. Parents are chosen as follows. Each model becomes a set of about 30 categorical traits. For a candidate parent `a`
-released strictly before `b`:
+`build_graph.py` (mirrored live in `web/lineage.js`, where the threshold is a slider) takes the
+83 models in release order; on one day the larger model comes first. GPT-2 XL opens the graph.
+Every later model is compared with each placed model that is not a scale copy, using the change
+list above, and attaches under the one with the fewest changes (ties: same modeling class, then
+same organisation, then the later release). Zero changes make it a scale copy: a diamond in the
+figure, never a parent. If even the closest placed model needs more than `ORIGIN_THRESHOLD`
+changes (12), the model hangs off GPT-2 XL. For every field the model adds or switches to, one
+more edge (`trait`) comes from the earliest placed model that already carried it. Generation is
+one more than the largest generation among a node's parents and is the column in the figure.
 
-```
-score(a -> b) = 10 * weighted Jaccard(traits(a), traits(b))
-              +  4 * log-ratio closeness over layers, width, heads, KV heads, head_dim, experts, top-k, vocab
-              +  3 if identical Hugging Face architecture class
-              +  2 if identical model_type
-              +  2 if identical vocab_size
-              +  1 if same organisation
-```
-
-* The highest-scoring earlier model is the first parent when trait overlap reaches 0.62
-  (0.45 within the same organisation); otherwise the model hangs off GPT-2 XL, the single
-  origin (`origin`). `graph.json` tags
-  such an edge `nearest`, or `same-code` when both configs load into the same modeling class.
-* Same-day releases of one modeling class under different names attach to the larger one (`variant`).
-* For every notable trait a model carries that its first parent lacks, one more edge comes
-  from the earliest gallery model that carried it (`trait`).
-
-The tags record how an edge was derived and are exposed in the detail panel; the figure
-draws every edge the same way.
-
-Every edge runs forward in release time, so the graph is acyclic. Generation is 0 for GPT-2 XL
-and one more than the largest generation among a node's parents. The trait set still comes from
-the first normalization pass; the canonical fields are displayed but do not yet enter the score.
-
-Result: 83 nodes, 139 edges, 10 generations, one root.
+Result at the default threshold: 83 nodes, 189 edges (80 parent, 107 trait, 2 origin), 18 scale
+copies, 12 generations.
 
 ## Caveats
 
