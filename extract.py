@@ -463,7 +463,7 @@ def extract(card):
         put("swa_head_dim", aos.get("head_dim"), "attention_other_setting.head_dim")
     sac = tc.get("sparse_attention_config")
     if isinstance(sac, dict):
-        norm["sparse_attention"] = "QSA"; raw_used["sparse_attention"] = "sparse_attention_config"
+        norm["sparse_attention"] = m["sparse_attention"] or "sparse"; raw_used["sparse_attention"] = "sparse_attention_config"
         if sac.get("sparse_topk_blocks") and sac.get("sparse_block_size"):
             put("index_topk", sac["sparse_topk_blocks"] * sac["sparse_block_size"], "sparse_attention_config.sparse_topk_blocks × sparse_block_size")
         put("index_num_heads", sac.get("sparse_num_index_heads"), "sparse_attention_config.sparse_num_index_heads")
@@ -548,6 +548,15 @@ def extract(card):
         fill("per_layer_embedding_dim", m["hidden_size_per_layer_input"] or True, imp_src)
     if m["encoder_decoder"]:
         fill("bidirectional_attention", True, imp_src)
+    # null and empty values carry no information; several spellings with one value collapse to that value
+    for k in list(norm):
+        v = norm[k]
+        if v is None or v == [] or v == {} or v == "":
+            del norm[k]; raw_used.pop(k, None); continue
+        if isinstance(v, dict) and "_raw" in v:
+            vals = list(v["_raw"].values())
+            if all(json.dumps(x, sort_keys=True) == json.dumps(vals[0], sort_keys=True) for x in vals):
+                norm[k] = vals[0]; raw_used[k] = " / ".join(v["_raw"])
     m["config_canonical"] = dict(norm)
     m["config_canonical_raw_key"] = raw_used
     m["num_architecture_keys"] = sum(1 for k in tc if k not in NON_ARCH)

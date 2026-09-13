@@ -58,7 +58,7 @@ the same fields and per-layer index lists become layer schedules by kind. `KEYS.
 Each canonical field is tagged design (66), scale (65) or tuning (41) in `schema.py`. The change
 line under a model compares canonical configs with the first parent: design fields count when
 their value differs (layer schedules by the kinds of layer they contain), scale fields never
-count by value and 17 of them count on appearance because they mark a mechanism (`PRESENCE`),
+count by value and 16 of them count on appearance because they mark a mechanism (`PRESENCE`),
 tuning fields never count. A wider or deeper copy of the same
 design therefore reads as no change. `extract.py` writes the canonical config per model (`config_canonical`, with the original
 spelling in `config_canonical_raw_key`) next to the derived traits used by the score. Where a

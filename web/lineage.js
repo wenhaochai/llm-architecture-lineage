@@ -202,8 +202,9 @@
   }
   function fmtVal(v) {
     if (v === null || v === undefined) return 'null';
+    if (Array.isArray(v)) return v.map(fmtVal).join(', ');
     if (typeof v === 'object' && v._raw) return Object.keys(v._raw).map(function (k) { return k + ' = ' + fmtVal(v._raw[k]); }).join(' · ');
-    if (typeof v === 'object' && v._list_len) return Object.keys(v._counts).map(function (k) { return v._counts[k] + ' ' + k; }).join(' · ') + T(' of ', '，共 ') + v._list_len + T(' layers', ' 层');
+    if (typeof v === 'object' && v._list_len) return Object.keys(v._counts).map(function (k) { return v._counts[k] + ' × ' + k; }).join(' · ') + ' (' + v._list_len + T(' layers', ' 层') + ')';
     if (typeof v === 'object' && v._indices) return v._indices + T(' layers', ' 层') + (v._step ? T(', every ' + v._step, '，每 ' + v._step + ' 层一个') : '') + ' (' + v._min + '–' + v._max + ')';
     if (typeof v === 'object') return Object.keys(v).map(function (k) { return k + ' = ' + fmtVal(v[k]); }).join(' · ');
     return String(v);

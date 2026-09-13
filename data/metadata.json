@@ -165,12 +165,7 @@
   "config_canonical": {
    "activation": "gelu_new",
    "norm_eps": 1e-05,
-   "max_position_embeddings": {
-    "_raw": {
-     "n_ctx": 1024,
-     "n_positions": 1024
-    }
-   },
+   "max_position_embeddings": 1024,
    "hidden_size": 1600,
    "num_heads": 25,
    "num_layers": 48,
@@ -183,7 +178,7 @@
   "config_canonical_raw_key": {
    "activation": "activation_function",
    "norm_eps": "layer_norm_epsilon",
-   "max_position_embeddings": "n_ctx",
+   "max_position_embeddings": "n_ctx / n_positions",
    "hidden_size": "n_embd",
    "num_heads": "n_head",
    "num_layers": "n_layer",
@@ -369,7 +364,6 @@
    "num_layers": 32,
    "num_kv_heads": 8,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 500000.0,
    "tie_embeddings": false,
    "vocab_size": 128256,
@@ -389,7 +383,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
@@ -794,7 +787,6 @@
    "num_layers": 32,
    "num_kv_heads": 32,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 500000,
    "tie_embeddings": false,
    "vocab_size": 100352,
@@ -814,7 +806,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
@@ -1577,8 +1568,6 @@
   },
   "config_canonical": {
    "attention_bias": false,
-   "attention_logit_softcapping": null,
-   "final_logit_softcapping": null,
    "head_dim": 128,
    "activation": "gelu_pytorch_tanh",
    "hidden_size": 5376,
@@ -1605,8 +1594,6 @@
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "attention_logit_softcapping": "attn_logit_softcapping",
-   "final_logit_softcapping": "final_logit_softcapping",
    "head_dim": "head_dim",
    "activation": "hidden_activation",
    "hidden_size": "hidden_size",
@@ -1812,7 +1799,6 @@
    "num_kv_heads": 8,
    "norm_eps": 1e-05,
    "rope_theta": 1000000000.0,
-   "sliding_window": null,
    "vocab_size": 131072,
    "attention_kind": "GQA",
    "sequence_mixer": "attention",
@@ -1830,7 +1816,6 @@
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "vocab_size": "vocab_size",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
@@ -2138,7 +2123,6 @@
    "num_kv_heads": 8,
    "num_experts": 128,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 500000.0,
    "qk_norm": false,
    "vocab_size": 202048,
@@ -2166,7 +2150,6 @@
    "num_kv_heads": "num_key_value_heads",
    "num_experts": "num_local_experts",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
@@ -2352,9 +2335,7 @@
    "num_layers": 28,
    "num_kv_heads": 8,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000,
-   "sliding_window": null,
    "tie_embeddings": true,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
@@ -2376,9 +2357,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -2584,9 +2563,7 @@
    "num_layers": 94,
    "num_kv_heads": 4,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000.0,
-   "sliding_window": null,
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
@@ -2614,9 +2591,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -2822,9 +2797,7 @@
    "num_layers": 48,
    "num_kv_heads": 4,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000.0,
-   "sliding_window": null,
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
@@ -2852,9 +2825,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -3042,9 +3013,7 @@
    "num_layers": 64,
    "num_kv_heads": 8,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000,
-   "sliding_window": null,
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
@@ -3066,9 +3035,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -3255,9 +3222,7 @@
    "num_layers": 36,
    "num_kv_heads": 8,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000,
-   "sliding_window": null,
    "tie_embeddings": true,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
@@ -3279,9 +3244,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -3468,9 +3431,7 @@
    "num_layers": 36,
    "num_kv_heads": 8,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000,
-   "sliding_window": null,
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
@@ -3492,9 +3453,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -3681,9 +3640,7 @@
    "num_layers": 36,
    "num_kv_heads": 4,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 5000000.0,
-   "sliding_window": null,
    "tie_embeddings": true,
    "sliding_window_enabled": false,
    "vocab_size": 128256,
@@ -3703,9 +3660,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -3941,14 +3896,7 @@
    "rope_scaling_type": "yarn",
    "rope_scaling_factor": 32.0,
    "rope_original_max_position": 4096,
-   "rope_scaling_params": {
-    "_raw": {
-     "beta_fast": 1.0,
-     "beta_slow": 1.0,
-     "mscale": 1.0,
-     "mscale_all_dim": 1.0
-    }
-   },
+   "rope_scaling_params": 1.0,
    "attention_kind": "MLA",
    "sequence_mixer": "attention",
    "mla": true,
@@ -3989,7 +3937,7 @@
    "rope_scaling_type": "rope_scaling.rope_type",
    "rope_scaling_factor": "rope_scaling.factor",
    "rope_original_max_position": "rope_scaling.original_max_position_embeddings",
-   "rope_scaling_params": "rope_scaling",
+   "rope_scaling_params": "beta_fast / beta_slow / mscale / mscale_all_dim",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "mla": "implied by model_type kimi_k2",
@@ -4202,7 +4150,6 @@
    "num_layers": 92,
    "num_kv_heads": 8,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 1000000,
    "tie_embeddings": false,
    "qk_norm": true,
@@ -4234,7 +4181,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "qk_norm": "use_qk_norm",
@@ -4439,12 +4385,7 @@
   },
   "config_canonical": {
    "attention_bias": true,
-   "experts_per_tok": {
-    "_raw": {
-     "experts_per_token": 4,
-     "num_experts_per_tok": 4
-    }
-   },
+   "experts_per_tok": 4,
    "head_dim": 64,
    "activation": "silu",
    "hidden_size": 2880,
@@ -4487,7 +4428,7 @@
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "experts_per_tok": "experts_per_token",
+   "experts_per_tok": "experts_per_token / num_experts_per_tok",
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -4710,12 +4651,7 @@
   },
   "config_canonical": {
    "attention_bias": true,
-   "experts_per_tok": {
-    "_raw": {
-     "experts_per_token": 4,
-     "num_experts_per_tok": 4
-    }
-   },
+   "experts_per_tok": 4,
    "head_dim": 64,
    "activation": "silu",
    "hidden_size": 2880,
@@ -4758,7 +4694,7 @@
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "experts_per_tok": "experts_per_token",
+   "experts_per_tok": "experts_per_token / num_experts_per_tok",
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -4970,8 +4906,6 @@
   "config_canonical": {
    "sliding_window_pattern": 6,
    "attention_bias": false,
-   "attention_logit_softcapping": null,
-   "final_logit_softcapping": null,
    "head_dim": 256,
    "activation": "gelu_pytorch_tanh",
    "hidden_size": 640,
@@ -4990,7 +4924,6 @@
    "attention_scale": 256,
    "norm_eps": 1e-06,
    "rope_theta_local": 10000.0,
-   "rope_scaling": null,
    "rope_theta": 1000000.0,
    "sliding_window": 512,
    "bidirectional_attention": false,
@@ -5005,8 +4938,6 @@
   "config_canonical_raw_key": {
    "sliding_window_pattern": "_sliding_window_pattern",
    "attention_bias": "attention_bias",
-   "attention_logit_softcapping": "attn_logit_softcapping",
-   "final_logit_softcapping": "final_logit_softcapping",
    "head_dim": "head_dim",
    "activation": "hidden_activation",
    "hidden_size": "hidden_size",
@@ -5019,7 +4950,6 @@
    "attention_scale": "query_pre_attn_scalar",
    "norm_eps": "rms_norm_eps",
    "rope_theta_local": "rope_local_base_freq",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "sliding_window": "sliding_window",
    "bidirectional_attention": "use_bidirectional_attention",
@@ -5482,7 +5412,6 @@
    "num_kv_heads": 2,
    "partial_rotary_factor": 0.25,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 10000000,
    "shared_expert_intermediate_size": 512,
    "tie_embeddings": false,
@@ -5519,7 +5448,6 @@
    "num_kv_heads": "num_key_value_heads",
    "partial_rotary_factor": "partial_rotary_factor",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "tie_embeddings": "tie_word_embeddings",
@@ -5760,7 +5688,6 @@
    "router_scoring": "sigmoid",
    "shared_expert_intermediate_size": 0,
    "shared_expert_mode": "sigmoid",
-   "sliding_window": null,
    "tie_embeddings": false,
    "qk_norm": true,
    "router_expert_bias": true,
@@ -5793,7 +5720,6 @@
    "router_scoring": "scoring_func",
    "shared_expert_intermediate_size": "shared_intermediate_size",
    "shared_expert_mode": "shared_moe_mode",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "qk_norm": "use_qk_norm",
    "router_expert_bias": "use_routing_bias",
@@ -6045,11 +5971,9 @@
    "num_layers": 27,
    "num_kv_heads": 32,
    "num_shared_experts": 1,
-   "q_lora_rank": null,
    "qk_nope_head_dim": 128,
    "qk_rope_head_dim": 64,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 10000.0,
    "router_scaling_factor": 2.446,
    "tie_embeddings": false,
@@ -6097,11 +6021,9 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "num_shared_experts": "num_shared_experts",
-   "q_lora_rank": "q_lora_rank",
    "qk_nope_head_dim": "qk_nope_head_dim",
    "qk_rope_head_dim": "qk_rope_head_dim",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
    "tie_embeddings": "tie_word_embeddings",
@@ -7383,12 +7305,7 @@
    "vocab_size": 131072
   },
   "config_canonical": {
-   "attention_bias": {
-    "_raw": {
-     "attention_bias": false,
-     "use_bias": false
-    }
-   },
+   "attention_bias": false,
    "short_conv_kernel": 4,
    "mamba_expand": 2,
    "head_dim": 128,
@@ -7402,12 +7319,7 @@
     }
    },
    "intermediate_size": 1856,
-   "norm_eps": {
-    "_raw": {
-     "layer_norm_epsilon": 1e-05,
-     "norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "mamba_head_dim": 64,
    "mamba_activation": "silu",
    "mamba_num_heads": 64,
@@ -7429,7 +7341,6 @@
    "partial_rotary_factor": 1.0,
    "rope_theta": 10000,
    "router_scaling_factor": 2.5,
-   "sliding_window": null,
    "mamba_state_size": 128,
    "tie_embeddings": false,
    "mamba_time_step": {
@@ -7450,14 +7361,14 @@
    "nope_layers": "full"
   },
   "config_canonical_raw_key": {
-   "attention_bias": "attention_bias",
+   "attention_bias": "attention_bias / use_bias",
    "short_conv_kernel": "conv_kernel",
    "mamba_expand": "expand",
    "head_dim": "head_dim",
    "hidden_size": "hidden_size",
    "layer_types": "hybrid_override_pattern",
    "intermediate_size": "intermediate_size",
-   "norm_eps": "layer_norm_epsilon",
+   "norm_eps": "layer_norm_epsilon / norm_eps",
    "mamba_head_dim": "mamba_head_dim",
    "mamba_activation": "mamba_hidden_act",
    "mamba_num_heads": "mamba_num_heads",
@@ -7479,7 +7390,6 @@
    "partial_rotary_factor": "partial_rotary_factor",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
-   "sliding_window": "sliding_window",
    "mamba_state_size": "ssm_state_size",
    "tie_embeddings": "tie_word_embeddings",
    "mamba_time_step": "time_step_floor",
@@ -7710,12 +7620,7 @@
    "tie_embeddings": false,
    "vocab_size": 152576,
    "partial_rotary_factor": 0.334,
-   "sliding_window": {
-    "_raw": {
-     "sliding_window": 128,
-     "sliding_window_size": 128
-    }
-   },
+   "sliding_window": 128,
    "swa_rope_theta": 10000,
    "attention_bias": false,
    "v_head_dim": 128,
@@ -7742,14 +7647,12 @@
    },
    "moe_intermediate_size": 2048,
    "num_experts": 256,
-   "num_shared_experts": null,
    "experts_per_tok": 8,
    "router_normalize_weights": true,
    "router_scoring": "sigmoid",
    "router_num_groups": 1,
    "router_topk_groups": 1,
    "router_topk_method": "noaux_tc",
-   "router_scaling_factor": null,
    "swa_num_heads": 64,
    "swa_num_kv_heads": 8,
    "swa_head_dim": {
@@ -7780,7 +7683,7 @@
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
    "partial_rotary_factor": "partial_rotary_factor",
-   "sliding_window": "sliding_window",
+   "sliding_window": "sliding_window / sliding_window_size",
    "swa_rope_theta": "swa_rope_theta",
    "attention_bias": "attention_bias",
    "v_head_dim": "v_head_dim",
@@ -7790,14 +7693,12 @@
    "moe_layer_schedule": "moe_layer_freq",
    "moe_intermediate_size": "moe_intermediate_size",
    "num_experts": "n_routed_experts",
-   "num_shared_experts": "n_shared_experts",
    "experts_per_tok": "num_experts_per_tok",
    "router_normalize_weights": "norm_topk_prob",
    "router_scoring": "scoring_func",
    "router_num_groups": "n_group",
    "router_topk_groups": "topk_group",
    "router_topk_method": "topk_method",
-   "router_scaling_factor": "routed_scaling_factor",
    "swa_num_heads": "swa_num_attention_heads",
    "swa_num_kv_heads": "swa_num_key_value_heads",
    "swa_head_dim": "swa_head_dim",
@@ -8014,7 +7915,6 @@
    "num_layers": 92,
    "num_kv_heads": 8,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 1000000,
    "tie_embeddings": false,
    "qk_norm": true,
@@ -8046,7 +7946,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "qk_norm": "use_qk_norm",
@@ -8263,27 +8162,16 @@
    "max_position_embeddings": 262144,
    "moe_intermediate_size": 3072,
    "mup": true,
-   "router_num_groups": {
-    "_raw": {
-     "n_group": 1,
-     "num_expert_groups": 1
-    }
-   },
+   "router_num_groups": 1,
    "num_heads": 48,
    "dense_prefix_layers": 6,
    "num_experts": 256,
    "experts_per_tok": 4,
    "num_layers": 60,
    "num_kv_heads": 8,
-   "router_topk_groups": {
-    "_raw": {
-     "num_limited_groups": 1,
-     "topk_group": 1
-    }
-   },
+   "router_topk_groups": 1,
    "num_shared_experts": 1,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 10000,
    "router_normalize_weights": true,
    "router_scaling_factor": 2.448,
@@ -8311,17 +8199,16 @@
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
    "mup": "mup_enabled",
-   "router_num_groups": "n_group",
+   "router_num_groups": "n_group / num_expert_groups",
    "num_heads": "num_attention_heads",
    "dense_prefix_layers": "num_dense_layers",
    "num_experts": "num_experts",
    "experts_per_tok": "num_experts_per_tok",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
-   "router_topk_groups": "num_limited_groups",
+   "router_topk_groups": "num_limited_groups / topk_group",
    "num_shared_experts": "num_shared_experts",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "router_normalize_weights": "route_norm",
    "router_scaling_factor": "route_scale",
@@ -8842,12 +8729,7 @@
    "vocab_size": 131072
   },
   "config_canonical": {
-   "attention_bias": {
-    "_raw": {
-     "attention_bias": false,
-     "use_bias": false
-    }
-   },
+   "attention_bias": false,
    "short_conv_kernel": 4,
    "mamba_expand": 2,
    "head_dim": 128,
@@ -8861,12 +8743,7 @@
     }
    },
    "intermediate_size": 2688,
-   "norm_eps": {
-    "_raw": {
-     "layer_norm_epsilon": 1e-05,
-     "norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "mamba_head_dim": 64,
    "mamba_activation": "silu",
    "mamba_num_heads": 128,
@@ -8889,7 +8766,6 @@
    "partial_rotary_factor": 1.0,
    "rope_theta": 10000,
    "router_scaling_factor": 5.0,
-   "sliding_window": null,
    "mamba_state_size": 128,
    "tie_embeddings": false,
    "mamba_time_step": {
@@ -8910,14 +8786,14 @@
    "nope_layers": "full"
   },
   "config_canonical_raw_key": {
-   "attention_bias": "attention_bias",
+   "attention_bias": "attention_bias / use_bias",
    "short_conv_kernel": "conv_kernel",
    "mamba_expand": "expand",
    "head_dim": "head_dim",
    "hidden_size": "hidden_size",
    "layer_types": "hybrid_override_pattern",
    "intermediate_size": "intermediate_size",
-   "norm_eps": "layer_norm_epsilon",
+   "norm_eps": "layer_norm_epsilon / norm_eps",
    "mamba_head_dim": "mamba_head_dim",
    "mamba_activation": "mamba_hidden_act",
    "mamba_num_heads": "mamba_num_heads",
@@ -8940,7 +8816,6 @@
    "partial_rotary_factor": "partial_rotary_factor",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
-   "sliding_window": "sliding_window",
    "mamba_state_size": "ssm_state_size",
    "tie_embeddings": "tie_word_embeddings",
    "mamba_time_step": "time_step_floor",
@@ -9179,7 +9054,6 @@
    "attention_bias": false,
    "global_kv_unified": true,
    "moe": false,
-   "moe_intermediate_size": null,
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
@@ -9196,7 +9070,6 @@
    },
    "max_position_embeddings": 262144,
    "num_heads": 32,
-   "num_experts": null,
    "global_num_kv_heads": 4,
    "num_layers": 60,
    "num_kv_heads": 16,
@@ -9204,7 +9077,6 @@
    "norm_eps": 1e-06,
    "sliding_window": 1024,
    "tie_embeddings": true,
-   "experts_per_tok": null,
    "bidirectional_attention": "vision",
    "double_wide_mlp": false,
    "vocab_size": 262144,
@@ -9224,7 +9096,6 @@
    "attention_bias": "attention_bias",
    "global_kv_unified": "attention_k_eq_v",
    "moe": "enable_moe_block",
-   "moe_intermediate_size": "expert_intermediate_size",
    "final_logit_softcapping": "final_logit_softcapping",
    "global_head_dim": "global_head_dim",
    "head_dim": "head_dim",
@@ -9235,7 +9106,6 @@
    "layer_types": "layer_types",
    "max_position_embeddings": "max_position_embeddings",
    "num_heads": "num_attention_heads",
-   "num_experts": "num_experts",
    "global_num_kv_heads": "num_global_key_value_heads",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
@@ -9243,7 +9113,6 @@
    "norm_eps": "rms_norm_eps",
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
-   "experts_per_tok": "top_k_experts",
    "bidirectional_attention": "use_bidirectional_attention",
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
@@ -9802,9 +9671,7 @@
     }
    },
    "max_position_embeddings": 262144,
-   "moe_intermediate_size": null,
    "num_heads": 16,
-   "num_experts": null,
    "global_num_kv_heads": 1,
    "num_layers": 48,
    "num_kv_heads": 8,
@@ -9812,7 +9679,6 @@
    "norm_eps": 1e-06,
    "sliding_window": 1024,
    "tie_embeddings": true,
-   "experts_per_tok": null,
    "bidirectional_attention": "vision",
    "double_wide_mlp": false,
    "vocab_size": 262144,
@@ -9841,9 +9707,7 @@
    "intermediate_size": "intermediate_size",
    "layer_types": "layer_types",
    "max_position_embeddings": "max_position_embeddings",
-   "moe_intermediate_size": "moe_intermediate_size",
    "num_heads": "num_attention_heads",
-   "num_experts": "num_experts",
    "global_num_kv_heads": "num_global_key_value_heads",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
@@ -9851,7 +9715,6 @@
    "norm_eps": "rms_norm_eps",
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
-   "experts_per_tok": "top_k_experts",
    "bidirectional_attention": "use_bidirectional_attention",
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
@@ -10286,9 +10149,7 @@
    "num_layers": 48,
    "num_kv_heads": 4,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 10000000,
-   "sliding_window": null,
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
@@ -10316,9 +10177,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
@@ -10980,12 +10839,7 @@
    "hidden_size": 4096,
    "intermediate_size": 11264,
    "num_layers": 45,
-   "max_position_embeddings": {
-    "_raw": {
-     "max_seq_len": 262144,
-     "max_position_embeddings": 262144
-    }
-   },
+   "max_position_embeddings": 262144,
    "vocab_size": 128896,
    "qk_norm": true,
    "moe_layer_schedule": {
@@ -11026,7 +10880,6 @@
      "full_attention": 12
     }
    },
-   "nope_layers": [],
    "partial_rotary_factor": {
     "_list_len": 48,
     "_counts": {
@@ -11072,7 +10925,7 @@
    "hidden_size": "hidden_size",
    "intermediate_size": "intermediate_size",
    "num_layers": "num_hidden_layers",
-   "max_position_embeddings": "max_seq_len",
+   "max_position_embeddings": "max_seq_len / max_position_embeddings",
    "vocab_size": "vocab_size",
    "qk_norm": "use_qk_norm",
    "moe_layer_schedule": "moe_layers_enum",
@@ -11095,7 +10948,6 @@
    "router_expert_bias": "use_moe_router_bias",
    "attention_sinks": "sink",
    "layer_types": "layer_types",
-   "nope_layers": "use_rope_layers",
    "partial_rotary_factor": "partial_rotary_factors",
    "activation_clamp": "swiglu_limits",
    "activation_clamp_shared_expert": "swiglu_limits_shared",
@@ -11292,7 +11144,6 @@
    "num_layers": 32,
    "num_kv_heads": 4,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 70000000,
    "tie_embeddings": false,
    "vocab_size": 166144,
@@ -11313,7 +11164,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
@@ -11754,12 +11604,7 @@
    "vocab_size": 262144
   },
   "config_canonical": {
-   "sliding_window_pattern": {
-    "_raw": {
-     "_sliding_window_pattern": 4,
-     "layer_switch": 4
-    }
-   },
+   "sliding_window_pattern": 4,
    "attention_bias": false,
    "head_dim": 128,
    "activation": "silu",
@@ -11795,7 +11640,6 @@
      "rope_style": "interleave"
     }
    },
-   "rope_scaling": null,
    "rope_theta": 50000,
    "partial_rotary_factor": 1.0,
    "sliding_window": 4096,
@@ -11810,7 +11654,7 @@
    "nope_layers": "global"
   },
   "config_canonical_raw_key": {
-   "sliding_window_pattern": "_sliding_window_pattern",
+   "sliding_window_pattern": "_sliding_window_pattern / layer_switch",
    "attention_bias": "attention_bias",
    "head_dim": "head_dim",
    "activation": "hidden_act",
@@ -11825,7 +11669,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "position_encoding_type": "position_embedding_type",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "partial_rotary_factor": "rotary_pct",
    "sliding_window": "sliding_window",
@@ -12075,24 +11918,13 @@
    "qk_rope_head_dim": 64,
    "norm_eps": 1e-06,
    "rope_interleave": true,
-   "rope_scaling": null,
    "rope_theta": 6000000,
    "router_scaling_factor": 2.5,
-   "router_scoring": {
-    "_raw": {
-     "score_function": "sigmoid",
-     "scoring_func": "sigmoid"
-    }
-   },
+   "router_scoring": "sigmoid",
    "tie_embeddings": false,
    "router_topk_groups": 4,
    "router_topk_method": "noaux_tc",
-   "attention_bias": {
-    "_raw": {
-     "use_bias": false,
-     "use_qkv_bias": false
-    }
-   },
+   "attention_bias": false,
    "qk_norm": true,
    "v_head_dim": 128,
    "vocab_size": 157184,
@@ -12133,14 +11965,13 @@
    "qk_rope_head_dim": "qk_rope_head_dim",
    "norm_eps": "rms_norm_eps",
    "rope_interleave": "rope_interleave",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
-   "router_scoring": "score_function",
+   "router_scoring": "score_function / scoring_func",
    "tie_embeddings": "tie_word_embeddings",
    "router_topk_groups": "topk_group",
    "router_topk_method": "topk_method",
-   "attention_bias": "use_bias",
+   "attention_bias": "use_bias / use_qkv_bias",
    "qk_norm": "use_qk_norm",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
@@ -12379,7 +12210,6 @@
    "linear_num_value_heads": 64,
    "linear_value_head_dim": 128,
    "max_position_embeddings": 262144,
-   "moe_layer_schedule": [],
    "moe_intermediate_size": 1024,
    "num_heads": 32,
    "num_experts": 512,
@@ -12424,7 +12254,6 @@
    "linear_num_value_heads": "linear_num_value_heads",
    "linear_value_head_dim": "linear_value_head_dim",
    "max_position_embeddings": "max_position_embeddings",
-   "moe_layer_schedule": "mlp_only_layers",
    "moe_intermediate_size": "moe_intermediate_size",
    "num_heads": "num_attention_heads",
    "num_experts": "num_experts",
@@ -12650,18 +12479,12 @@
    "num_kv_heads": 4,
    "num_shared_experts": 1,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 8000000,
    "router_scaling_factor": 2.5,
    "router_scoring": "sigmoid",
    "tie_embeddings": false,
    "router_topk_groups": 1,
-   "attention_bias": {
-    "_raw": {
-     "use_bias": false,
-     "use_qkv_bias": false
-    }
-   },
+   "attention_bias": false,
    "qk_norm": true,
    "norm_type": true,
    "vocab_size": 262144,
@@ -12690,13 +12513,12 @@
    "num_kv_heads": "num_key_value_heads",
    "num_shared_experts": "num_shared_experts",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
    "router_scoring": "score_function",
    "tie_embeddings": "tie_word_embeddings",
    "router_topk_groups": "topk_group",
-   "attention_bias": "use_bias",
+   "attention_bias": "use_bias / use_qkv_bias",
    "qk_norm": "use_qk_norm",
    "norm_type": "use_rmsnorm",
    "vocab_size": "vocab_size",
@@ -12893,12 +12715,7 @@
    "vocab_size": 262144
   },
   "config_canonical": {
-   "rope_theta": {
-    "_raw": {
-     "default_theta": 10000.0,
-     "rope_theta": 10000.0
-    }
-   },
+   "rope_theta": 10000.0,
    "dense_prefix_layers": 1,
    "head_dim": {
     "_raw": {
@@ -12946,7 +12763,7 @@
    "nope_layers": "partial"
   },
   "config_canonical_raw_key": {
-   "rope_theta": "default_theta",
+   "rope_theta": "default_theta / rope_theta",
    "dense_prefix_layers": "first_k_dense_replace",
    "head_dim": "head_dim",
    "activation": "hidden_act",
@@ -13158,9 +12975,7 @@
    "num_kv_heads": 10,
    "rope_original_max_position": 16384,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 250000,
-   "sliding_window": null,
    "tie_embeddings": false,
    "vocab_size": 100352,
    "attention_kind": "GQA",
@@ -13179,9 +12994,7 @@
    "num_kv_heads": "num_key_value_heads",
    "rope_original_max_position": "original_max_position_embeddings",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
    "attention_kind": "derived",
@@ -13379,19 +13192,9 @@
    "qk_norm": false,
    "norm_eps_cell": 1e-06,
    "hidden_size": 4096,
-   "norm_eps": {
-    "_raw": {
-     "eps": 1e-06,
-     "norm_eps": 1e-06
-    }
-   },
+   "norm_eps": 1e-06,
    "ffn_width_multiplier": 2.667,
-   "ffn_round_to_multiple": {
-    "_raw": {
-     "ffn_round_up_to_multiple_of": 64,
-     "mlstm_round_up_to_multiple_of": 64
-    }
-   },
+   "ffn_round_to_multiple": 64,
    "mlstm_gate_softcap": 15.0,
    "head_dim": 512,
    "num_layers": 32,
@@ -13416,9 +13219,9 @@
    "qk_norm": "add_qk_norm",
    "norm_eps_cell": "cell_norm_eps",
    "hidden_size": "embedding_dim",
-   "norm_eps": "eps",
+   "norm_eps": "eps / norm_eps",
    "ffn_width_multiplier": "ffn_proj_factor",
-   "ffn_round_to_multiple": "ffn_round_up_to_multiple_of",
+   "ffn_round_to_multiple": "ffn_round_up_to_multiple_of / mlstm_round_up_to_multiple_of",
    "mlstm_gate_softcap": "gate_soft_cap",
    "head_dim": "head_dim",
    "num_layers": "num_blocks",
@@ -13637,7 +13440,6 @@
    "num_layers": 46,
    "num_kv_heads": 8,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 1000000,
    "tie_embeddings": false,
    "qk_norm": false,
@@ -13669,7 +13471,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "qk_norm": "use_qk_norm",
@@ -13871,9 +13672,7 @@
    "num_layers": 48,
    "num_kv_heads": 16,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000.0,
-   "sliding_window": null,
    "tie_embeddings": false,
    "loop_passes": 4,
    "loop_exit_threshold": 1.0,
@@ -13896,9 +13695,7 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "loop_passes": "total_ut_steps",
    "loop_exit_threshold": "early_exit_threshold",
@@ -14109,7 +13906,6 @@
    "num_kv_heads": 8,
    "partial_rotary_factor": 0.5,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 1000000,
    "router_scaling_factor": 1.0,
    "tie_embeddings": false,
@@ -14141,7 +13937,6 @@
    "num_kv_heads": "num_key_value_heads",
    "partial_rotary_factor": "partial_rotary_factor",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
    "tie_embeddings": "tie_word_embeddings",
@@ -14346,12 +14141,7 @@
    "qk_rope_head_dim": 64,
    "v_head_dim": 128,
    "qk_nope_head_dim": 128,
-   "mla_scale_lora": {
-    "_raw": {
-     "mla_scale_q_lora": true,
-     "mla_scale_kv_lora": true
-    }
-   },
+   "mla_scale_lora": true,
    "router_scaling_factor": 6.0,
    "num_experts": 256,
    "norm_eps": 1e-05,
@@ -14402,7 +14192,7 @@
    "qk_rope_head_dim": "qk_rope_head_dim",
    "v_head_dim": "v_head_dim",
    "qk_nope_head_dim": "qk_nope_head_dim",
-   "mla_scale_lora": "mla_scale_q_lora",
+   "mla_scale_lora": "mla_scale_q_lora / mla_scale_kv_lora",
    "router_scaling_factor": "routed_scaling_factor",
    "num_experts": "n_routed_experts",
    "norm_eps": "rms_norm_eps",
@@ -14629,12 +14419,7 @@
   "config_canonical": {
    "attention_bias": false,
    "dense_prefix_layers": 0,
-   "head_dim": {
-    "_raw": {
-     "head_dim": 128,
-     "qk_head_dim": 128
-    }
-   },
+   "head_dim": 128,
    "activation": "silu",
    "hidden_size": 4096,
    "intermediate_size": 12288,
@@ -14656,7 +14441,6 @@
    "norm_eps": 1e-06,
    "rope_interleave": true,
    "router_scaling_factor": 1.0,
-   "sliding_window": null,
    "tie_embeddings": false,
    "router_topk_groups": 1,
    "v_head_dim": 128,
@@ -14684,7 +14468,7 @@
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
    "dense_prefix_layers": "first_k_dense_replace",
-   "head_dim": "head_dim",
+   "head_dim": "head_dim / qk_head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
    "intermediate_size": "intermediate_size",
@@ -14706,7 +14490,6 @@
    "norm_eps": "rms_norm_eps",
    "rope_interleave": "rope_interleave",
    "router_scaling_factor": "routed_scaling_factor",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "router_topk_groups": "topk_group",
    "v_head_dim": "v_head_dim",
@@ -14914,12 +14697,7 @@
    "vocab_size": 131072
   },
   "config_canonical": {
-   "attention_bias": {
-    "_raw": {
-     "attention_bias": false,
-     "use_bias": false
-    }
-   },
+   "attention_bias": false,
    "head_dim": 128,
    "short_conv_kernel": 4,
    "mamba_expand": 2,
@@ -14933,12 +14711,7 @@
     }
    },
    "intermediate_size": 12544,
-   "norm_eps": {
-    "_raw": {
-     "layer_norm_epsilon": 1e-05,
-     "rms_norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "mamba_head_dim": 80,
    "mamba_activation": "silu",
    "mamba_num_heads": 96,
@@ -14950,7 +14723,6 @@
    "num_heads": 40,
    "num_layers": 42,
    "num_kv_heads": 8,
-   "sliding_window": null,
    "mamba_state_size": 128,
    "tie_embeddings": false,
    "mamba_time_step": {
@@ -14970,14 +14742,14 @@
    "nope_layers": "full"
   },
   "config_canonical_raw_key": {
-   "attention_bias": "attention_bias",
+   "attention_bias": "attention_bias / use_bias",
    "head_dim": "head_dim",
    "short_conv_kernel": "conv_kernel",
    "mamba_expand": "expand",
    "hidden_size": "hidden_size",
    "layer_types": "hybrid_override_pattern",
    "intermediate_size": "intermediate_size",
-   "norm_eps": "layer_norm_epsilon",
+   "norm_eps": "layer_norm_epsilon / rms_norm_eps",
    "mamba_head_dim": "mamba_head_dim",
    "mamba_activation": "mamba_hidden_act",
    "mamba_num_heads": "mamba_num_heads",
@@ -14989,7 +14761,6 @@
    "num_heads": "num_attention_heads",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
-   "sliding_window": "sliding_window",
    "mamba_state_size": "ssm_state_size",
    "tie_embeddings": "tie_word_embeddings",
    "mamba_time_step": "time_step_floor",
@@ -15470,7 +15241,6 @@
    "attention_bias": false,
    "global_kv_unified": false,
    "moe": false,
-   "moe_intermediate_size": null,
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
@@ -15487,16 +15257,12 @@
    },
    "max_position_embeddings": 131072,
    "num_heads": 8,
-   "num_experts": null,
-   "global_num_kv_heads": null,
    "num_layers": 35,
    "num_kv_heads": 1,
    "kv_shared_layers": 20,
    "norm_eps": 1e-06,
    "sliding_window": 512,
    "tie_embeddings": true,
-   "experts_per_tok": null,
-   "bidirectional_attention": null,
    "double_wide_mlp": true,
    "vocab_size": 262144,
    "per_layer_embedding_vocab": 262144,
@@ -15515,7 +15281,6 @@
    "attention_bias": "attention_bias",
    "global_kv_unified": "attention_k_eq_v",
    "moe": "enable_moe_block",
-   "moe_intermediate_size": "expert_intermediate_size",
    "final_logit_softcapping": "final_logit_softcapping",
    "global_head_dim": "global_head_dim",
    "head_dim": "head_dim",
@@ -15526,16 +15291,12 @@
    "layer_types": "layer_types",
    "max_position_embeddings": "max_position_embeddings",
    "num_heads": "num_attention_heads",
-   "num_experts": "num_experts",
-   "global_num_kv_heads": "num_global_key_value_heads",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "kv_shared_layers": "num_kv_shared_layers",
    "norm_eps": "rms_norm_eps",
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
-   "experts_per_tok": "top_k_experts",
-   "bidirectional_attention": "use_bidirectional_attention",
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
    "per_layer_embedding_vocab": "vocab_size_per_layer_input",
@@ -15777,7 +15538,6 @@
    "attention_bias": false,
    "global_kv_unified": false,
    "moe": false,
-   "moe_intermediate_size": null,
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
@@ -15794,16 +15554,12 @@
    },
    "max_position_embeddings": 131072,
    "num_heads": 8,
-   "num_experts": null,
-   "global_num_kv_heads": null,
    "num_layers": 42,
    "num_kv_heads": 2,
    "kv_shared_layers": 18,
    "norm_eps": 1e-06,
    "sliding_window": 512,
    "tie_embeddings": true,
-   "experts_per_tok": null,
-   "bidirectional_attention": null,
    "double_wide_mlp": false,
    "vocab_size": 262144,
    "per_layer_embedding_vocab": 262144,
@@ -15822,7 +15578,6 @@
    "attention_bias": "attention_bias",
    "global_kv_unified": "attention_k_eq_v",
    "moe": "enable_moe_block",
-   "moe_intermediate_size": "expert_intermediate_size",
    "final_logit_softcapping": "final_logit_softcapping",
    "global_head_dim": "global_head_dim",
    "head_dim": "head_dim",
@@ -15833,16 +15588,12 @@
    "layer_types": "layer_types",
    "max_position_embeddings": "max_position_embeddings",
    "num_heads": "num_attention_heads",
-   "num_experts": "num_experts",
-   "global_num_kv_heads": "num_global_key_value_heads",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "kv_shared_layers": "num_kv_shared_layers",
    "norm_eps": "rms_norm_eps",
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
-   "experts_per_tok": "top_k_experts",
-   "bidirectional_attention": "use_bidirectional_attention",
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
    "per_layer_embedding_vocab": "vocab_size_per_layer_input",
@@ -17008,12 +16759,7 @@
   },
   "config_canonical": {
    "attention_bias": false,
-   "attention_cca_steps": {
-    "_raw": {
-     "cca_time0": 2,
-     "cca_time1": 2
-    }
-   },
+   "attention_cca_steps": 2,
    "head_dim": 128,
    "activation": "silu",
    "hidden_size": 2048,
@@ -17034,7 +16780,6 @@
    "partial_rotary_factor": 0.5,
    "norm_eps": 1e-05,
    "router_hidden_size": 256,
-   "sliding_window": null,
    "tie_embeddings": true,
    "vocab_size": 262272,
    "rope_scaling_type": "default",
@@ -17048,7 +16793,7 @@
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "attention_cca_steps": "cca_time0",
+   "attention_cca_steps": "cca_time0 / cca_time1",
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -17064,7 +16809,6 @@
    "partial_rotary_factor": "partial_rotary_factor",
    "norm_eps": "rms_norm_eps",
    "router_hidden_size": "router_hidden_size",
-   "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
    "rope_scaling_type": "rope_parameters.rope_type",
@@ -18600,7 +18344,6 @@
    "head_dim": 192,
    "activation": "silu",
    "hidden_size": 4096,
-   "hybrid_attention_interval": null,
    "layer_types": {
     "_list_len": 48,
     "_counts": {
@@ -18621,7 +18364,6 @@
    },
    "router_num_groups": 1,
    "num_experts": 256,
-   "num_shared_experts": null,
    "router_normalize_weights": true,
    "num_heads": 64,
    "experts_per_tok": 8,
@@ -18629,14 +18371,8 @@
    "num_kv_heads": 4,
    "partial_rotary_factor": 0.334,
    "rope_theta": 10000000,
-   "router_scaling_factor": null,
    "router_scoring": "sigmoid",
-   "sliding_window": {
-    "_raw": {
-     "sliding_window": 128,
-     "sliding_window_size": 128
-    }
-   },
+   "sliding_window": 128,
    "swa_rope_theta": 10000,
    "tie_embeddings": false,
    "router_topk_groups": 1,
@@ -18662,7 +18398,6 @@
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
-   "hybrid_attention_interval": "hybrid_block_size",
    "layer_types": "hybrid_layer_pattern",
    "intermediate_size": "intermediate_size",
    "norm_eps": "layernorm_epsilon",
@@ -18671,7 +18406,6 @@
    "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
-   "num_shared_experts": "n_shared_experts",
    "router_normalize_weights": "norm_topk_prob",
    "num_heads": "num_attention_heads",
    "experts_per_tok": "num_experts_per_tok",
@@ -18679,9 +18413,8 @@
    "num_kv_heads": "num_key_value_heads",
    "partial_rotary_factor": "partial_rotary_factor",
    "rope_theta": "rope_theta",
-   "router_scaling_factor": "routed_scaling_factor",
    "router_scoring": "scoring_func",
-   "sliding_window": "sliding_window",
+   "sliding_window": "sliding_window / sliding_window_size",
    "swa_rope_theta": "swa_rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "router_topk_groups": "topk_group",
@@ -18932,7 +18665,6 @@
    },
    "router_num_groups": 1,
    "num_experts": 384,
-   "num_shared_experts": null,
    "router_normalize_weights": true,
    "num_heads": 128,
    "experts_per_tok": 8,
@@ -18940,14 +18672,8 @@
    "num_kv_heads": 8,
    "partial_rotary_factor": 0.334,
    "rope_theta": 10000000,
-   "router_scaling_factor": null,
    "router_scoring": "sigmoid",
-   "sliding_window": {
-    "_raw": {
-     "sliding_window": 128,
-     "sliding_window_size": 128
-    }
-   },
+   "sliding_window": 128,
    "swa_head_dim": {
     "_raw": {
      "swa_head_dim": 192,
@@ -18985,7 +18711,6 @@
    "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
-   "num_shared_experts": "n_shared_experts",
    "router_normalize_weights": "norm_topk_prob",
    "num_heads": "num_attention_heads",
    "experts_per_tok": "num_experts_per_tok",
@@ -18993,9 +18718,8 @@
    "num_kv_heads": "num_key_value_heads",
    "partial_rotary_factor": "partial_rotary_factor",
    "rope_theta": "rope_theta",
-   "router_scaling_factor": "routed_scaling_factor",
    "router_scoring": "scoring_func",
-   "sliding_window": "sliding_window",
+   "sliding_window": "sliding_window / sliding_window_size",
    "swa_head_dim": "swa_head_dim",
    "swa_num_heads": "swa_num_attention_heads",
    "swa_num_kv_heads": "swa_num_key_value_heads",
@@ -19254,24 +18978,13 @@
    "qk_rope_head_dim": 64,
    "norm_eps": 1e-06,
    "rope_interleave": true,
-   "rope_scaling": null,
    "rope_theta": 6000000,
    "router_scaling_factor": 2.5,
-   "router_scoring": {
-    "_raw": {
-     "score_function": "sigmoid",
-     "scoring_func": "sigmoid"
-    }
-   },
+   "router_scoring": "sigmoid",
    "tie_embeddings": false,
    "router_topk_groups": 4,
    "router_topk_method": "noaux_tc",
-   "attention_bias": {
-    "_raw": {
-     "use_bias": false,
-     "use_qkv_bias": false
-    }
-   },
+   "attention_bias": false,
    "qk_norm": true,
    "v_head_dim": 128,
    "vocab_size": 157184,
@@ -19312,14 +19025,13 @@
    "qk_rope_head_dim": "qk_rope_head_dim",
    "norm_eps": "rms_norm_eps",
    "rope_interleave": "rope_interleave",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
-   "router_scoring": "score_function",
+   "router_scoring": "score_function / scoring_func",
    "tie_embeddings": "tie_word_embeddings",
    "router_topk_groups": "topk_group",
    "router_topk_method": "topk_method",
-   "attention_bias": "use_bias",
+   "attention_bias": "use_bias / use_qkv_bias",
    "qk_norm": "use_qk_norm",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
@@ -19515,12 +19227,7 @@
    "num_nextn_predict_layers": 1
   },
   "config_canonical": {
-   "moe_intermediate_size": {
-    "_raw": {
-     "expert_hidden_dim": 1536,
-     "moe_intermediate_size": 1536
-    }
-   },
+   "moe_intermediate_size": 1536,
    "dense_prefix_layers": 1,
    "head_dim": 128,
    "activation": "silu",
@@ -19550,7 +19257,7 @@
    "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
-   "moe_intermediate_size": "expert_hidden_dim",
+   "moe_intermediate_size": "expert_hidden_dim / moe_intermediate_size",
    "dense_prefix_layers": "first_k_dense_replace",
    "head_dim": "head_dim",
    "activation": "hidden_act",
@@ -19761,7 +19468,6 @@
    "num_kv_heads": 8,
    "residual_multiplier": 0.175,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 50000000,
    "tie_embeddings": true,
    "vocab_size": 100352,
@@ -19785,7 +19491,6 @@
    "num_kv_heads": "num_key_value_heads",
    "residual_multiplier": "residual_multiplier",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
@@ -20049,7 +19754,6 @@
    "num_shared_experts": 4,
    "position_encoding_type": "rope_gptj",
    "dense_prefix_intermediate_size": 16384,
-   "rope_scaling": null,
    "rope_theta": 50000,
    "partial_rotary_factor": 1.0,
    "shared_expert_mode": "average",
@@ -20088,7 +19792,6 @@
    "num_shared_experts": "num_shared_experts",
    "position_encoding_type": "position_embedding_type",
    "dense_prefix_intermediate_size": "prefix_dense_intermediate_size",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "partial_rotary_factor": "rotary_pct",
    "shared_expert_mode": "shared_expert_combination_strategy",
@@ -20294,25 +19997,10 @@
      "block_multiple_of": 256
     }
    },
-   "hidden_size": {
-    "_raw": {
-     "block_dim": 2048,
-     "hidden_size": 2048
-    }
-   },
-   "intermediate_size": {
-    "_raw": {
-     "block_ff_dim": 12288,
-     "intermediate_size": 12288
-    }
-   },
+   "hidden_size": 2048,
+   "intermediate_size": 12288,
    "ffn_width_multiplier": 1.0,
-   "norm_eps": {
-    "_raw": {
-     "block_norm_eps": 1e-05,
-     "norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "activation_gated": true,
    "short_conv_kernel": 3,
    "conv_bias": false,
@@ -20325,12 +20013,7 @@
     }
    },
    "max_position_embeddings": 128000,
-   "num_heads": {
-    "_raw": {
-     "num_attention_heads": 32,
-     "num_heads": 32
-    }
-   },
+   "num_heads": 32,
    "num_layers": 16,
    "num_kv_heads": 8,
    "rope_theta": 1000000.0,
@@ -20344,17 +20027,17 @@
   },
   "config_canonical_raw_key": {
    "ffn_round_to_multiple": "block_auto_adjust_ff_dim",
-   "hidden_size": "block_dim",
-   "intermediate_size": "block_ff_dim",
+   "hidden_size": "block_dim / hidden_size",
+   "intermediate_size": "block_ff_dim / intermediate_size",
    "ffn_width_multiplier": "block_ffn_dim_multiplier",
-   "norm_eps": "block_norm_eps",
+   "norm_eps": "block_norm_eps / norm_eps",
    "activation_gated": "block_use_swiglu",
    "short_conv_kernel": "conv_L_cache",
    "conv_bias": "conv_bias",
    "conv_dim": "conv_dim",
    "layer_types": "layer_types",
    "max_position_embeddings": "max_position_embeddings",
-   "num_heads": "num_attention_heads",
+   "num_heads": "num_attention_heads / num_heads",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "rope_theta": "rope_theta",
@@ -20559,25 +20242,10 @@
      "block_multiple_of": 256
     }
    },
-   "hidden_size": {
-    "_raw": {
-     "block_dim": 1024,
-     "hidden_size": 1024
-    }
-   },
-   "intermediate_size": {
-    "_raw": {
-     "block_ff_dim": 6656,
-     "intermediate_size": 6656
-    }
-   },
+   "hidden_size": 1024,
+   "intermediate_size": 6656,
    "ffn_width_multiplier": 1.0,
-   "norm_eps": {
-    "_raw": {
-     "block_norm_eps": 1e-05,
-     "norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "activation_gated": true,
    "short_conv_kernel": 3,
    "conv_bias": false,
@@ -20590,12 +20258,7 @@
     }
    },
    "max_position_embeddings": 128000,
-   "num_heads": {
-    "_raw": {
-     "num_attention_heads": 16,
-     "num_heads": 16
-    }
-   },
+   "num_heads": 16,
    "num_layers": 16,
    "num_kv_heads": 8,
    "tie_embeddings": true,
@@ -20610,17 +20273,17 @@
   },
   "config_canonical_raw_key": {
    "ffn_round_to_multiple": "block_auto_adjust_ff_dim",
-   "hidden_size": "block_dim",
-   "intermediate_size": "block_ff_dim",
+   "hidden_size": "block_dim / hidden_size",
+   "intermediate_size": "block_ff_dim / intermediate_size",
    "ffn_width_multiplier": "block_ffn_dim_multiplier",
-   "norm_eps": "block_norm_eps",
+   "norm_eps": "block_norm_eps / norm_eps",
    "activation_gated": "block_use_swiglu",
    "short_conv_kernel": "conv_L_cache",
    "conv_bias": "conv_bias",
    "conv_dim": "conv_dim",
    "layer_types": "layer_types",
    "max_position_embeddings": "max_position_embeddings",
-   "num_heads": "num_attention_heads",
+   "num_heads": "num_attention_heads / num_heads",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "tie_embeddings": "tie_embedding",
@@ -21379,23 +21042,13 @@
    }
   },
   "config_canonical": {
-   "attention_bias": {
-    "_raw": {
-     "attention_bias": false,
-     "use_bias": false
-    }
-   },
+   "attention_bias": false,
    "short_conv_kernel": 4,
    "mamba_expand": 2,
    "head_dim": 128,
    "hidden_size": 8192,
    "intermediate_size": 5120,
-   "norm_eps": {
-    "_raw": {
-     "layer_norm_epsilon": 1e-05,
-     "norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "layer_types": {
     "_list_len": 108,
     "_counts": {
@@ -21425,7 +21078,6 @@
    "partial_rotary_factor": 1.0,
    "rope_theta": 10000,
    "router_scaling_factor": 5.0,
-   "sliding_window": null,
    "mamba_state_size": 128,
    "tie_embeddings": false,
    "mamba_time_step": {
@@ -21452,13 +21104,13 @@
    "nope_layers": "full"
   },
   "config_canonical_raw_key": {
-   "attention_bias": "attention_bias",
+   "attention_bias": "attention_bias / use_bias",
    "short_conv_kernel": "conv_kernel",
    "mamba_expand": "expand",
    "head_dim": "head_dim",
    "hidden_size": "hidden_size",
    "intermediate_size": "intermediate_size",
-   "norm_eps": "layer_norm_epsilon",
+   "norm_eps": "layer_norm_epsilon / norm_eps",
    "layer_types": "layers_block_type",
    "mamba_head_dim": "mamba_head_dim",
    "mamba_activation": "mamba_hidden_act",
@@ -21481,7 +21133,6 @@
    "partial_rotary_factor": "partial_rotary_factor",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
-   "sliding_window": "sliding_window",
    "mamba_state_size": "ssm_state_size",
    "tie_embeddings": "tie_word_embeddings",
    "mamba_time_step": "time_step_floor",
@@ -21717,7 +21368,6 @@
    "num_shared_experts": 0,
    "dense_prefix_intermediate_size": 3072,
    "sliding_window_pattern": 1,
-   "rope_scaling": null,
    "rope_theta": 50000,
    "shared_expert_mode": "average",
    "sliding_window": 4096,
@@ -21754,7 +21404,6 @@
    "num_shared_experts": "num_shared_experts",
    "dense_prefix_intermediate_size": "prefix_dense_intermediate_size",
    "sliding_window_pattern": "prefix_dense_sliding_window_pattern",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "shared_expert_mode": "shared_expert_combination_strategy",
    "sliding_window": "sliding_window",
@@ -22395,7 +22044,7 @@
     }
    },
    "router_scaling_factor": 2.0,
-   "sparse_attention": "QSA",
+   "sparse_attention": "MSA",
    "index_topk": 2048,
    "index_num_heads": 4,
    "index_head_dim": 128,
@@ -22745,7 +22394,6 @@
    "num_layers": 36,
    "num_kv_heads": 2,
    "norm_eps": 1e-06,
-   "rope_scaling": null,
    "rope_theta": 1000000.0,
    "sliding_window": 32768,
    "tie_embeddings": true,
@@ -22766,7 +22414,6 @@
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
@@ -23660,12 +23307,7 @@
    "_provenance": "reconstructed: gated repo Soofi-Project/Soofi-S-Base; README states 'Nemotron 3 Nano reference architecture, adopted without modification'; values cross-checked with arXiv 2607.09424 Table 1 (52 layers = 23 Mamba-2 + 23 MoE + 6 GQA, d=2688, 32 Q heads, 2 KV heads, head_dim 128, 128 routed + 2 shared experts, top-6, expert dim 1856, NoPE, RMSNorm, untied); HF GGUF metadata reports architecture nemotron_h_moe, context_length 1048576"
   },
   "config_canonical": {
-   "attention_bias": {
-    "_raw": {
-     "attention_bias": false,
-     "use_bias": false
-    }
-   },
+   "attention_bias": false,
    "short_conv_kernel": 4,
    "mamba_expand": 2,
    "head_dim": 128,
@@ -23679,12 +23321,7 @@
     }
    },
    "intermediate_size": 1856,
-   "norm_eps": {
-    "_raw": {
-     "layer_norm_epsilon": 1e-05,
-     "norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "mamba_head_dim": 64,
    "mamba_activation": "silu",
    "mamba_num_heads": 64,
@@ -23706,7 +23343,6 @@
    "partial_rotary_factor": 1.0,
    "rope_theta": 10000,
    "router_scaling_factor": 2.5,
-   "sliding_window": null,
    "mamba_state_size": 128,
    "tie_embeddings": false,
    "mamba_time_step": {
@@ -23727,14 +23363,14 @@
    "nope_layers": "full"
   },
   "config_canonical_raw_key": {
-   "attention_bias": "attention_bias",
+   "attention_bias": "attention_bias / use_bias",
    "short_conv_kernel": "conv_kernel",
    "mamba_expand": "expand",
    "head_dim": "head_dim",
    "hidden_size": "hidden_size",
    "layer_types": "hybrid_override_pattern",
    "intermediate_size": "intermediate_size",
-   "norm_eps": "layer_norm_epsilon",
+   "norm_eps": "layer_norm_epsilon / norm_eps",
    "mamba_head_dim": "mamba_head_dim",
    "mamba_activation": "mamba_hidden_act",
    "mamba_num_heads": "mamba_num_heads",
@@ -23756,7 +23392,6 @@
    "partial_rotary_factor": "partial_rotary_factor",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
-   "sliding_window": "sliding_window",
    "mamba_state_size": "ssm_state_size",
    "tie_embeddings": "tie_word_embeddings",
    "mamba_time_step": "time_step_floor",
@@ -24034,12 +23669,7 @@
      "rel_extent": 1024
     }
    },
-   "attention_bias": {
-    "_raw": {
-     "q_bias": false,
-     "o_bias": false
-    }
-   },
+   "attention_bias": false,
    "attention_log_scaling": {
     "_raw": {
      "log_scaling_n_floor": 128000,
@@ -24064,7 +23694,6 @@
    },
    "vocab_size_unpadded": 200058,
    "output_multiplier": 24.0,
-   "final_logit_softcapping": null,
    "swa_head_dim": 128,
    "swa_num_heads": 64,
    "swa_num_kv_heads": 16,
@@ -24106,7 +23735,7 @@
    "num_kv_heads": "num_key_value_heads",
    "head_dim": "head_dim",
    "relative_position_bias": "d_rel",
-   "attention_bias": "q_bias",
+   "attention_bias": "q_bias / o_bias",
    "attention_log_scaling": "log_scaling_n_floor",
    "norm_eps": "rms_norm_eps",
    "norm_extra_placement": "use_embed_norm",
@@ -24115,7 +23744,6 @@
    "short_conv_kernel": "use_sconv",
    "vocab_size_unpadded": "unpadded_vocab_size",
    "output_multiplier": "logits_mup_width_multiplier",
-   "final_logit_softcapping": "final_logit_softcapping",
    "swa_head_dim": "swa_head_dim",
    "swa_num_heads": "swa_num_attention_heads",
    "swa_num_kv_heads": "swa_num_key_value_heads",
@@ -25579,12 +25207,7 @@
   },
   "config_canonical": {
    "attention_bias": false,
-   "head_dim": {
-    "_raw": {
-     "head_dim": 128,
-     "kv_channels": 128
-    }
-   },
+   "head_dim": 128,
    "activation": "silu",
    "hidden_size": 3072,
    "intermediate_size": 10752,
@@ -25594,7 +25217,6 @@
    "num_kv_heads": 8,
    "loop_passes": 2,
    "norm_eps": 1e-05,
-   "rope_scaling": null,
    "rope_theta": 70000000,
    "norm_extra_placement": false,
    "tie_embeddings": false,
@@ -25606,7 +25228,7 @@
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "head_dim": "head_dim",
+   "head_dim": "head_dim / kv_channels",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
    "intermediate_size": "intermediate_size",
@@ -25616,7 +25238,6 @@
    "num_kv_heads": "num_key_value_heads",
    "loop_passes": "num_loops",
    "norm_eps": "rms_norm_eps",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "norm_extra_placement": "skip_loop_final_norm",
    "tie_embeddings": "tie_word_embeddings",
@@ -26694,21 +26315,14 @@
      "rotary_dim": 64
     }
    },
-   "q_lora_rank": null,
    "qk_nope_head_dim": 128,
    "qk_rope_head_dim": 64,
    "norm_eps": 1e-06,
    "rope_interleave": true,
-   "rope_scaling": null,
    "rope_theta": 6000000,
    "router_scaling_factor": 2.5,
    "router_input_scaling": false,
-   "router_scoring": {
-    "_raw": {
-     "score_function": "sigmoid",
-     "scoring_func": "sigmoid"
-    }
-   },
+   "router_scoring": "sigmoid",
    "activation_clamp_shared_expert": {
     "_list_len": 42,
     "_counts": {
@@ -26721,18 +26335,8 @@
    "tie_embeddings": false,
    "router_topk_groups": 4,
    "router_topk_method": "noaux_tc",
-   "norm_extra_placement": {
-    "_raw": {
-     "up_proj_norm": false,
-     "value_norm": false
-    }
-   },
-   "attention_bias": {
-    "_raw": {
-     "use_bias": false,
-     "use_qkv_bias": false
-    }
-   },
+   "norm_extra_placement": false,
+   "attention_bias": false,
    "mla_nope": false,
    "ngpt": false,
    "qk_norm": true,
@@ -26774,23 +26378,21 @@
    "linear_num_key_heads": "num_kv_heads_for_linear_attn",
    "num_shared_experts": "num_shared_experts",
    "partial_rotary_factor": "partial_rotary_factor",
-   "q_lora_rank": "q_lora_rank",
    "qk_nope_head_dim": "qk_nope_head_dim",
    "qk_rope_head_dim": "qk_rope_head_dim",
    "norm_eps": "rms_norm_eps",
    "rope_interleave": "rope_interleave",
-   "rope_scaling": "rope_scaling",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
    "router_input_scaling": "scale_router_input",
-   "router_scoring": "score_function",
+   "router_scoring": "score_function / scoring_func",
    "activation_clamp_shared_expert": "share_expert_swiglu_limit_list",
    "short_conv_kernel": "short_conv_kernel_size",
    "tie_embeddings": "tie_word_embeddings",
    "router_topk_groups": "topk_group",
    "router_topk_method": "topk_method",
-   "norm_extra_placement": "up_proj_norm",
-   "attention_bias": "use_bias",
+   "norm_extra_placement": "up_proj_norm / value_norm",
+   "attention_bias": "use_bias / use_qkv_bias",
    "mla_nope": "use_mla_nope",
    "ngpt": "use_nGPT",
    "qk_norm": "use_qk_norm",
@@ -27302,12 +26904,7 @@
    }
   },
   "config_canonical": {
-   "attention_bias": {
-    "_raw": {
-     "attention_bias": false,
-     "use_bias": false
-    }
-   },
+   "attention_bias": false,
    "short_conv_kernel": 4,
    "mamba_expand": 2,
    "head_dim": 128,
@@ -27321,12 +26918,7 @@
     }
    },
    "intermediate_size": 1856,
-   "norm_eps": {
-    "_raw": {
-     "layer_norm_epsilon": 1e-05,
-     "norm_eps": 1e-05
-    }
-   },
+   "norm_eps": 1e-05,
    "mamba_head_dim": 64,
    "mamba_activation": "silu",
    "mamba_num_heads": 64,
@@ -27335,7 +26927,6 @@
    "mlp_bias": false,
    "activation": "relu2",
    "moe_intermediate_size": 1856,
-   "moe_latent_size": null,
    "shared_expert_intermediate_size": 3712,
    "router_num_groups": 1,
    "mamba_num_groups": 8,
@@ -27349,7 +26940,6 @@
    "partial_rotary_factor": 1.0,
    "rope_theta": 10000,
    "router_scaling_factor": 2.5,
-   "sliding_window": null,
    "mamba_state_size": 128,
    "tie_embeddings": false,
    "mamba_time_step": {
@@ -27370,14 +26960,14 @@
    "nope_layers": "full"
   },
   "config_canonical_raw_key": {
-   "attention_bias": "attention_bias",
+   "attention_bias": "attention_bias / use_bias",
    "short_conv_kernel": "conv_kernel",
    "mamba_expand": "expand",
    "head_dim": "head_dim",
    "hidden_size": "hidden_size",
    "layer_types": "layers_block_type",
    "intermediate_size": "intermediate_size",
-   "norm_eps": "layer_norm_epsilon",
+   "norm_eps": "layer_norm_epsilon / norm_eps",
    "mamba_head_dim": "mamba_head_dim",
    "mamba_activation": "mamba_hidden_act",
    "mamba_num_heads": "mamba_num_heads",
@@ -27386,7 +26976,6 @@
    "mlp_bias": "mlp_bias",
    "activation": "mlp_hidden_act",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_latent_size": "moe_latent_size",
    "shared_expert_intermediate_size": "moe_shared_expert_intermediate_size",
    "router_num_groups": "n_group",
    "mamba_num_groups": "n_groups",
@@ -27400,7 +26989,6 @@
    "partial_rotary_factor": "partial_rotary_factor",
    "rope_theta": "rope_theta",
    "router_scaling_factor": "routed_scaling_factor",
-   "sliding_window": "sliding_window",
    "mamba_state_size": "ssm_state_size",
    "tie_embeddings": "tie_word_embeddings",
    "mamba_time_step": "time_step_floor",
@@ -28394,11 +27982,7 @@
    "linear_num_value_heads": 64,
    "linear_value_head_dim": 128,
    "short_conv_kernel": 4,
-   "kda_config": {
-    "_raw": {
-     "gate_lower_bound": -5.0
-    }
-   },
+   "kda_config": -5.0,
    "attention_kind": "MLA",
    "sequence_mixer": "kda",
    "mixer_attention_ratio": 3,
@@ -28455,7 +28039,7 @@
    "linear_num_value_heads": "linear_attn_config.num_heads",
    "linear_value_head_dim": "linear_attn_config.head_dim",
    "short_conv_kernel": "linear_attn_config.short_conv_kernel_size",
-   "kda_config": "linear_attn_config",
+   "kda_config": "gate_lower_bound",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "mixer_attention_ratio": "derived",

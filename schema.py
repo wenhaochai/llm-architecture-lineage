@@ -271,7 +271,7 @@ assert SCALE <= set(ALIASES) and TUNING <= set(ALIASES) and not (SCALE & TUNING)
 NOT_A_CHANGE = set()  # kept for the change rule; multi-token-prediction heads and identity keys are dropped upstream
 # Scale fields whose appearance marks a mechanism (their value never counts, their presence does).
 PRESENCE = {"kv_lora_rank", "q_lora_rank", "index_topk", "mamba_num_heads", "mamba_state_size", "linear_num_value_heads",
-            "kv_shared_layers", "per_layer_embedding_dim", "hyper_connection_streams", "loop_passes", "moe_latent_size", "num_experts",
+            "kv_shared_layers", "per_layer_embedding_dim", "hyper_connection_streams", "loop_passes", "moe_latent_size",
             "engram_size", "sliding_window", "chunked_attention_size", "num_shared_experts", "dense_prefix_layers"}
 assert NOT_A_CHANGE <= set(ALIASES) and PRESENCE <= SCALE
 
