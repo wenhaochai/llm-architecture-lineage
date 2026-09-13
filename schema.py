@@ -279,5 +279,5 @@ assert NOT_A_CHANGE <= set(ALIASES) and PRESENCE <= SCALE
 # then by the total number of design changes, then by the tie rules of build_graph.py.
 MECHANISM = {"attention_kind", "sequence_mixer", "moe", "sparse_attention", "mla", "position_encoding_type", "nope_layers",
              "hyper_connections", "loop_passes", "per_layer_embedding_dim", "kv_shared_layers", "bidirectional_attention",
-             "engram_layers", "dspark"}
+             "engram_layers", "dspark", "gated_attention", "qk_norm"}
 assert MECHANISM <= set(ALIASES)

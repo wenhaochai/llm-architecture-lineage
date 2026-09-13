@@ -20,8 +20,10 @@ origin threshold can be tuned there; this script writes the same graph at the de
   4. If even the closest placed model needs more than ORIGIN_THRESHOLD changes, the model
      hangs off GPT-2 XL instead.
   5. For every field the model adds or switches to, one more edge comes from the earliest
-     placed model that already carried it (second kind of edge, "trait").
-  6. Generation = 1 + max generation over all parents; it is the column in the figure.
+     placed model that already carried the same value (second kind of edge, "trait").
+  6. Transitive reduction: an edge A -> C is dropped when A already reaches C through another
+     parent of C.
+  7. Generation = 1 + max generation over all parents; it is the column in the figure.
 """
 import json, os, collections
 import schema
@@ -132,7 +134,7 @@ for x in M[1:]:
             v = p["config_canonical"].get(c["field"])
             if absent(v):
                 continue
-            if c["kind"] == "change" and not same(v, x["config_canonical"][c["field"]]):
+            if not same(v, x["config_canonical"][c["field"]]):  # the origin must carry the same value, not just the field
                 continue
             if src is None or (p["date"], p["key"]) < (src["date"], src["key"]):
                 src = p
@@ -142,6 +144,24 @@ for x in M[1:]:
         add_edge(by[k], x, "trait", fields, len(fields))
     x["generation"] = 1 + max(by[e["source"]]["generation"] for e in parents[x["key"]])
     placed.append(x)
+
+# transitive reduction: an edge A -> C is dropped when A already reaches C through another parent
+anc = {}
+for m in M:  # release order is a topological order
+    anc[m["key"]] = set()
+    for e in parents[m["key"]]:
+        anc[m["key"]] |= anc[e["source"]] | {e["source"]}
+kept = []
+for e in edges:
+    others = [o["source"] for o in parents[e["target"]] if o is not e]
+    if any(e["source"] in anc[o] for o in others):
+        children[e["source"]] = [c for c in children[e["source"]] if c is not e]
+        parents[e["target"]] = [p for p in parents[e["target"]] if p is not e]
+        if e["type"] != "trait":  # the closest design is still reached, through another parent
+            by[e["target"]]["parent_via"] = next((o for o in others if e["source"] in anc[o]), None)
+    else:
+        kept.append(e)
+edges = kept
 
 # a scale copy is the same design: fold it into the model it copies, which keeps the earliest name
 for m in M:

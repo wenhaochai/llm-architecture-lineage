@@ -68,7 +68,7 @@
   var edges, parentsOf, childrenOf, visible = nodes;
   function computeGraph(thr) {
     edges = []; parentsOf = {}; childrenOf = {};
-    nodes.forEach(function (n) { parentsOf[n.key] = []; childrenOf[n.key] = []; n.parent = null; n.scale_copy = false; n.changes = []; n.generation = 0; n.is_root = false; });
+    nodes.forEach(function (n) { parentsOf[n.key] = []; childrenOf[n.key] = []; n.parent = null; n.parentVia = null; n.scale_copy = false; n.changes = []; n.generation = 0; n.is_root = false; });
     var placed = [], origin = nodes[0];
     origin.is_root = true;
     placed.push(origin);
@@ -104,7 +104,7 @@
           if (p.key === x.parent) return;
           var v = (p.config_canonical || {})[c.field];
           if (absent(v)) return;
-          if (c.kind === 'change' && !same(v, c.to)) return;
+          if (!same(v, c.to)) return; // the origin must carry the same value, not just the field
           if (!src || p.date < src.date || (p.date === src.date && p.key < src.key)) src = p;
         });
         if (src) (origins[src.key] = origins[src.key] || []).push(c.field);
@@ -112,6 +112,24 @@
       Object.keys(origins).forEach(function (k) { addEdge(byKey[k], x, 'trait', origins[k], origins[k].length); });
       x.generation = 1 + Math.max.apply(null, parentsOf[x.key].map(function (e) { return byKey[e.source].generation; }));
       placed.push(x);
+    });
+    // transitive reduction: an edge A -> C is dropped when A already reaches C through another parent of C
+    var anc = {};
+    nodes.forEach(function (n) {
+      anc[n.key] = {};
+      parentsOf[n.key].forEach(function (e) { anc[n.key][e.source] = 1; Object.keys(anc[e.source] || {}).forEach(function (k) { anc[n.key][k] = 1; }); });
+    });
+    edges = edges.filter(function (e) {
+      var redundant = parentsOf[e.target].some(function (o) { return o !== e && anc[o.source] && anc[o.source][e.source]; });
+      if (redundant) {
+        childrenOf[e.source] = childrenOf[e.source].filter(function (c) { return c !== e; });
+        parentsOf[e.target] = parentsOf[e.target].filter(function (p) { return p !== e; });
+        if (e.type !== 'trait') { // the closest design is still reached, through another parent
+          var via = parentsOf[e.target].filter(function (o) { return anc[o.source] && anc[o.source][e.source]; })[0];
+          byKey[e.target].parentVia = via ? via.source : null;
+        }
+      }
+      return !redundant;
     });
     // a scale copy is the same design: fold it into the model it copies; that node keeps the earliest name
     nodes.forEach(function (n) { n.aliases = []; n.hidden = false; });
@@ -346,7 +364,11 @@
     }
     function rel(title, list, side) {
       var h = '<div class="sp-rel"><h4>' + esc(title) + '</h4>';
-      if (!list.length) h += '<p class="sp-none">' + esc(side === 'up' ? (n.is_root ? T('origin of the graph', '图的起点') : dash) : T('none yet', '暂无')) + '</p>';
+      if (!list.length && !(side === 'up' && n.parentVia)) h += '<p class="sp-none">' + esc(side === 'up' ? (n.is_root ? T('origin of the graph', '图的起点') : dash) : T('none yet', '暂无')) + '</p>';
+      if (side === 'up' && n.parentVia) {
+        var pp = byKey[n.parent];
+        h += '<div class="sp-node"><button type="button" data-go="' + esc(pp.key) + '">' + esc(shortName(pp)) + '</button><span>' + esc(T('closest design · ' + n.changes.length + ' changes · reached through ' + shortName(byKey[n.parentVia]), '最近设计 · ' + n.changes.length + ' 项改动 · 经 ' + shortName(byKey[n.parentVia]) + ' 到达')) + '</span></div>';
+      }
       list.forEach(function (e) {
         var o = byKey[side === 'up' ? e.source : e.target];
         h += '<div class="sp-node"><button type="button" data-go="' + esc(o.key) + '">' + esc(shortName(o)) + (o.gallery.scale && sameName(o) ? ' <i>' + esc(o.gallery.scale.split(',')[0]) + '</i>' : '') + '</button><span>' + esc(why(e)) + '</span></div>';

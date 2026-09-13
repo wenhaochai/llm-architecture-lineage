@@ -9,7 +9,7 @@ KEEP = ["key", "title", "base_title", "org", "date", "month", "generation", "mod
         "sparse_attention", "swa", "swa_ratio", "swa_local_layers", "swa_global_layers", "mtp", "mtp_layers", "qk_norm", "gated_attention", "nope",
         "position_encoding", "mhc", "kv_sharing", "per_layer_embeddings", "looped", "shortconv", "attention_sinks", "chunked_attention", "latent_moe",
         "encoder_decoder", "num_layers", "hidden_size", "num_heads", "num_kv_heads", "head_dim", "intermediate_size", "vocab_size",
-        "max_position_embeddings", "tie_embeddings", "activation", "norm_type", "primary_parent", "is_terminal", "is_root", "scale_copy", "merged_into", "aliases",
+        "max_position_embeddings", "tie_embeddings", "activation", "norm_type", "primary_parent", "is_terminal", "is_root", "scale_copy", "merged_into", "aliases", "parent_via",
         "config_source", "provenance",
         "rope_theta", "rope_scaling_type", "rope_scaling_factor", "original_max_position_embeddings", "partial_rotary_factor", "rotary_dim", "norm_eps", "hidden_act",
         "attention_bias", "mlp_bias", "moe_intermediate_size", "shared_expert_intermediate_size", "moe_layers", "moe_layer_freq", "routed_scaling_factor", "norm_topk_prob",
