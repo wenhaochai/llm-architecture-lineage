@@ -291,7 +291,7 @@
   /* ---------- tooltip ---------- */
   function showTip(n, ev) {
     tip.innerHTML = '<div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span></div>' +
-      '<div class="tp-title">' + esc(shortName(n)) + '</div>' + aliasHTML(n, 'tp-alias') + noveltyHTML(n, 'tp-sig', 4) +
+      '<div class="tp-title">' + esc(shortName(n)) + '</div>' + aliasHTML(n, 'tp-alias') +
       '<div class="tp-foot"><span>' + esc((n.gallery.scale || '').replace(/ \(.*\)$/, '')) + '</span><span>' + n.num_layers + ' ' + T('layers', '层') + ' · d ' + n.hidden_size + '</span></div>';
     tip.hidden = false;
     moveTip(ev);
