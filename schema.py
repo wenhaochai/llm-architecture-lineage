@@ -274,3 +274,10 @@ PRESENCE = {"kv_lora_rank", "q_lora_rank", "index_topk", "mamba_num_heads", "mam
             "kv_shared_layers", "per_layer_embedding_dim", "hyper_connection_streams", "loop_passes", "moe_latent_size", "num_experts",
             "engram_size", "sliding_window", "chunked_attention_size", "num_shared_experts", "dense_prefix_layers"}
 assert NOT_A_CHANGE <= set(ALIASES) and PRESENCE <= SCALE
+
+# Mechanism-level design fields: a candidate parent is ranked first by how many of these differ,
+# then by the total number of design changes, then by the tie rules of build_graph.py.
+MECHANISM = {"attention_kind", "sequence_mixer", "moe", "sparse_attention", "mla", "position_encoding_type", "nope_layers",
+             "hyper_connections", "loop_passes", "per_layer_embedding_dim", "kv_shared_layers", "bidirectional_attention",
+             "engram_layers", "dspark"}
+assert MECHANISM <= set(ALIASES)

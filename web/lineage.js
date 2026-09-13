@@ -20,11 +20,13 @@
   var T = function (en, zh) { return (window.ArticleCharts && window.ArticleCharts.t) ? window.ArticleCharts.t(en, zh) : en; };
 
   /* ---------- schema: which canonical fields count ---------- */
-  var SCALE = {}, TUNING = {}, SKIP = {}, PRESENCE = {}, ORDER = [];
+  var SCALE = {}, TUNING = {}, SKIP = {}, PRESENCE = {}, MECH = {}, ORDER = [];
   (D.schema_scale || []).forEach(function (f) { SCALE[f] = 1; });
   (D.schema_tuning || []).forEach(function (f) { TUNING[f] = 1; });
   (D.schema_not_a_change || []).forEach(function (f) { SKIP[f] = 1; });
   (D.schema_presence || []).forEach(function (f) { PRESENCE[f] = 1; });
+  (D.schema_mechanism || []).forEach(function (f) { MECH[f] = 1; });
+  function mechCount(ch) { var m = 0; ch.forEach(function (c) { if (MECH[c.field]) m++; }); return m; }
   Object.keys(D.schema_groups || {}).forEach(function (g) { D.schema_groups[g].forEach(function (f) { ORDER.push(f); }); });
 
   function absent(v) {
@@ -71,20 +73,19 @@
     origin.is_root = true;
     placed.push(origin);
     function addEdge(src, dst, type, fields, n) {
-      var e = { source: src.key, target: dst.key, type: type, fields: fields || [], n: n };
+      var e = { source: src.key, target: dst.key, type: type, fields: fields || [], n: n, mech: type === 'trait' ? null : mechCount(dst.changes) };
       edges.push(e); parentsOf[dst.key].push(e); childrenOf[src.key].push(e);
     }
     nodes.slice(1).forEach(function (x) {
       var eligible = placed.filter(function (p) { return !p.scale_copy; });
-      var best = null, bestN = Infinity;
+      // rank: fewer mechanism-level changes, then fewer changes overall, then same modeling class, same organisation, later release
+      var best = null, bestKey = null, bestN = Infinity;
       eligible.forEach(function (p) {
-        var n = changes(x, p).length;
-        if (n < bestN) { best = p; bestN = n; return; }
-        if (n === bestN && best) { // ties: same modeling class, then same organisation, then the later release
-          var s1 = (p.architecture_class === x.architecture_class) - (best.architecture_class === x.architecture_class);
-          var s2 = (p.org === x.org) - (best.org === x.org);
-          if (s1 > 0 || (s1 === 0 && (s2 > 0 || (s2 === 0 && p.date > best.date)))) best = p;
-        }
+        var ch = changes(x, p);
+        var key = [mechCount(ch), ch.length, -(p.architecture_class === x.architecture_class), -(p.org === x.org)];
+        var better = !best;
+        if (best) { for (var i = 0; i < key.length; i++) { if (key[i] !== bestKey[i]) { better = key[i] < bestKey[i]; break; } } if (!better && key.join() === bestKey.join() && p.date > best.date) better = true; }
+        if (better) { best = p; bestKey = key; bestN = ch.length; }
       });
       if (!best || bestN > thr) {
         x.parent = origin.key; x.changes = changes(x, origin);
@@ -218,7 +219,7 @@
     var items;
     if (n.is_root) items = [signature(n)];
     else if (!n.changes.length) items = [T('same design, different scale', '设计相同，只有规模不同')];
-    else items = n.changes.map(changeText);
+    else items = n.changes.slice().sort(function (a, b) { return (MECH[b.field] ? 1 : 0) - (MECH[a.field] ? 1 : 0); }).map(changeText);
     if (limit && items.length > limit) items = items.slice(0, limit).concat([T('+' + (n.changes.length - limit) + ' more', '还有 ' + (n.changes.length - limit) + ' 项')]);
     var head = n.is_root ? T('origin', '起点') : T('from ', '承自 ') + esc(shortName(byKey[n.parent]));
     return '<p class="' + cls + '"><span class="sp-vs">' + head + '</span>' + esc(items.join(' · ')) + '</p>';
@@ -341,7 +342,7 @@
       if (e.type === 'origin') return T('origin · ' + e.n + ' changes, over the threshold', '起点 · ' + e.n + ' 项改动，超过阈值');
       if (e.type === 'trait') return T('first with ', '首见 ') + e.fields.join(', ');
       if (e.n === 0) return T('same design', '设计相同');
-      return T('closest design · ' + e.n + (e.n === 1 ? ' change' : ' changes'), '最近设计 · ' + e.n + ' 项改动');
+      return T('closest design · ' + (e.mech ? e.mech + ' mechanism · ' : '') + e.n + (e.n === 1 ? ' change' : ' changes'), '最近设计 · ' + (e.mech ? e.mech + ' 项机制 · ' : '') + e.n + ' 项改动');
     }
     function rel(title, list, side) {
       var h = '<div class="sp-rel"><h4>' + esc(title) + '</h4>';

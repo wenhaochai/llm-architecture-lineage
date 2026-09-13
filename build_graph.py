@@ -12,8 +12,9 @@ origin threshold can be tuned there; this script writes the same graph at the de
      their value differs (per-layer schedules compared by the kinds of layer they contain),
      scale fields never count by value and the PRESENCE subset counts on appearance, tuning
      fields and NOT_A_CHANGE fields never count.
-  3. The placed model needing the fewest changes becomes the parent. Ties: same modeling
-     class, then same organisation, then the later release. Zero changes make the new model a
+  3. Candidates are ranked by the number of mechanism-level changes (schema.MECHANISM: attention
+     kind, sequence mixer, MoE, sparse attention, positions, ...), then by the total number of
+     changes, then by the tie rules: same modeling class, same organisation, later release. Zero changes make the new model a
      scale copy: it can never be a parent and is folded into its parent's node, which keeps
      the earliest name and lists the copies as aliases.
   4. If even the closest placed model needs more than ORIGIN_THRESHOLD changes, the model
@@ -94,7 +95,8 @@ children = collections.defaultdict(list)
 
 
 def add_edge(src, dst, etype, fields, n):
-    e = {"source": src["key"], "target": dst["key"], "type": etype, "fields": fields, "n": n}
+    e = {"source": src["key"], "target": dst["key"], "type": etype, "fields": fields, "n": n,
+         "mech": sum(1 for c in (dst.get("changes") or []) if c["field"] in schema.MECHANISM) if etype in ("parent", "origin") else None}
     edges.append(e); parents[dst["key"]].append(e); children[src["key"]].append(e)
 
 
@@ -104,15 +106,15 @@ placed = [origin]
 for x in M[1:]:
     x["is_root"] = False
     eligible = [p for p in placed if not p["scale_copy"]]
-    best, best_n = None, None
+    best, best_r, best_n = None, None, None
+    def rank(p):  # fewer mechanism-level changes first, then fewer changes overall, then the tie rules
+        ch = changes(x, p)
+        mech = sum(1 for c in ch if c["field"] in schema.MECHANISM)
+        return (mech, len(ch), -(p["architecture_class"] == x["architecture_class"]), -(p["org"] == x["org"]), p["date"] < "" or p["date"])
     for p in eligible:
-        n = len(changes(x, p))
-        if best is None or n < best_n:
-            best, best_n = p, n
-        elif n == best_n:
-            key = lambda c: ((c["architecture_class"] == x["architecture_class"]), (c["org"] == x["org"]), c["date"])
-            if key(p) > key(best):
-                best = p
+        r = rank(p)
+        if best is None or (r[0], r[1], r[2], r[3]) < (best_r[0], best_r[1], best_r[2], best_r[3]) or ((r[0], r[1], r[2], r[3]) == (best_r[0], best_r[1], best_r[2], best_r[3]) and p["date"] > best["date"]):
+            best, best_r, best_n = p, r, r[1]
     if best is None or best_n > ORIGIN_THRESHOLD:
         x["primary_parent"], x["changes"], x["scale_copy"] = origin["key"], changes(x, origin), False
         add_edge(origin, x, "origin", [], len(x["changes"]))

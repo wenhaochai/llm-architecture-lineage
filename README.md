@@ -70,16 +70,18 @@ attached by `model_type` in the `IMPLIED` table.
 `build_graph.py` (mirrored in `web/lineage.js`) takes the
 103 models in release order; on one day the larger model comes first. GPT-2 XL opens the graph.
 Every later model is compared with each placed model that is not a scale copy, using the change
-list above, and attaches under the one with the fewest changes (ties: same modeling class, then
-same organisation, then the later release). Zero changes make it a scale copy: it is folded into
+list above. Candidates are ranked by the number of mechanism-level changes (`MECHANISM` in
+`schema.py`: attention kind, sequence mixer, MoE, sparse attention, positions, hyper-connections,
+looped depth, per-layer embeddings, KV sharing, encoder-decoder, n-gram memories), then by the
+total number of changes, then same modeling class, same organisation, later release. Zero changes make it a scale copy: it is folded into
 its parent's node, which keeps the earliest name and lists the copies as aliases, and it can
 never be a parent. If even the closest placed model needs more than `ORIGIN_THRESHOLD` changes
 (32), the model hangs off GPT-2 XL; no model currently does, the largest gap being 13. For every field the model adds or switches to, one more edge
 (`trait`) comes from the earliest placed model that already carried it. Generation is one more
 than the largest generation among a node's parents and is the column in the figure.
 
-Result: 103 models, 27 folded as scale copies, 76 drawn nodes, 226 edges (75 parent, 151
-trait), 15 generations.
+Result: 103 models, 27 folded as scale copies, 76 drawn nodes, 233 edges (75 parent, 158
+trait), 16 generations.
 
 ## Caveats
 
