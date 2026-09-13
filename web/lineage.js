@@ -90,7 +90,7 @@
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function shortName(n) { return n.name || n.title; }
-  var NEG = { no: 1, none: 1, dense: 1, 'attention-only': 1, rope: 1, rmsnorm: 1, 'silu/swiglu': 1 };
+  var NEG = { no: 1, none: 1 };
   function tl(k) { return (D.trait_labels || {})[k] || k; }
   function novelty(n) {
     // what the model changes relative to its primary parent, read off the trait set; falls back to scale
@@ -149,8 +149,7 @@
       var a = pos[e.source], b = pos[e.target];
       if (!a || !b) return;
       var hi = lin.edges[e.source + '>' + e.target];
-      var dx = Math.max(24, (b.x - a.x) * 0.5);
-      var d = 'M' + a.x + ',' + a.y + ' C' + (a.x + dx) + ',' + a.y + ' ' + (b.x - dx) + ',' + b.y + ' ' + b.x + ',' + b.y;
+      var d = 'M' + a.x + ',' + a.y + ' L' + b.x + ',' + b.y;
       var p = el('path', { d: d, fill: 'none', 'class': 'lin-e' + (hi ? ' hi' : ''), stroke: hi ? ACCENT : GREY_EDGE, 'stroke-width': hi ? 1.6 : 1, 'stroke-opacity': hi ? 0.85 : 1 });
       (hi ? gEdgesHi : gEdges).appendChild(p);
     });
