@@ -1,8 +1,8 @@
-# From 571 config keys to 174 canonical fields
+# From 571 config keys to the canonical fields
 
-The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **142** that carry no architecture, and `schema.py` renames the remaining **429** into **174** canonical fields, every raw key covered exactly once.
+The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **142** that carry no architecture, and `schema.py` renames the remaining **429** into **174** canonical fields, every raw key covered exactly once. Four more canonical fields are derived (`attention_kind`, `sequence_mixer`, `local_global_ratio`, `mixer_attention_ratio`), and traits the modeling class implies (QK-Norm in Gemma 3, gated attention in Qwen3-Next, ...) are filled in by `extract.py` with the implying model type recorded as their source.
 
-Each canonical field is tagged **design** (67), **scale** (66) or **tuning** (41). The change line under a model name compares its canonical config with its first parent's: a design field counts when its value differs (per-layer schedules compared by the kinds of layer they contain); a scale field never counts by value, and 17 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields and the MTP fields in `NOT_A_CHANGE` never count.
+Each canonical field is tagged **design** (71), **scale** (66) or **tuning** (41). The change list between a model and a candidate parent: a design field counts when its value differs (per-layer schedules compared by the kinds of layer they contain); a scale field never counts by value, and 17 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields and the fields in `NOT_A_CHANGE` never count.
 
 ## Dropped
 
@@ -59,6 +59,7 @@ Each canonical field is tagged **design** (67), **scale** (66) or **tuning** (41
 | norm & activation | `polynorm_output_scale` | tuning | `polynorm_output_scale` ×1, `polynorm_output_scale_per_layer` ×1 |
 | norm & activation | `polynorm_bias_clamp` | tuning | `polynorm_bias_clamp` ×1 |
 | norm & activation | `ngpt` | design | `use_nGPT` ×1 |
+| attention | `attention_kind` | design | *derived* |
 | attention | `num_heads` | scale | `num_attention_heads` ×101, `n_head` ×1, `num_heads` ×3 |
 | attention | `num_kv_heads` | scale | `num_key_value_heads` ×98, `num_attention_groups` ×1 |
 | attention | `head_dim` | scale | `head_dim` ×81, `qk_head_dim` ×9, `kv_channels` ×1, `q_head_dim` ×1 |
@@ -86,6 +87,7 @@ Each canonical field is tagged **design** (67), **scale** (66) or **tuning** (41
 | attention | `qk_nope_head_dim` | scale | `qk_nope_head_dim` ×21 |
 | attention | `mla_scale_lora` | design | `mla_scale_q_lora` ×1, `mla_scale_kv_lora` ×1 |
 | attention | `mla_nope` | design | `mla_use_nope` ×3, `use_mla_nope` ×1 |
+| layer schedule & sliding window | `local_global_ratio` | design | *derived* |
 | layer schedule & sliding window | `layer_types` | design | `layer_types` ×35, `attn_type_list` ×3, `hybrid_layer_pattern` ×3, `local_layer_ids` ×1, `order_of_interleaved_layers` ×2, `layers_block_type` ×2, `hybrid_override_pattern` ×4 |
 | layer schedule & sliding window | `sliding_window` | scale · presence | `sliding_window` ×49, `sliding_window_size` ×5 |
 | layer schedule & sliding window | `sliding_window_enabled` | design | `use_sliding_window` ×13 |
@@ -157,6 +159,8 @@ Each canonical field is tagged **design** (67), **scale** (66) or **tuning** (41
 | multi-token prediction | `mtp_layer_types` | design · never | `mtp_layers_block_type` ×2, `mtp_hybrid_override_pattern` ×1 |
 | multi-token prediction | `mtp_dedicated_embeddings` | design · never | `mtp_use_dedicated_embeddings` ×7 |
 | multi-token prediction | `mtp_use_kda` | design · never | `mtp_use_kda` ×1 |
+| hybrid sequence mixers | `sequence_mixer` | design | *derived* |
+| hybrid sequence mixers | `mixer_attention_ratio` | design | *derived* |
 | hybrid sequence mixers | `linear_attention_config` | design | `linear_attn_config` ×4 |
 | hybrid sequence mixers | `hybrid_attention_interval` | design | `full_attention_interval` ×8, `gqa_interval` ×1, `layer_group_size` ×3, `gqa_layers` ×1, `hybrid_block_size` ×1 |
 | hybrid sequence mixers | `linear_num_key_heads` | scale | `linear_num_key_heads` ×8, `num_kv_heads_for_linear_attn` ×3 |

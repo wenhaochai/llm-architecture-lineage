@@ -7,6 +7,11 @@ the architecture each canonical field belongs to.
 """
 
 ALIASES = {
+    # ---- derived (no raw key of their own; filled by extract.py from the modeling class or from ratios) ----
+    "attention_kind": [],          # MHA / GQA / MQA / MLA / CSA ... from head counts and latent ranks
+    "local_global_ratio": [],      # sliding-window : global layers, rounded
+    "sequence_mixer": [],          # attention | gated_deltanet | kda | mamba2 | lightning | liv_conv | mlstm
+    "mixer_attention_ratio": [],   # mixer : attention layers in a hybrid, rounded
     # ---- identity ---------------------------------------------------------------
     "model_type": ["model_type"],
     "architecture_class": ["architectures"],
@@ -203,19 +208,20 @@ GROUPS = {
     "identity": ["model_type", "architecture_class"],
     "shape": ["hidden_size", "num_layers", "intermediate_size", "dense_prefix_intermediate_size", "ffn_width_multiplier", "ffn_round_to_multiple", "vocab_size", "vocab_size_unpadded", "max_position_embeddings", "tie_embeddings", "lm_head_bias", "mlp_bias", "parallel_block"],
     "norm & activation": ["norm_eps", "norm_type", "norm_eps_post", "norm_eps_cell", "norm_extra_placement", "norm_beta_attention", "norm_beta_linear_attention", "norm_beta_mlp", "norm_zero_centered", "activation", "activation_gated", "activation_clamp", "activation_clamp_shared_expert", "activation_clamp_experts", "activation_situ_beta", "polynorm_output_scale", "polynorm_bias_clamp", "ngpt"],
-    "attention": ["num_heads", "num_kv_heads", "head_dim", "v_head_dim", "attention_bias", "attention_impl_type", "attention_scale", "attention_value_scale", "attention_logit_softcapping", "attention_temperature_tuning", "attention_log_scaling", "attention_heads_per_layer", "attention_differential", "attention_cca_steps", "gated_attention", "gated_attention_type", "qk_norm", "qk_norm_type", "mla", "q_lora_rank", "kv_lora_rank", "o_lora_rank", "o_groups", "qk_rope_head_dim", "qk_nope_head_dim", "mla_scale_lora", "mla_nope"],
-    "layer schedule & sliding window": ["layer_types", "sliding_window", "sliding_window_enabled", "sliding_window_pattern", "sliding_window_max_layers", "chunked_attention_size", "swa_num_heads", "swa_num_kv_heads", "swa_head_dim", "swa_rope_theta", "swa_attention_config", "global_head_dim", "global_num_kv_heads", "global_kv_unified", "kv_shared_layers", "attention_sinks", "bidirectional_attention"],
+    "attention": ["attention_kind", "num_heads", "num_kv_heads", "head_dim", "v_head_dim", "attention_bias", "attention_impl_type", "attention_scale", "attention_value_scale", "attention_logit_softcapping", "attention_temperature_tuning", "attention_log_scaling", "attention_heads_per_layer", "attention_differential", "attention_cca_steps", "gated_attention", "gated_attention_type", "qk_norm", "qk_norm_type", "mla", "q_lora_rank", "kv_lora_rank", "o_lora_rank", "o_groups", "qk_rope_head_dim", "qk_nope_head_dim", "mla_scale_lora", "mla_nope"],
+    "layer schedule & sliding window": ["local_global_ratio", "layer_types", "sliding_window", "sliding_window_enabled", "sliding_window_pattern", "sliding_window_max_layers", "chunked_attention_size", "swa_num_heads", "swa_num_kv_heads", "swa_head_dim", "swa_rope_theta", "swa_attention_config", "global_head_dim", "global_num_kv_heads", "global_kv_unified", "kv_shared_layers", "attention_sinks", "bidirectional_attention"],
     "sparse attention": ["sparse_attention", "index_topk", "index_num_heads", "index_head_dim", "index_kv_heads", "index_layer_types", "index_kpool", "index_share_layers", "index_rope_interleave", "compress_ratios", "compress_rope_theta", "candidate_selection"],
     "positions": ["position_encoding_type", "rope_theta", "rope_theta_per_layer", "rope_theta_local", "rope_scaling", "rope_scaling_type", "rope_scaling_factor", "rope_scaling_params", "rope_original_max_position", "rope_scaling_layer_types", "partial_rotary_factor", "rope_interleave", "nope_layers", "relative_position_bias"],
     "mixture of experts": ["moe", "num_experts", "experts_per_tok", "num_shared_experts", "shared_expert_intermediate_size", "shared_expert_mode", "moe_intermediate_size", "dense_prefix_layers", "moe_layer_schedule", "router_scoring", "router_topk_method", "router_num_groups", "router_topk_groups", "router_normalize_weights", "router_scaling_factor", "router_expert_bias", "router_hidden_size", "router_input_scaling", "router_logit_softcapping", "moe_latent_size", "moe_latent_norm", "zero_experts", "residual_moe", "double_wide_mlp"],
     "multi-token prediction": ["mtp_layers", "mtp_layer_types", "mtp_dedicated_embeddings", "mtp_use_kda"],
-    "hybrid sequence mixers": ["linear_attention_config", "hybrid_attention_interval", "linear_num_key_heads", "linear_num_value_heads", "linear_key_head_dim", "linear_value_head_dim", "linear_group_norm_size", "linear_activation", "kda_config", "short_conv_kernel", "conv_dim", "conv_bias", "mamba_num_heads", "mamba_head_dim", "mamba_state_size", "mamba_num_groups", "mamba_expand", "mamba_activation", "mamba_proj_bias", "mamba_time_step", "mlstm_dims", "mlstm_gate_softcap", "hash_layers"],
+    "hybrid sequence mixers": ["sequence_mixer", "mixer_attention_ratio", "linear_attention_config", "hybrid_attention_interval", "linear_num_key_heads", "linear_num_value_heads", "linear_key_head_dim", "linear_value_head_dim", "linear_group_norm_size", "linear_activation", "kda_config", "short_conv_kernel", "conv_dim", "conv_bias", "mamba_num_heads", "mamba_head_dim", "mamba_state_size", "mamba_num_groups", "mamba_expand", "mamba_activation", "mamba_proj_bias", "mamba_time_step", "mlstm_dims", "mlstm_gate_softcap", "hash_layers"],
     "residual stream": ["hyper_connections", "hyper_connection_streams", "hyper_connection_params", "attention_residual_block", "residual_multiplier", "embedding_multiplier", "output_multiplier", "mup", "final_logit_softcapping"],
     "looped depth": ["loop_passes", "loop_exit_threshold"],
     "per-layer embeddings": ["per_layer_embedding_dim", "per_layer_embedding_vocab", "per_layer_embedding_layers", "per_layer_embedding_conv"],
     "n-gram memories": ["engram_layers", "engram_size", "engram_heads", "ngram_embedding", "dspark"],
 }
 
+DERIVED = {"attention_kind", "local_global_ratio", "sequence_mixer", "mixer_attention_ratio"}
 RAW_TO_CANONICAL = {raw: canon for canon, raws in ALIASES.items() for raw in raws}
 CANONICAL_GROUP = {canon: g for g, canons in GROUPS.items() for canon in canons}
 

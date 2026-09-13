@@ -432,6 +432,39 @@ def extract(card):
             raw_used[canon] = k
     if archs:
         norm["architecture_class"] = archs[0]; raw_used["architecture_class"] = "architectures"
+    # traits the modeling class implies (QK-Norm in Gemma 3 / OLMo 2, gated attention in Qwen3-Next, ...) and
+    # ratios that only exist as counts in the raw config become canonical fields too, so two configs are
+    # compared on what the model computes rather than on which keys its family happened to spell out
+    def fill(canon, value, source):
+        if canon not in norm and value not in (None, False, "", 0, "none"):
+            norm[canon] = value
+            raw_used[canon] = source
+    fill("attention_kind", m["attention_class"], "derived")
+    fill("sequence_mixer", m["hybrid_mixer"] or "attention", "derived")
+    if m["hybrid_ratio"]:
+        fill("mixer_attention_ratio", round(m["hybrid_ratio"]), "derived")
+    if m["swa"] and m["swa_ratio"]:
+        fill("local_global_ratio", round(m["swa_ratio"]), "derived")
+    imp_src = f"implied by model_type {mt}"
+    fill("qk_norm", m["qk_norm"], imp_src)
+    fill("gated_attention", m["gated_attention"], imp_src)
+    fill("sparse_attention", m["sparse_attention"], imp_src)
+    fill("mla", m["mla"], imp_src)
+    fill("attention_sinks", m["attention_sinks"], imp_src)
+    fill("hyper_connections", m["mhc"], imp_src)
+    fill("moe", m["is_moe"], "derived")
+    fill("norm_type", m["norm_type"], imp_src)
+    fill("position_encoding_type", m["position_encoding"], imp_src)
+    if m["nope"] != "none":
+        fill("nope_layers", m["nope"], imp_src)
+    if m["looped"]:
+        fill("loop_passes", m["loop_passes"] or True, imp_src)
+    if m["kv_sharing"]:
+        fill("kv_shared_layers", m["kv_shared_layers"] or True, imp_src)
+    if m["per_layer_embeddings"]:
+        fill("per_layer_embedding_dim", m["hidden_size_per_layer_input"] or True, imp_src)
+    if m["encoder_decoder"]:
+        fill("bidirectional_attention", True, imp_src)
     m["config_canonical"] = dict(norm)
     m["config_canonical_raw_key"] = raw_used
     m["num_architecture_keys"] = sum(1 for k in tc if k not in NON_ARCH)

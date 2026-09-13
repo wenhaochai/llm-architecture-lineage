@@ -2,8 +2,8 @@
 
 An interactive lineage graph of the open-weight models in Sebastian Raschka's
 [LLM Architecture Gallery](https://sebastianraschka.com/llm-architecture-gallery/),
-built from each model's `config.json` alone: 103 gallery cards, 83 nodes once the sizes of one
-release are folded into the largest.
+built from each model's `config.json` alone: 103 gallery models, 79 nodes once models that only
+change scale fold into the design they copy.
 
 **Live page:** https://wenhaochai.com/blogs/llm-architecture-lineage.html
 **Standalone viewer:** open `web/index.html` in a browser (no server needed).
@@ -19,7 +19,7 @@ the graph is a deterministic function of the configs.
 fetch_gallery.py   gallery page  -> data/cards.json          (103 cards, config.json links)
 fetch_configs.py   Hugging Face  -> data/configs/<key>.json  (103 configs, provenance recorded)
 key_taxonomy.py    hand-made lists of the 143 non-architecture keys (dropped)
-schema.py          alias table: 429 architecture keys -> 174 canonical fields in 14 sections; design/scale/tuning kinds
+schema.py          alias table: 429 architecture keys -> 174 canonical fields (+4 derived) in 14 sections; design/scale/tuning kinds
 extract.py         configs       -> data/metadata.json       (canonical config + derived traits per model)
 build_graph.py     metadata      -> data/graph.json          (online insertion: parents, trait edges, generations)
 export_web.py      graph.json    -> web/data.js              (trimmed data for the viewer)
@@ -62,26 +62,21 @@ spelling in `config_canonical_raw_key`) next to the derived traits used by the s
 modeling class fixes a trait the config does not spell out (QK-Norm in Gemma 3), the trait is
 attached by `model_type` in the `IMPLIED` table.
 
-### 2b. One node per model name
-
-Twelve releases appear in several sizes (six Qwen3 models, two GPT-OSS, ...). `SIZE_VARIANTS`
-in `build_graph.py` keeps the largest of each, so 103 cards become 83 nodes; folded sizes are
-recorded on the kept node.
-
 ### 3. The graph: online insertion in release order
 
 `build_graph.py` (mirrored live in `web/lineage.js`, where the threshold is a slider) takes the
-83 models in release order; on one day the larger model comes first. GPT-2 XL opens the graph.
+103 models in release order; on one day the larger model comes first. GPT-2 XL opens the graph.
 Every later model is compared with each placed model that is not a scale copy, using the change
 list above, and attaches under the one with the fewest changes (ties: same modeling class, then
-same organisation, then the later release). Zero changes make it a scale copy: a diamond in the
-figure, never a parent. If even the closest placed model needs more than `ORIGIN_THRESHOLD`
-changes (12), the model hangs off GPT-2 XL. For every field the model adds or switches to, one
-more edge (`trait`) comes from the earliest placed model that already carried it. Generation is
-one more than the largest generation among a node's parents and is the column in the figure.
+same organisation, then the later release). Zero changes make it a scale copy: it is folded into
+its parent's node, which keeps the earliest name and lists the copies as aliases, and it can
+never be a parent. If even the closest placed model needs more than `ORIGIN_THRESHOLD` changes
+(12), the model hangs off GPT-2 XL. For every field the model adds or switches to, one more edge
+(`trait`) comes from the earliest placed model that already carried it. Generation is one more
+than the largest generation among a node's parents and is the column in the figure.
 
-Result at the default threshold: 83 nodes, 189 edges (80 parent, 107 trait, 2 origin), 18 scale
-copies, 12 generations.
+Result at the default threshold: 103 models, 24 folded as scale copies, 79 drawn nodes, 229
+edges (76 parent, 151 trait, 2 origin), 14 generations.
 
 ## Caveats
 

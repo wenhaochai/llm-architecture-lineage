@@ -62,7 +62,7 @@
   /* ---------- online construction ---------- */
   var state = { selected: 'kimi-k3', threshold: D.origin_threshold || 12 };
   try { var q = /[?&]model=([a-z0-9-]+)/.exec(location.search); if (q && byKey[q[1]]) state.selected = q[1]; } catch (e) {}
-  var edges, parentsOf, childrenOf;
+  var edges, parentsOf, childrenOf, visible = nodes;
   function computeGraph(thr) {
     edges = []; parentsOf = {}; childrenOf = {};
     nodes.forEach(function (n) { parentsOf[n.key] = []; childrenOf[n.key] = []; n.parent = null; n.scale_copy = false; n.changes = []; n.generation = 0; n.is_root = false; });
@@ -111,6 +111,18 @@
       x.generation = 1 + Math.max.apply(null, parentsOf[x.key].map(function (e) { return byKey[e.source].generation; }));
       placed.push(x);
     });
+    // a scale copy is the same design: fold it into the model it copies; that node keeps the earliest name
+    nodes.forEach(function (n) { n.aliases = []; n.hidden = false; });
+    nodes.forEach(function (n) {
+      if (!n.scale_copy) return;
+      var p = byKey[n.parent];
+      p.aliases.push(n); n.hidden = true;
+      edges = edges.filter(function (e) { return e.target !== n.key; });
+      parentsOf[n.key] = [];
+      childrenOf[p.key] = childrenOf[p.key].filter(function (e) { return e.target !== n.key; });
+    });
+    visible = nodes.filter(function (n) { return !n.hidden; });
+    if (byKey[state.selected] && byKey[state.selected].hidden) state.selected = byKey[state.selected].parent;
     nodes.forEach(function (n) { n.is_terminal = childrenOf[n.key].length === 0; });
   }
 
@@ -118,10 +130,10 @@
   var W = 1120, ML = 30, MR = 30, MT = 24, MB = 18, ROW = 24, H, pos, gens;
   function layout() {
     gens = [];
-    nodes.forEach(function (n) { if (gens.indexOf(n.generation) < 0) gens.push(n.generation); });
+    visible.forEach(function (n) { if (gens.indexOf(n.generation) < 0) gens.push(n.generation); });
     gens.sort(function (a, b) { return a - b; });
     var colOf = {}, maxCol = 0;
-    gens.forEach(function (g) { colOf[g] = nodes.filter(function (n) { return n.generation === g; }); maxCol = Math.max(maxCol, colOf[g].length); });
+    gens.forEach(function (g) { colOf[g] = visible.filter(function (n) { return n.generation === g; }); maxCol = Math.max(maxCol, colOf[g].length); });
     H = MT + MB + Math.max(maxCol, 12) * ROW;
     var colX = {}, mid = H / 2;
     gens.forEach(function (g, i) { colX[g] = ML + (W - ML - MR) * (gens.length === 1 ? 0.5 : i / (gens.length - 1)); });
@@ -162,7 +174,12 @@
     return e;
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function shortName(n) { return n.name || n.title; }
+  function shortName(n) {
+    // parameter counts stay out of names; they come back only when two drawn nodes would otherwise read the same
+    var nm = n.name || n.title;
+    var clash = visible.some(function (x) { return x !== n && !x.hidden && (x.name || x.title) === nm; });
+    return clash ? n.title : nm;
+  }
   function fmtVal(v) {
     if (v === null || v === undefined) return 'null';
     if (typeof v === 'object' && v._raw) return Object.keys(v._raw).map(function (k) { return k + ' = ' + fmtVal(v._raw[k]); }).join(' · ');
@@ -189,6 +206,10 @@
     if (c.kind === 'drop') return '− ' + c.field;
     var a = short(c.from), b = short(c.to);
     return a === b ? c.field + ' ' + b : c.field + ' ' + a + ' → ' + b;
+  }
+  function aliasHTML(n, cls) {
+    if (!n.aliases || !n.aliases.length) return '';
+    return '<p class="' + cls + '"><span class="sp-vs">' + T('same design', '同一设计') + '</span>' + n.aliases.map(function (a) { return esc(shortName(a)) + ' <i>' + esc(a.date) + '</i>'; }).join(' · ') + '</p>';
   }
   function noveltyHTML(n, cls, limit) {
     var items;
@@ -227,7 +248,7 @@
     layout();
     var nOrigin = edges.filter(function (e) { return e.type === 'origin'; }).length;
     var nCopies = nodes.filter(function (n) { return n.scale_copy; }).length;
-    if (thrLabel) thrLabel.textContent = state.threshold + ' · ' + T(nOrigin + ' attached to origin · ' + nCopies + ' scale copies · ' + edges.length + ' edges · ' + gens.length + ' generations', nOrigin + ' 个挂在起点 · ' + nCopies + ' 个规模副本 · ' + edges.length + ' 条边 · ' + gens.length + ' 代');
+    if (thrLabel) thrLabel.textContent = state.threshold + ' · ' + T(visible.length + ' nodes · ' + nCopies + ' scale copies folded in · ' + nOrigin + ' attached to origin · ' + edges.length + ' edges · ' + gens.length + ' generations', visible.length + ' 个节点 · ' + nCopies + ' 个规模副本已合并 · ' + nOrigin + ' 个挂在起点 · ' + edges.length + ' 条边 · ' + gens.length + ' 代');
     draw();
   }
 
@@ -249,15 +270,14 @@
     });
     svg.appendChild(gEdges); svg.appendChild(gEdgesHi);
     var gN = el('g');
-    nodes.forEach(function (n) {
+    visible.forEach(function (n) {
       var p = pos[n.key];
       var isSel = n.key === state.selected, inLin = !!lin.nodes[n.key];
       var fill = isSel ? ACCENT_DEEP : inLin ? ACCENT : GREY, stroke = isSel ? ACCENT_DEEP : 'var(--paper)';
       var r = isSel ? 7.5 : inLin ? 6 : 5;
       var g = el('g', { 'class': 'lin-n' + (isSel ? ' sel' : '') + (inLin ? ' lin' : ''), 'data-key': n.key, tabindex: 0, role: 'button', 'aria-label': shortName(n) });
       var sw = isSel ? 2 : inLin ? 1.5 : 1, shapeEl;
-      if (n.scale_copy) { var d = r * 1.25; shapeEl = el('path', { d: 'M' + p.x + ',' + (p.y - d) + ' L' + (p.x + d) + ',' + p.y + ' L' + p.x + ',' + (p.y + d) + ' L' + (p.x - d) + ',' + p.y + ' Z', fill: fill, stroke: stroke, 'stroke-width': sw }); }
-      else if (n.is_terminal) shapeEl = el('rect', { x: p.x - r, y: p.y - r, width: 2 * r, height: 2 * r, fill: fill, stroke: stroke, 'stroke-width': sw });
+      if (n.is_terminal) shapeEl = el('rect', { x: p.x - r, y: p.y - r, width: 2 * r, height: 2 * r, fill: fill, stroke: stroke, 'stroke-width': sw });
       else shapeEl = el('circle', { cx: p.x, cy: p.y, r: r, fill: fill, stroke: stroke, 'stroke-width': sw });
       g.appendChild(el('circle', { cx: p.x, cy: p.y, r: 11, fill: 'transparent' }));
       g.appendChild(shapeEl);
@@ -282,7 +302,7 @@
   /* ---------- tooltip ---------- */
   function showTip(n, ev) {
     tip.innerHTML = '<div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span></div>' +
-      '<div class="tp-title">' + esc(shortName(n)) + '</div>' + noveltyHTML(n, 'tp-sig', 4) +
+      '<div class="tp-title">' + esc(shortName(n)) + '</div>' + aliasHTML(n, 'tp-alias') + noveltyHTML(n, 'tp-sig', 4) +
       '<div class="tp-foot"><span>' + esc((n.gallery.scale || '').replace(/ \(.*\)$/, '')) + '</span><span>' + n.num_layers + ' ' + T('layers', '层') + ' · d ' + n.hidden_size + '</span></div>';
     tip.hidden = false;
     moveTip(ev);
@@ -337,7 +357,7 @@
       row(T('Activation', '激活'), n.activation)
     ]);
     var shapeG = group(T('Shape', '尺度'), [
-      row(T('Parameters', '参数量'), n.gallery.scale || null),
+      row(T('Parameters', '参数量'), (n.gallery.scale || '') + (n.aliases && n.aliases.length ? n.aliases.map(function (a) { return '; ' + shortName(a) + ' ' + (a.gallery.scale || '').split(',')[0]; }).join('') : '') || null),
       row(T('Other sizes', '其他尺寸'), n.size_variants ? n.size_variants.map(function (v) { return (v.scale || v.title).split(',')[0].replace(/ total$/, ''); }).join(', ') : null),
       row(T('Layers', '层数'), n.num_layers + (n.looped && n.loop_passes ? ' × ' + n.loop_passes + T(' passes', ' 遍') : '')),
       row('d_model', n.hidden_size),
@@ -366,7 +386,7 @@
     }
     function rel(title, list, side) {
       var h = '<div class="sp-rel"><h4>' + esc(title) + '</h4>';
-      if (!list.length) h += '<p class="sp-none">' + esc(side === 'up' ? (n.is_root ? T('origin of the graph', '图的起点') : dash) : (n.scale_copy ? T('a scale copy cannot be a parent', '规模副本不能作为父节点') : T('none yet', '暂无'))) + '</p>';
+      if (!list.length) h += '<p class="sp-none">' + esc(side === 'up' ? (n.is_root ? T('origin of the graph', '图的起点') : dash) : T('none yet', '暂无')) + '</p>';
       list.forEach(function (e) {
         var o = byKey[side === 'up' ? e.source : e.target];
         h += '<div class="sp-node"><button type="button" data-go="' + esc(o.key) + '">' + esc(shortName(o)) + (o.gallery.scale && sameName(o) ? ' <i>' + esc(o.gallery.scale.split(',')[0]) + '</i>' : '') + '</button><span>' + esc(why(e)) + '</span></div>';
@@ -376,7 +396,7 @@
     var ps = parentsOf[n.key].slice().sort(function (a, b) { return (a.type === 'trait') - (b.type === 'trait'); });
     var cs = childrenOf[n.key].slice().sort(function (a, b) { return byKey[a.target].date < byKey[b.target].date ? -1 : 1; });
     var cc = n.config_canonical || {}, rawOf = n.config_canonical_raw_key || {};
-    var h = '<div class="sp-head"><div><div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span>' + (n.gallery.scale ? '<span>' + esc(n.gallery.scale) + '</span>' : '') + '</div><h3>' + esc(shortName(n)) + '</h3>' + noveltyHTML(n, 'sp-sig') + '</div>' +
+    var h = '<div class="sp-head"><div><div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span>' + (n.gallery.scale ? '<span>' + esc(n.gallery.scale) + '</span>' : '') + '</div><h3>' + esc(shortName(n)) + '</h3>' + aliasHTML(n, 'sp-alias') + noveltyHTML(n, 'sp-sig') + '</div>' +
       '<div class="sp-links">' + (n.gallery.config_url ? '<a href="' + esc(n.gallery.config_url) + '" target="_blank" rel="noopener">config.json</a>' : '') +
       (n.gallery.report_url ? '<a href="' + esc(n.gallery.report_url) + '" target="_blank" rel="noopener">' + T('report', '技术报告') + '</a>' : '') +
       '<a href="' + esc(n.gallery.card_url) + '" target="_blank" rel="noopener">' + T('gallery', '图库') + '</a></div></div>';

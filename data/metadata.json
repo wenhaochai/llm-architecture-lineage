@@ -176,7 +176,11 @@
    "num_heads": 25,
    "num_layers": 48,
    "vocab_size": 50257,
-   "architecture_class": "GPT2LMHeadModel"
+   "architecture_class": "GPT2LMHeadModel",
+   "attention_kind": "MHA",
+   "sequence_mixer": "attention",
+   "norm_type": "layernorm",
+   "position_encoding_type": "learned_absolute"
   },
   "config_canonical_raw_key": {
    "activation": "activation_function",
@@ -187,7 +191,11 @@
    "num_heads": "n_head",
    "num_layers": "n_layer",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type gpt2",
+   "position_encoding_type": "implied by model_type gpt2"
   },
   "num_architecture_keys": 10
  },
@@ -370,7 +378,11 @@
    "rope_theta": 500000.0,
    "tie_embeddings": false,
    "vocab_size": 128256,
-   "architecture_class": "LlamaForCausalLM"
+   "architecture_class": "LlamaForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -388,7 +400,11 @@
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type llama",
+   "position_encoding_type": "implied by model_type llama"
   },
   "num_architecture_keys": 16
  },
@@ -584,7 +600,11 @@
    "rope_theta": 500000.0,
    "tie_embeddings": true,
    "vocab_size": 128256,
-   "architecture_class": "LlamaForCausalLM"
+   "architecture_class": "LlamaForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -603,7 +623,11 @@
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type llama",
+   "position_encoding_type": "implied by model_type llama"
   },
   "num_architecture_keys": 17
  },
@@ -782,7 +806,12 @@
    "rope_theta": 500000,
    "tie_embeddings": false,
    "vocab_size": 100352,
-   "architecture_class": "Olmo2ForCausalLM"
+   "architecture_class": "Olmo2ForCausalLM",
+   "attention_kind": "MHA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -799,7 +828,12 @@
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type olmo2",
+   "norm_type": "implied by model_type olmo2",
+   "position_encoding_type": "implied by model_type olmo2"
   },
   "num_architecture_keys": 15
  },
@@ -1035,7 +1069,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 129280,
-   "architecture_class": "DeepseekV3ForCausalLM"
+   "architecture_class": "DeepseekV3ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -1070,7 +1110,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type deepseek_v3",
+   "moe": "derived",
+   "norm_type": "implied by model_type deepseek_v3",
+   "position_encoding_type": "implied by model_type deepseek_v3"
   },
   "num_architecture_keys": 33
  },
@@ -1306,7 +1352,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 129280,
-   "architecture_class": "DeepseekV3ForCausalLM"
+   "architecture_class": "DeepseekV3ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -1341,7 +1393,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type deepseek_v3",
+   "moe": "derived",
+   "norm_type": "implied by model_type deepseek_v3",
+   "position_encoding_type": "implied by model_type deepseek_v3"
   },
   "num_architecture_keys": 33
  },
@@ -1554,7 +1612,13 @@
    "sliding_window": 1024,
    "sliding_window_pattern": 6,
    "vocab_size": 262208,
-   "architecture_class": "Gemma3ForConditionalGeneration"
+   "architecture_class": "Gemma3ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 5,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -1577,7 +1641,13 @@
    "sliding_window": "sliding_window",
    "sliding_window_pattern": "sliding_window_pattern",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type gemma3_text",
+   "norm_type": "implied by model_type gemma3_text",
+   "position_encoding_type": "implied by model_type gemma3_text"
   },
   "num_architecture_keys": 20
  },
@@ -1763,7 +1833,11 @@
    "rope_theta": 1000000000.0,
    "sliding_window": null,
    "vocab_size": 131072,
-   "architecture_class": "Mistral3ForConditionalGeneration"
+   "architecture_class": "Mistral3ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "head_dim": "head_dim",
@@ -1779,7 +1853,11 @@
    "rope_theta": "rope_theta",
    "sliding_window": "sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type mistral",
+   "position_encoding_type": "implied by model_type mistral"
   },
   "num_architecture_keys": 13
  },
@@ -2087,7 +2165,12 @@
    "rope_theta": 500000.0,
    "qk_norm": false,
    "vocab_size": 202048,
-   "architecture_class": "Llama4ForConditionalGeneration"
+   "architecture_class": "Llama4ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -2112,7 +2195,12 @@
    "rope_theta": "rope_theta",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type llama4_text",
+   "position_encoding_type": "implied by model_type llama4_text"
   },
   "num_architecture_keys": 25
  },
@@ -2297,7 +2385,12 @@
    "tie_embeddings": true,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3ForCausalLM"
+   "architecture_class": "Qwen3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -2318,7 +2411,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type qwen3",
+   "norm_type": "implied by model_type qwen3",
+   "position_encoding_type": "implied by model_type qwen3"
   },
   "num_architecture_keys": 19
  },
@@ -2523,7 +2621,13 @@
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3MoeForCausalLM"
+   "architecture_class": "Qwen3MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -2549,7 +2653,13 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type qwen3_moe",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen3_moe",
+   "position_encoding_type": "implied by model_type qwen3_moe"
   },
   "num_architecture_keys": 25
  },
@@ -2753,7 +2863,13 @@
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3MoeForCausalLM"
+   "architecture_class": "Qwen3MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -2779,7 +2895,13 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type qwen3_moe",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen3_moe",
+   "position_encoding_type": "implied by model_type qwen3_moe"
   },
   "num_architecture_keys": 25
  },
@@ -2965,7 +3087,12 @@
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3ForCausalLM"
+   "architecture_class": "Qwen3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -2986,7 +3113,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type qwen3",
+   "norm_type": "implied by model_type qwen3",
+   "position_encoding_type": "implied by model_type qwen3"
   },
   "num_architecture_keys": 19
  },
@@ -3172,7 +3304,12 @@
    "tie_embeddings": true,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3ForCausalLM"
+   "architecture_class": "Qwen3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -3193,7 +3330,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type qwen3",
+   "norm_type": "implied by model_type qwen3",
+   "position_encoding_type": "implied by model_type qwen3"
   },
   "num_architecture_keys": 19
  },
@@ -3379,7 +3521,12 @@
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3ForCausalLM"
+   "architecture_class": "Qwen3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -3400,7 +3547,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type qwen3",
+   "norm_type": "implied by model_type qwen3",
+   "position_encoding_type": "implied by model_type qwen3"
   },
   "num_architecture_keys": 19
  },
@@ -3586,7 +3738,11 @@
    "tie_embeddings": true,
    "sliding_window_enabled": false,
    "vocab_size": 128256,
-   "architecture_class": "SmolLM3ForCausalLM"
+   "architecture_class": "SmolLM3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -3606,7 +3762,11 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type smollm3",
+   "position_encoding_type": "implied by model_type smollm3"
   },
   "num_architecture_keys": 18
  },
@@ -3843,7 +4003,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 163840,
-   "architecture_class": "DeepseekV3ForCausalLM"
+   "architecture_class": "DeepseekV3ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -3878,7 +4044,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type kimi_k2",
+   "moe": "derived",
+   "norm_type": "implied by model_type kimi_k2",
+   "position_encoding_type": "implied by model_type kimi_k2"
   },
   "num_architecture_keys": 33
  },
@@ -4092,7 +4264,12 @@
    "tie_embeddings": false,
    "qk_norm": true,
    "vocab_size": 151552,
-   "architecture_class": "Glm4MoeForCausalLM"
+   "architecture_class": "Glm4MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -4122,7 +4299,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm4_moe",
+   "position_encoding_type": "implied by model_type glm4_moe"
   },
   "num_architecture_keys": 28
  },
@@ -4356,7 +4538,14 @@
    "activation_clamp": 7.0,
    "tie_embeddings": false,
    "vocab_size": 201088,
-   "architecture_class": "GptOssForCausalLM"
+   "architecture_class": "GptOssForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 1,
+   "attention_sinks": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -4380,7 +4569,14 @@
    "activation_clamp": "swiglu_limit",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "attention_sinks": "implied by model_type gpt_oss",
+   "moe": "derived",
+   "norm_type": "implied by model_type gpt_oss",
+   "position_encoding_type": "implied by model_type gpt_oss"
   },
   "num_architecture_keys": 23
  },
@@ -4614,7 +4810,14 @@
    "activation_clamp": 7.0,
    "tie_embeddings": false,
    "vocab_size": 201088,
-   "architecture_class": "GptOssForCausalLM"
+   "architecture_class": "GptOssForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 1,
+   "attention_sinks": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -4638,7 +4841,14 @@
    "activation_clamp": "swiglu_limit",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "attention_sinks": "implied by model_type gpt_oss",
+   "moe": "derived",
+   "norm_type": "implied by model_type gpt_oss",
+   "position_encoding_type": "implied by model_type gpt_oss"
   },
   "num_architecture_keys": 23
  },
@@ -4849,7 +5059,13 @@
    "sliding_window": 512,
    "bidirectional_attention": false,
    "vocab_size": 262144,
-   "architecture_class": "Gemma3ForCausalLM"
+   "architecture_class": "Gemma3ForCausalLM",
+   "attention_kind": "MQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 5,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "sliding_window_pattern": "_sliding_window_pattern",
@@ -4874,7 +5090,13 @@
    "sliding_window": "sliding_window",
    "bidirectional_attention": "use_bidirectional_attention",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type gemma3_text",
+   "norm_type": "implied by model_type gemma3_text",
+   "position_encoding_type": "implied by model_type gemma3_text"
   },
   "num_architecture_keys": 23
  },
@@ -5082,7 +5304,12 @@
      "beta_slow": 1
     }
    },
-   "architecture_class": "Grok1ForCausalLM"
+   "architecture_class": "Grok1ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "embedding_multiplier": "embedding_multiplier_scale",
@@ -5112,7 +5339,12 @@
    "rope_original_max_position": "original_max_position_embeddings",
    "rope_scaling_factor": "scaling_factor",
    "rope_scaling_params": "extrapolation_factor",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type git",
+   "position_encoding_type": "implied by model_type git"
   },
   "num_architecture_keys": 31
  },
@@ -5328,7 +5560,15 @@
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3NextForCausalLM"
+   "architecture_class": "Qwen3NextForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "gated_attention": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "moe_layer_schedule": "decoder_sparse_step",
@@ -5359,7 +5599,15 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen3_next",
+   "gated_attention": "implied by model_type qwen3_next",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen3_next",
+   "position_encoding_type": "implied by model_type qwen3_next"
   },
   "num_architecture_keys": 30
  },
@@ -5600,7 +5848,12 @@
    "qk_norm": true,
    "router_expert_bias": true,
    "vocab_size": 200064,
-   "architecture_class": "MiniMaxM2ForCausalLM"
+   "architecture_class": "MiniMaxM2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "layer_types": "attn_type_list",
@@ -5631,7 +5884,12 @@
    "qk_norm": "use_qk_norm",
    "router_expert_bias": "use_routing_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type minimax_m2",
+   "position_encoding_type": "implied by model_type minimax_m2"
   },
   "num_architecture_keys": 32
  },
@@ -5927,7 +6185,16 @@
    "router_topk_method": true,
    "v_head_dim": 128,
    "vocab_size": 163840,
-   "architecture_class": "KimiLinearForCausalLM"
+   "architecture_class": "KimiLinearForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "kda",
+   "mixer_attention_ratio": 3,
+   "gated_attention": true,
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope",
+   "nope_layers": "partial"
   },
   "config_canonical_raw_key": {
    "dense_prefix_layers": "first_k_dense_replace",
@@ -5964,7 +6231,16 @@
    "router_topk_method": "use_grouped_topk",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "gated_attention": "implied by model_type kimi_linear",
+   "mla": "implied by model_type kimi_linear",
+   "moe": "derived",
+   "norm_type": "implied by model_type kimi_linear",
+   "position_encoding_type": "implied by model_type kimi_linear",
+   "nope_layers": "implied by model_type kimi_linear"
   },
   "num_architecture_keys": 35
  },
@@ -6176,7 +6452,13 @@
    "sliding_window": 4096,
    "tie_embeddings": false,
    "vocab_size": 100278,
-   "architecture_class": "Olmo3ForCausalLM"
+   "architecture_class": "Olmo3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -6195,7 +6477,13 @@
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type olmo3",
+   "norm_type": "implied by model_type olmo3",
+   "position_encoding_type": "implied by model_type olmo3"
   },
   "num_architecture_keys": 17
  },
@@ -6407,7 +6695,13 @@
    "sliding_window": 4096,
    "tie_embeddings": false,
    "vocab_size": 100278,
-   "architecture_class": "Olmo3ForCausalLM"
+   "architecture_class": "Olmo3ForCausalLM",
+   "attention_kind": "MHA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -6426,7 +6720,13 @@
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type olmo3",
+   "norm_type": "implied by model_type olmo3",
+   "position_encoding_type": "implied by model_type olmo3"
   },
   "num_architecture_keys": 17
  },
@@ -6669,7 +6969,14 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 129280,
-   "architecture_class": "DeepseekV32ForCausalLM"
+   "architecture_class": "DeepseekV32ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "sparse_attention": "DSA",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -6707,7 +7014,14 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "sparse_attention": "implied by model_type deepseek_v32",
+   "mla": "implied by model_type deepseek_v32",
+   "moe": "derived",
+   "norm_type": "implied by model_type deepseek_v32",
+   "position_encoding_type": "implied by model_type deepseek_v32"
   },
   "num_architecture_keys": 36
  },
@@ -6938,7 +7252,13 @@
    "num_shared_experts": 1,
    "moe_layer_schedule": 1,
    "activation": "silu",
-   "architecture_class": "MistralLarge3ForCausalLM"
+   "architecture_class": "MistralLarge3ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "model_type": "model_type",
@@ -6969,7 +7289,13 @@
    "num_shared_experts": "n_shared_experts",
    "moe_layer_schedule": "moe_layer_freq",
    "activation": "hidden_act",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type mistral_large3",
+   "moe": "derived",
+   "norm_type": "implied by model_type mistral_large3",
+   "position_encoding_type": "implied by model_type mistral_large3"
   },
   "num_architecture_keys": 29
  },
@@ -7227,7 +7553,13 @@
    "router_topk_groups": 1,
    "conv_bias": true,
    "vocab_size": 131072,
-   "architecture_class": "NemotronHForCausalLM"
+   "architecture_class": "NemotronHForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "mamba2",
+   "mixer_attention_ratio": 4,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -7267,7 +7599,13 @@
    "router_topk_groups": "topk_group",
    "conv_bias": "use_conv_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type nemotron_h",
+   "nope_layers": "implied by model_type nemotron_h"
   },
   "num_architecture_keys": 42
  },
@@ -7535,7 +7873,13 @@
      "swa_v_head_dim": 128
     }
    },
-   "architecture_class": "MiMoV2FlashForCausalLM"
+   "architecture_class": "MiMoV2FlashForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 4,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_value_scale": "attention_value_scale",
@@ -7574,7 +7918,13 @@
    "swa_num_heads": "swa_num_attention_heads",
    "swa_num_kv_heads": "swa_num_key_value_heads",
    "swa_head_dim": "swa_head_dim",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type mimo_v2_flash",
+   "position_encoding_type": "implied by model_type mimo_v2_flash"
   },
   "num_architecture_keys": 40
  },
@@ -7789,7 +8139,12 @@
    "tie_embeddings": false,
    "qk_norm": true,
    "vocab_size": 151552,
-   "architecture_class": "Glm4MoeForCausalLM"
+   "architecture_class": "Glm4MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -7819,7 +8174,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm4_moe",
+   "position_encoding_type": "implied by model_type glm4_moe"
   },
   "num_architecture_keys": 28
  },
@@ -8056,7 +8416,16 @@
    "sliding_window": 4096,
    "tie_embeddings": false,
    "vocab_size": 200192,
-   "architecture_class": "AfmoeForCausalLM"
+   "architecture_class": "AfmoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "qk_norm": true,
+   "gated_attention": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope",
+   "nope_layers": "global"
   },
   "config_canonical_raw_key": {
    "sliding_window_pattern": "global_attn_every_n_layers",
@@ -8087,7 +8456,16 @@
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type afmoe",
+   "gated_attention": "implied by model_type afmoe",
+   "moe": "derived",
+   "norm_type": "implied by model_type afmoe",
+   "position_encoding_type": "implied by model_type afmoe",
+   "nope_layers": "implied by model_type afmoe"
   },
   "num_architecture_keys": 31
  },
@@ -8334,7 +8712,14 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 256,
    "vocab_size": 154880,
-   "architecture_class": "GlmMoeDsaForCausalLM"
+   "architecture_class": "GlmMoeDsaForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "sparse_attention": "DSA",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -8374,7 +8759,14 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "sparse_attention": "implied by model_type glm_moe_dsa",
+   "mla": "implied by model_type glm_moe_dsa",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm_moe_dsa",
+   "position_encoding_type": "implied by model_type glm_moe_dsa"
   },
   "num_architecture_keys": 39
  },
@@ -8641,7 +9033,13 @@
    "router_topk_groups": 1,
    "conv_bias": true,
    "vocab_size": 131072,
-   "architecture_class": "NemotronHForCausalLM"
+   "architecture_class": "NemotronHForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "mamba2",
+   "mixer_attention_ratio": 5,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -8684,7 +9082,13 @@
    "router_topk_groups": "topk_group",
    "conv_bias": "use_conv_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type nemotron_h",
+   "nope_layers": "implied by model_type nemotron_h"
   },
   "num_architecture_keys": 45
  },
@@ -8953,7 +9357,13 @@
    "double_wide_mlp": false,
    "vocab_size": 262144,
    "per_layer_embedding_vocab": 262144,
-   "architecture_class": "Gemma4ForConditionalGeneration"
+   "architecture_class": "Gemma4ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 5,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -8985,7 +9395,13 @@
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
    "per_layer_embedding_vocab": "vocab_size_per_layer_input",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type gemma4_text",
+   "norm_type": "implied by model_type gemma4_text",
+   "position_encoding_type": "implied by model_type gemma4_text"
   },
   "num_architecture_keys": 29
  },
@@ -9255,7 +9671,13 @@
    "double_wide_mlp": false,
    "vocab_size": 262144,
    "per_layer_embedding_vocab": 262144,
-   "architecture_class": "Gemma4ForConditionalGeneration"
+   "architecture_class": "Gemma4ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 5,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -9287,7 +9709,13 @@
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
    "per_layer_embedding_vocab": "vocab_size_per_layer_input",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type gemma4_text",
+   "norm_type": "implied by model_type gemma4_text",
+   "position_encoding_type": "implied by model_type gemma4_text"
   },
   "num_architecture_keys": 29
  },
@@ -9553,7 +9981,13 @@
    "double_wide_mlp": false,
    "vocab_size": 262144,
    "per_layer_embedding_vocab": 262144,
-   "architecture_class": "Gemma4UnifiedForConditionalGeneration"
+   "architecture_class": "Gemma4UnifiedForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 5,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -9585,7 +10019,13 @@
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
    "per_layer_embedding_vocab": "vocab_size_per_layer_input",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type gemma4_unified_text",
+   "norm_type": "implied by model_type gemma4_unified_text",
+   "position_encoding_type": "implied by model_type gemma4_unified_text"
   },
   "num_architecture_keys": 29
  },
@@ -9781,7 +10221,11 @@
    "rope_theta": 500000.0,
    "tie_embeddings": true,
    "vocab_size": 128256,
-   "architecture_class": "LlamaForCausalLM"
+   "architecture_class": "LlamaForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -9800,7 +10244,11 @@
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type llama",
+   "position_encoding_type": "implied by model_type llama"
   },
   "num_architecture_keys": 17
  },
@@ -10004,7 +10452,13 @@
    "tie_embeddings": false,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen3MoeForCausalLM"
+   "architecture_class": "Qwen3MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "qk_norm": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -10030,7 +10484,13 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "qk_norm": "implied by model_type qwen3_moe",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen3_moe",
+   "position_encoding_type": "implied by model_type qwen3_moe"
   },
   "num_architecture_keys": 25
  },
@@ -10339,7 +10799,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 163840,
-   "architecture_class": "KimiK25ForConditionalGeneration"
+   "architecture_class": "KimiK25ForConditionalGeneration",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -10374,7 +10840,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type kimi_k2",
+   "moe": "derived",
+   "norm_type": "implied by model_type kimi_k2",
+   "position_encoding_type": "implied by model_type kimi_k2"
   },
   "num_architecture_keys": 33
  },
@@ -10757,7 +11229,12 @@
     }
    },
    "norm_zero_centered": true,
-   "architecture_class": "Step3p5ForCausalLM"
+   "architecture_class": "Step3p5ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "model_type": "model_type",
@@ -10796,7 +11273,12 @@
    "activation_clamp": "swiglu_limits",
    "activation_clamp_shared_expert": "swiglu_limits_shared",
    "norm_zero_centered": "zero_centered",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "norm_type": "implied by model_type step3p5",
+   "position_encoding_type": "implied by model_type step3p5"
   },
   "num_architecture_keys": 40
  },
@@ -10982,7 +11464,11 @@
    "rope_theta": 70000000,
    "tie_embeddings": false,
    "vocab_size": 166144,
-   "architecture_class": "LlamaForCausalLM"
+   "architecture_class": "LlamaForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -11001,7 +11487,11 @@
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type llama",
+   "position_encoding_type": "implied by model_type llama"
   },
   "num_architecture_keys": 17
  },
@@ -11220,7 +11710,12 @@
    "qk_norm": true,
    "router_expert_bias": true,
    "vocab_size": 200064,
-   "architecture_class": "MiniMaxM2ForCausalLM"
+   "architecture_class": "MiniMaxM2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "layer_types": "attn_type_list",
@@ -11246,7 +11741,12 @@
    "qk_norm": "use_qk_norm",
    "router_expert_bias": "use_routing_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type minimax_m2",
+   "position_encoding_type": "implied by model_type minimax_m2"
   },
   "num_architecture_keys": 26
  },
@@ -11488,7 +11988,11 @@
    "activation_gated": true,
    "qk_norm": false,
    "vocab_size": 262144,
-   "architecture_class": "Cohere2ForCausalLM"
+   "architecture_class": "Cohere2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "nope_layers": "global"
   },
   "config_canonical_raw_key": {
    "sliding_window_pattern": "_sliding_window_pattern",
@@ -11516,7 +12020,11 @@
    "activation_gated": "use_gated_activation",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "nope_layers": "implied by model_type cohere2"
   },
   "num_architecture_keys": 30
  },
@@ -11777,7 +12285,14 @@
    "v_head_dim": 128,
    "vocab_size": 157184,
    "model_type": "bailing_hybrid",
-   "architecture_class": "BailingMoeV2_5ForCausalLM"
+   "architecture_class": "BailingMoeV2_5ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "lightning",
+   "mixer_attention_ratio": 7,
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "dense_prefix_layers": "first_k_dense_replace",
@@ -11821,7 +12336,14 @@
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
    "model_type": "model_type",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "mla": "implied by model_type bailing_hybrid",
+   "moe": "derived",
+   "norm_type": "implied by model_type bailing_hybrid",
+   "position_encoding_type": "implied by model_type bailing_hybrid"
   },
   "num_architecture_keys": 46
  },
@@ -12074,7 +12596,14 @@
     "rope_theta": 10000000,
     "partial_rotary_factor": 0.25
    },
-   "architecture_class": "Qwen3_5MoeForConditionalGeneration"
+   "architecture_class": "Qwen3_5MoeForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -12104,7 +12633,14 @@
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "vocab_size": "vocab_size",
    "rope_scaling": "rope_parameters",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen3_5_moe_text",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen3_5_moe_text",
+   "position_encoding_type": "implied by model_type qwen3_5_moe_text"
   },
   "num_architecture_keys": 27
  },
@@ -12326,7 +12862,11 @@
    "qk_norm": true,
    "norm_type": true,
    "vocab_size": 262144,
-   "architecture_class": "SarvamMoEForCausalLM"
+   "architecture_class": "SarvamMoEForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "dense_prefix_layers": "first_k_dense_replace",
@@ -12359,7 +12899,11 @@
    "qk_norm": "use_qk_norm",
    "norm_type": "use_rmsnorm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "position_encoding_type": "implied by model_type sarvam_moe"
   },
   "num_architecture_keys": 32
  },
@@ -12592,7 +13136,14 @@
    "qk_norm": true,
    "v_head_dim": 128,
    "vocab_size": 262144,
-   "architecture_class": "SarvamMLAForCausalLM"
+   "architecture_class": "SarvamMLAForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope",
+   "nope_layers": "partial"
   },
   "config_canonical_raw_key": {
    "rope_theta": "default_theta",
@@ -12620,7 +13171,14 @@
    "qk_norm": "use_qk_norm",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type sarvam_mla",
+   "moe": "derived",
+   "norm_type": "implied by model_type sarvam_mla",
+   "position_encoding_type": "implied by model_type sarvam_mla",
+   "nope_layers": "implied by model_type sarvam_mla"
   },
   "num_architecture_keys": 28
  },
@@ -12805,7 +13363,11 @@
    "sliding_window": null,
    "tie_embeddings": false,
    "vocab_size": 100352,
-   "architecture_class": "Phi3ForCausalLM"
+   "architecture_class": "Phi3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -12824,7 +13386,11 @@
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type phi3",
+   "position_encoding_type": "implied by model_type phi3"
   },
   "num_architecture_keys": 17
  },
@@ -13044,7 +13610,11 @@
    "tie_embeddings": false,
    "attention_bias": false,
    "vocab_size": 50304,
-   "architecture_class": "xLSTMForCausalLM"
+   "architecture_class": "xLSTMForCausalLM",
+   "attention_kind": "none (mLSTM)",
+   "sequence_mixer": "mlstm",
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "norm_extra_placement": "add_out_norm",
@@ -13064,7 +13634,11 @@
    "tie_embeddings": "tie_word_embeddings",
    "attention_bias": "use_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type xlstm",
+   "nope_layers": "implied by model_type xlstm"
   },
   "num_architecture_keys": 23
  },
@@ -13277,7 +13851,12 @@
    "tie_embeddings": false,
    "qk_norm": false,
    "vocab_size": 151552,
-   "architecture_class": "Glm4MoeForCausalLM"
+   "architecture_class": "Glm4MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -13307,7 +13886,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm4_moe",
+   "position_encoding_type": "implied by model_type glm4_moe"
   },
   "num_architecture_keys": 28
  },
@@ -13509,7 +14093,11 @@
    "loop_exit_threshold": 1.0,
    "sliding_window_enabled": false,
    "vocab_size": 49152,
-   "architecture_class": "OuroForCausalLM"
+   "architecture_class": "OuroForCausalLM",
+   "attention_kind": "MHA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "head_dim": "head_dim",
@@ -13532,7 +14120,11 @@
    "loop_exit_threshold": "early_exit_threshold",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type ouro",
+   "position_encoding_type": "implied by model_type ouro"
   },
   "num_architecture_keys": 21
  },
@@ -13743,7 +14335,12 @@
    "router_topk_groups": 1,
    "qk_norm": false,
    "vocab_size": 151552,
-   "architecture_class": "Glm4MoeForCausalLM"
+   "architecture_class": "Glm4MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -13773,7 +14370,12 @@
    "router_topk_groups": "topk_group",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm4_moe",
+   "position_encoding_type": "implied by model_type glm4_moe"
   },
   "num_architecture_keys": 28
  },
@@ -14001,7 +14603,13 @@
      "emb_split_num": 4
     }
    },
-   "architecture_class": "LongcatFlashNgramForCausalLM"
+   "architecture_class": "LongcatFlashNgramForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -14026,7 +14634,13 @@
    "zero_experts": "zero_expert_num",
    "experts_per_tok": "moe_topk",
    "ngram_embedding": "ngram_vocab_size_ratio",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type None",
+   "moe": "derived",
+   "norm_type": "implied by model_type None",
+   "position_encoding_type": "implied by model_type None"
   },
   "num_architecture_keys": 27
  },
@@ -14280,7 +14894,13 @@
    "router_topk_groups": 1,
    "v_head_dim": 128,
    "vocab_size": 131072,
-   "architecture_class": "Mistral3ForConditionalGeneration"
+   "architecture_class": "Mistral3ForConditionalGeneration",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -14314,7 +14934,13 @@
    "router_topk_groups": "topk_group",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type mistral4",
+   "moe": "derived",
+   "norm_type": "implied by model_type mistral4",
+   "position_encoding_type": "implied by model_type mistral4"
   },
   "num_architecture_keys": 32
  },
@@ -14550,7 +15176,12 @@
    },
    "conv_bias": true,
    "vocab_size": 131072,
-   "architecture_class": "NemotronHForCausalLM"
+   "architecture_class": "NemotronHForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "mamba2",
+   "mixer_attention_ratio": 5,
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -14579,7 +15210,12 @@
    "mamba_time_step": "time_step_floor",
    "conv_bias": "use_conv_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "norm_type": "implied by model_type nemotron_h",
+   "nope_layers": "implied by model_type nemotron_h"
   },
   "num_architecture_keys": 32
  },
@@ -14798,7 +15434,12 @@
    "qk_norm": true,
    "router_expert_bias": true,
    "vocab_size": 200064,
-   "architecture_class": "MiniMaxM2ForCausalLM"
+   "architecture_class": "MiniMaxM2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "layer_types": "attn_type_list",
@@ -14824,7 +15465,12 @@
    "qk_norm": "use_qk_norm",
    "router_expert_bias": "use_routing_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type minimax_m2",
+   "position_encoding_type": "implied by model_type minimax_m2"
   },
   "num_architecture_keys": 26
  },
@@ -15094,7 +15740,13 @@
    "double_wide_mlp": true,
    "vocab_size": 262144,
    "per_layer_embedding_vocab": 262144,
-   "architecture_class": "Gemma4ForConditionalGeneration"
+   "architecture_class": "Gemma4ForConditionalGeneration",
+   "attention_kind": "MQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 4,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -15126,7 +15778,13 @@
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
    "per_layer_embedding_vocab": "vocab_size_per_layer_input",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type gemma4_text",
+   "norm_type": "implied by model_type gemma4_text",
+   "position_encoding_type": "implied by model_type gemma4_text"
   },
   "num_architecture_keys": 29
  },
@@ -15397,7 +16055,13 @@
    "double_wide_mlp": false,
    "vocab_size": 262144,
    "per_layer_embedding_vocab": 262144,
-   "architecture_class": "Gemma4ForConditionalGeneration"
+   "architecture_class": "Gemma4ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 5,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -15429,7 +16093,13 @@
    "double_wide_mlp": "use_double_wide_mlp",
    "vocab_size": "vocab_size",
    "per_layer_embedding_vocab": "vocab_size_per_layer_input",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type gemma4_text",
+   "norm_type": "implied by model_type gemma4_text",
+   "position_encoding_type": "implied by model_type gemma4_text"
   },
   "num_architecture_keys": 29
  },
@@ -15699,7 +16369,14 @@
      "0": 3
     }
    },
-   "architecture_class": "DeepseekV4ForCausalLM"
+   "architecture_class": "DeepseekV4ForCausalLM",
+   "attention_kind": "CSA/HCA",
+   "sequence_mixer": "attention",
+   "sparse_attention": "DSA",
+   "hyper_connections": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -15739,7 +16416,14 @@
    "vocab_size": "vocab_size",
    "compress_rope_theta": "compress_rope_theta",
    "compress_ratios": "compress_ratios",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "sparse_attention": "implied by model_type deepseek_v4",
+   "hyper_connections": "implied by model_type deepseek_v4",
+   "moe": "derived",
+   "norm_type": "implied by model_type deepseek_v4",
+   "position_encoding_type": "implied by model_type deepseek_v4"
   },
   "num_architecture_keys": 39
  },
@@ -16009,7 +16693,14 @@
      "0": 1
     }
    },
-   "architecture_class": "DeepseekV4ForCausalLM"
+   "architecture_class": "DeepseekV4ForCausalLM",
+   "attention_kind": "CSA/HCA",
+   "sequence_mixer": "attention",
+   "sparse_attention": "DSA",
+   "hyper_connections": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -16049,7 +16740,14 @@
    "vocab_size": "vocab_size",
    "compress_rope_theta": "compress_rope_theta",
    "compress_ratios": "compress_ratios",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "sparse_attention": "implied by model_type deepseek_v4",
+   "hyper_connections": "implied by model_type deepseek_v4",
+   "moe": "derived",
+   "norm_type": "implied by model_type deepseek_v4",
+   "position_encoding_type": "implied by model_type deepseek_v4"
   },
   "num_architecture_keys": 39
  },
@@ -16331,7 +17029,15 @@
      "48": 10
     }
    },
-   "architecture_class": "LagunaForCausalLM"
+   "architecture_class": "LagunaForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "qk_norm": true,
+   "gated_attention": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "model_type": "model_type",
@@ -16359,7 +17065,15 @@
    "moe_layer_schedule": "mlp_layer_types",
    "router_scaling_factor": "moe_routed_scaling_factor",
    "attention_heads_per_layer": "num_attention_heads_per_layer",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type laguna",
+   "gated_attention": "implied by model_type laguna",
+   "moe": "derived",
+   "norm_type": "implied by model_type laguna",
+   "position_encoding_type": "implied by model_type laguna"
   },
   "num_architecture_keys": 26
  },
@@ -16598,7 +17312,12 @@
    "sliding_window": null,
    "tie_embeddings": true,
    "vocab_size": 262272,
-   "architecture_class": "ZayaForCausalLM"
+   "architecture_class": "ZayaForCausalLM",
+   "attention_kind": "CCA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -16623,7 +17342,12 @@
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type zaya",
+   "position_encoding_type": "implied by model_type zaya"
   },
   "num_architecture_keys": 24
  },
@@ -16870,7 +17594,14 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 256,
    "vocab_size": 154880,
-   "architecture_class": "GlmMoeDsaForCausalLM"
+   "architecture_class": "GlmMoeDsaForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "sparse_attention": "DSA",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -16910,7 +17641,14 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "sparse_attention": "implied by model_type glm_moe_dsa",
+   "mla": "implied by model_type glm_moe_dsa",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm_moe_dsa",
+   "position_encoding_type": "implied by model_type glm_moe_dsa"
   },
   "num_architecture_keys": 39
  },
@@ -17168,7 +17906,14 @@
    "shared_expert_intermediate_size": 512,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "architecture_class": "Qwen3_5MoeForConditionalGeneration"
+   "architecture_class": "Qwen3_5MoeForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -17199,7 +17944,14 @@
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen3_5_moe_text",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen3_5_moe_text",
+   "position_encoding_type": "implied by model_type qwen3_5_moe_text"
   },
   "num_architecture_keys": 28
  },
@@ -17508,7 +18260,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 163840,
-   "architecture_class": "KimiK25ForConditionalGeneration"
+   "architecture_class": "KimiK25ForConditionalGeneration",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -17543,7 +18301,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type kimi_k2",
+   "moe": "derived",
+   "norm_type": "implied by model_type kimi_k2",
+   "position_encoding_type": "implied by model_type kimi_k2"
   },
   "num_architecture_keys": 33
  },
@@ -17796,7 +18560,13 @@
    },
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "architecture_class": "Qwen3_5ForConditionalGeneration"
+   "architecture_class": "Qwen3_5ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -17825,7 +18595,13 @@
    "rope_scaling": "rope_parameters",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen3_5_text",
+   "norm_type": "implied by model_type qwen3_5_text",
+   "position_encoding_type": "implied by model_type qwen3_5_text"
   },
   "num_architecture_keys": 26
  },
@@ -18163,7 +18939,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 152576,
-   "architecture_class": "MiMoV2ForCausalLM"
+   "architecture_class": "MiMoV2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 4,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -18204,7 +18986,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type mimo_v2",
+   "position_encoding_type": "implied by model_type mimo_v2"
   },
   "num_architecture_keys": 42
  },
@@ -18473,7 +19261,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 152576,
-   "architecture_class": "MiMoV2ForCausalLM"
+   "architecture_class": "MiMoV2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 6,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_sinks": "add_full_attention_sink_bias",
@@ -18512,7 +19306,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type mimo_v2",
+   "position_encoding_type": "implied by model_type mimo_v2"
   },
   "num_architecture_keys": 40
  },
@@ -18779,7 +19579,14 @@
    "qk_norm": true,
    "v_head_dim": 128,
    "vocab_size": 157184,
-   "architecture_class": "BailingMoeV2_5ForCausalLM"
+   "architecture_class": "BailingMoeV2_5ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "lightning",
+   "mixer_attention_ratio": 7,
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "dense_prefix_layers": "first_k_dense_replace",
@@ -18823,7 +19630,14 @@
    "qk_norm": "use_qk_norm",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "mla": "implied by model_type bailing_hybrid",
+   "moe": "derived",
+   "norm_type": "implied by model_type bailing_hybrid",
+   "position_encoding_type": "implied by model_type bailing_hybrid"
   },
   "num_architecture_keys": 46
  },
@@ -19041,7 +19855,12 @@
    "tie_embeddings": false,
    "vocab_size": 120832,
    "mtp_layers": 1,
-   "architecture_class": "HYV3ForCausalLM"
+   "architecture_class": "HYV3ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "moe_intermediate_size": "expert_hidden_dim",
@@ -19068,7 +19887,12 @@
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
    "mtp_layers": "num_nextn_predict_layers",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type hy_v3",
+   "position_encoding_type": "implied by model_type hy_v3"
   },
   "num_architecture_keys": 26
  },
@@ -19257,7 +20081,11 @@
    "rope_theta": 50000000,
    "tie_embeddings": true,
    "vocab_size": 100352,
-   "architecture_class": "GraniteForCausalLM"
+   "architecture_class": "GraniteForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -19279,7 +20107,11 @@
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type granite",
+   "position_encoding_type": "implied by model_type granite"
   },
   "num_architecture_keys": 20
  },
@@ -19547,7 +20379,12 @@
    "activation_gated": true,
    "qk_norm": false,
    "vocab_size": 262144,
-   "architecture_class": "Cohere2VisionForConditionalGeneration"
+   "architecture_class": "Cohere2VisionForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "moe": true,
+   "nope_layers": "global"
   },
   "config_canonical_raw_key": {
    "sliding_window_pattern": "_sliding_window_pattern",
@@ -19583,7 +20420,12 @@
    "activation_gated": "use_gated_activation",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "moe": "derived",
+   "nope_layers": "implied by model_type cohere2_moe"
   },
   "num_architecture_keys": 38
  },
@@ -19819,7 +20661,11 @@
    "tie_embeddings": true,
    "position_encoding_type": true,
    "vocab_size": 65536,
-   "architecture_class": "Lfm2ForCausalLM"
+   "architecture_class": "Lfm2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "liv_conv",
+   "mixer_attention_ratio": 2,
+   "norm_type": "rmsnorm"
   },
   "config_canonical_raw_key": {
    "ffn_round_to_multiple": "block_auto_adjust_ff_dim",
@@ -19841,7 +20687,11 @@
    "tie_embeddings": "tie_embedding",
    "position_encoding_type": "use_pos_enc",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "norm_type": "implied by model_type lfm2"
   },
   "num_architecture_keys": 25
  },
@@ -20083,7 +20933,11 @@
    "tie_embeddings": true,
    "position_encoding_type": true,
    "vocab_size": 65536,
-   "architecture_class": "Lfm2ForCausalLM"
+   "architecture_class": "Lfm2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "liv_conv",
+   "mixer_attention_ratio": 2,
+   "norm_type": "rmsnorm"
   },
   "config_canonical_raw_key": {
    "ffn_round_to_multiple": "block_auto_adjust_ff_dim",
@@ -20105,7 +20959,11 @@
    "tie_embeddings": "tie_embedding",
    "position_encoding_type": "use_pos_enc",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "norm_type": "implied by model_type lfm2"
   },
   "num_architecture_keys": 25
  },
@@ -20318,7 +21176,13 @@
    "tie_embeddings": true,
    "router_expert_bias": true,
    "vocab_size": 128000,
-   "architecture_class": "Lfm2MoeForCausalLM"
+   "architecture_class": "Lfm2MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "liv_conv",
+   "mixer_attention_ratio": 3,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "short_conv_kernel": "conv_L_cache",
@@ -20342,7 +21206,13 @@
    "tie_embeddings": "tie_word_embeddings",
    "router_expert_bias": "use_expert_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type lfm2_moe",
+   "position_encoding_type": "implied by model_type lfm2_moe"
   },
   "num_architecture_keys": 22
  },
@@ -20594,7 +21464,13 @@
    "tie_embeddings": false,
    "vocab_size": 98304,
    "sliding_window_enabled": true,
-   "architecture_class": "MellumForCausalLM"
+   "architecture_class": "MellumForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -20620,7 +21496,13 @@
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
    "sliding_window_enabled": "use_sliding_window",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type mellum",
+   "position_encoding_type": "implied by model_type mellum"
   },
   "num_architecture_keys": 24
  },
@@ -20919,7 +21801,13 @@
    "router_topk_groups": 1,
    "conv_bias": true,
    "vocab_size": 131072,
-   "architecture_class": "NemotronHForCausalLM"
+   "architecture_class": "NemotronHForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "mamba2",
+   "mixer_attention_ratio": 4,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -20961,7 +21849,13 @@
    "router_topk_groups": "topk_group",
    "conv_bias": "use_conv_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type nemotron_h",
+   "nope_layers": "implied by model_type nemotron_h"
   },
   "num_architecture_keys": 45
  },
@@ -21194,7 +22088,14 @@
    "parallel_block": true,
    "qk_norm": false,
    "vocab_size": 262144,
-   "architecture_class": "Cohere2MoeForCausalLM"
+   "architecture_class": "Cohere2MoeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "moe": true,
+   "norm_type": "layernorm",
+   "position_encoding_type": "rope",
+   "nope_layers": "global"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -21226,7 +22127,14 @@
    "parallel_block": "use_parallel_block",
    "qk_norm": "use_qk_norm",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type cohere2_moe",
+   "position_encoding_type": "implied by model_type cohere2_moe",
+   "nope_layers": "implied by model_type cohere2_moe"
   },
   "num_architecture_keys": 31
  },
@@ -21535,7 +22443,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 163840,
-   "architecture_class": "KimiK25ForConditionalGeneration"
+   "architecture_class": "KimiK25ForConditionalGeneration",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -21570,7 +22484,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mla": "implied by model_type kimi_k2",
+   "moe": "derived",
+   "norm_type": "implied by model_type kimi_k2",
+   "position_encoding_type": "implied by model_type kimi_k2"
   },
   "num_architecture_keys": 33
  },
@@ -21872,7 +22792,11 @@
      }
     }
    },
-   "architecture_class": "MiniMaxM3SparseForConditionalGeneration"
+   "architecture_class": "MiniMaxM3SparseForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "hidden_size": "hidden_size",
@@ -21903,7 +22827,11 @@
    "activation_clamp": "swiglu_alpha",
    "router_scaling_factor": "routed_scaling_factor",
    "sparse_attention": "sparse_attention_config",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "position_encoding_type": "implied by model_type minimax_m3_vl"
   },
   "num_architecture_keys": 33
  },
@@ -22084,7 +23012,11 @@
    "tie_embeddings": true,
    "sliding_window_enabled": false,
    "vocab_size": 151936,
-   "architecture_class": "Qwen2ForCausalLM"
+   "architecture_class": "Qwen2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "activation": "hidden_act",
@@ -22103,7 +23035,11 @@
    "tie_embeddings": "tie_word_embeddings",
    "sliding_window_enabled": "use_sliding_window",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type qwen2",
+   "position_encoding_type": "implied by model_type qwen2"
   },
   "num_architecture_keys": 17
  },
@@ -22395,7 +23331,14 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 256,
    "vocab_size": 154880,
-   "architecture_class": "GlmMoeDsaForCausalLM"
+   "architecture_class": "GlmMoeDsaForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "sparse_attention": "DSA",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -22437,7 +23380,14 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "sparse_attention": "implied by model_type glm_moe_dsa",
+   "mla": "implied by model_type glm_moe_dsa",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm_moe_dsa",
+   "position_encoding_type": "implied by model_type glm_moe_dsa"
   },
   "num_architecture_keys": 45
  },
@@ -22745,7 +23695,15 @@
      "48": 10
     }
    },
-   "architecture_class": "LagunaForCausalLM"
+   "architecture_class": "LagunaForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "qk_norm": true,
+   "gated_attention": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "model_type": "model_type",
@@ -22773,7 +23731,15 @@
    "router_input_scaling": "moe_apply_router_weight_on_input",
    "router_scaling_factor": "moe_routed_scaling_factor",
    "attention_heads_per_layer": "num_attention_heads_per_layer",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type laguna",
+   "gated_attention": "implied by model_type laguna",
+   "moe": "derived",
+   "norm_type": "implied by model_type laguna",
+   "position_encoding_type": "implied by model_type laguna"
   },
   "num_architecture_keys": 29
  },
@@ -23032,7 +23998,13 @@
    "router_topk_groups": 1,
    "conv_bias": true,
    "vocab_size": 131072,
-   "architecture_class": "NemotronHForCausalLM"
+   "architecture_class": "NemotronHForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "mamba2",
+   "mixer_attention_ratio": 4,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -23072,7 +24044,13 @@
    "router_topk_groups": "topk_group",
    "conv_bias": "use_conv_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type nemotron_h",
+   "nope_layers": "implied by model_type nemotron_h"
   },
   "num_architecture_keys": 42
  },
@@ -23445,7 +24423,15 @@
    "router_expert_bias": true,
    "router_scoring": "sigmoid",
    "router_normalize_weights": true,
-   "architecture_class": "InklingForConditionalGeneration"
+   "architecture_class": "InklingForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 5,
+   "qk_norm": true,
+   "attention_sinks": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "learned_relative_bias"
   },
   "config_canonical_raw_key": {
    "max_position_embeddings": "model_max_length",
@@ -23479,7 +24465,15 @@
    "router_expert_bias": "use_gate_bias",
    "router_scoring": "gate_activation",
    "router_normalize_weights": "norm_after_topk",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type inkling_mm_model",
+   "attention_sinks": "implied by model_type inkling_mm_model",
+   "moe": "derived",
+   "norm_type": "implied by model_type inkling_mm_model",
+   "position_encoding_type": "implied by model_type inkling_mm_model"
   },
   "num_architecture_keys": 37
  },
@@ -23734,7 +24728,13 @@
    },
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "architecture_class": "Qwen3_5ForConditionalGeneration"
+   "architecture_class": "Qwen3_5ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -23763,7 +24763,13 @@
    "rope_scaling": "rope_parameters",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen3_5_text",
+   "norm_type": "implied by model_type qwen3_5_text",
+   "position_encoding_type": "implied by model_type qwen3_5_text"
   },
   "num_architecture_keys": 26
  },
@@ -24020,7 +25026,9 @@
    },
    "vocab_size": 100352,
    "rope_theta": 10000000,
-   "architecture_class": "GraniteMoeHybridForCausalLM"
+   "architecture_class": "GraniteMoeHybridForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -24056,7 +25064,9 @@
    "mamba_time_step": "time_step_limit",
    "vocab_size": "vocab_size",
    "rope_theta": "rope_theta",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived"
   },
   "num_architecture_keys": 36
  },
@@ -24366,7 +25376,15 @@
     }
    },
    "router_logit_softcapping": 0.0,
-   "architecture_class": "LagunaForCausalLM"
+   "architecture_class": "LagunaForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "qk_norm": true,
+   "gated_attention": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "model_type": "model_type",
@@ -24395,7 +25413,15 @@
    "router_scaling_factor": "moe_routed_scaling_factor",
    "attention_heads_per_layer": "num_attention_heads_per_layer",
    "router_logit_softcapping": "moe_router_logit_softcapping",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type laguna",
+   "gated_attention": "implied by model_type laguna",
+   "moe": "derived",
+   "norm_type": "implied by model_type laguna",
+   "position_encoding_type": "implied by model_type laguna"
   },
   "num_architecture_keys": 30
  },
@@ -24688,7 +25714,14 @@
    "polynorm_bias_clamp": 0.5,
    "activation_clamp": 1000000.0,
    "mtp_layers": 1,
-   "architecture_class": "MotifForCausalLM"
+   "architecture_class": "MotifForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_impl_type": "attention_cls",
@@ -24737,7 +25770,14 @@
    "polynorm_bias_clamp": "polynorm_bias_clamp",
    "activation_clamp": "hidden_clamp",
    "mtp_layers": "num_nextn_predict_layers",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "mla": "implied by model_type Motif",
+   "moe": "derived",
+   "norm_type": "implied by model_type Motif",
+   "position_encoding_type": "implied by model_type Motif"
   },
   "num_architecture_keys": 52
  },
@@ -24931,7 +25971,11 @@
    "norm_extra_placement": false,
    "tie_embeddings": false,
    "vocab_size": 166144,
-   "architecture_class": "NanbeigeForCausalLM"
+   "architecture_class": "NanbeigeForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -24951,7 +25995,11 @@
    "norm_extra_placement": "skip_loop_final_norm",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "norm_type": "implied by model_type nanbeige",
+   "position_encoding_type": "implied by model_type nanbeige"
   },
   "num_architecture_keys": 19
  },
@@ -25201,7 +26249,13 @@
    "router_normalize_weights": true,
    "router_scaling_factor": 1.0,
    "experts_per_tok": 8,
-   "architecture_class": "SolarOpen2ForCausalLM"
+   "architecture_class": "SolarOpen2ForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "kda",
+   "mixer_attention_ratio": 3,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "model_type": "model_type",
@@ -25229,7 +26283,13 @@
    "router_normalize_weights": "norm_topk_prob",
    "router_scaling_factor": "routed_scaling_factor",
    "experts_per_tok": "num_experts_per_tok",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type solar_open2",
+   "nope_layers": "implied by model_type solar_open2"
   },
   "num_architecture_keys": 28
  },
@@ -25764,7 +26824,16 @@
    },
    "v_head_dim": 128,
    "vocab_size": 163840,
-   "architecture_class": "KimiK3ForConditionalGeneration"
+   "architecture_class": "KimiK3ForConditionalGeneration",
+   "attention_kind": "MLA",
+   "sequence_mixer": "kda",
+   "mixer_attention_ratio": 3,
+   "mla": true,
+   "hyper_connections": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope",
+   "nope_layers": "partial"
   },
   "config_canonical_raw_key": {
    "activation_situ_beta": "activation_situ_beta",
@@ -25802,7 +26871,16 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "mla": "implied by model_type kimi_linear",
+   "hyper_connections": "implied by model_type kimi_linear",
+   "moe": "derived",
+   "norm_type": "implied by model_type kimi_linear",
+   "position_encoding_type": "implied by model_type kimi_linear",
+   "nope_layers": "implied by model_type kimi_linear"
   },
   "num_architecture_keys": 39
  },
@@ -26131,7 +27209,14 @@
    "v_head_dim": 128,
    "vocab_size": 157184,
    "model_type": "bailing_hybrid",
-   "architecture_class": "BailingMoeV3ForCausalLM"
+   "architecture_class": "BailingMoeV3ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "kda",
+   "mixer_attention_ratio": 5,
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "activation_clamp_experts": "expert_swiglu_limit_list",
@@ -26186,7 +27271,14 @@
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
    "model_type": "model_type",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "mla": "implied by model_type bailing_hybrid",
+   "moe": "derived",
+   "norm_type": "implied by model_type bailing_hybrid",
+   "position_encoding_type": "implied by model_type bailing_hybrid"
   },
   "num_architecture_keys": 61
  },
@@ -26427,7 +27519,15 @@
    "sliding_window": 2048,
    "tie_embeddings": false,
    "vocab_size": 202048,
-   "architecture_class": "MuseGlimmerForConditionalGeneration"
+   "architecture_class": "MuseGlimmerForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "attention",
+   "local_global_ratio": 3,
+   "qk_norm": true,
+   "gated_attention": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope",
+   "nope_layers": "global"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -26451,7 +27551,15 @@
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "local_global_ratio": "derived",
+   "qk_norm": "implied by model_type muse_glimmer_text",
+   "gated_attention": "implied by model_type muse_glimmer_text",
+   "norm_type": "implied by model_type muse_glimmer_text",
+   "position_encoding_type": "implied by model_type muse_glimmer_text",
+   "nope_layers": "implied by model_type muse_glimmer_text"
   },
   "num_architecture_keys": 21
  },
@@ -26741,7 +27849,13 @@
    "router_topk_groups": 1,
    "conv_bias": true,
    "vocab_size": 131072,
-   "architecture_class": "NemotronHForCausalLM"
+   "architecture_class": "NemotronHForCausalLM",
+   "attention_kind": "GQA",
+   "sequence_mixer": "mamba2",
+   "mixer_attention_ratio": 4,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "nope_layers": "full"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -26784,7 +27898,13 @@
    "router_topk_groups": "topk_group",
    "conv_bias": "use_conv_bias",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type nemotron_h",
+   "nope_layers": "implied by model_type nemotron_h"
   },
   "num_architecture_keys": 45
  },
@@ -27039,7 +28159,13 @@
    },
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "architecture_class": "Qwen3_5ForConditionalGeneration"
+   "architecture_class": "Qwen3_5ForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -27068,7 +28194,13 @@
    "rope_scaling": "rope_parameters",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen3_5_text",
+   "norm_type": "implied by model_type qwen3_5_text",
+   "position_encoding_type": "implied by model_type qwen3_5_text"
   },
   "num_architecture_keys": 26
  },
@@ -27335,7 +28467,14 @@
    "shared_expert_intermediate_size": 512,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "architecture_class": "Qwen3_5MoeForConditionalGeneration"
+   "architecture_class": "Qwen3_5MoeForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -27366,7 +28505,14 @@
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen3_5_moe_text",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen3_5_moe_text",
+   "position_encoding_type": "implied by model_type qwen3_5_moe_text"
   },
   "num_architecture_keys": 28
  },
@@ -27807,7 +28953,16 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 256,
    "vocab_size": 154880,
-   "architecture_class": "Glm5NextForConditionalGeneration"
+   "architecture_class": "Glm5NextForConditionalGeneration",
+   "attention_kind": "MLA",
+   "sequence_mixer": "kda",
+   "mixer_attention_ratio": 3,
+   "sparse_attention": "DSA",
+   "mla": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope",
+   "nope_layers": "partial"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -27855,7 +29010,16 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "sparse_attention": "implied by model_type glm5_next_text",
+   "mla": "implied by model_type glm5_next_text",
+   "moe": "derived",
+   "norm_type": "implied by model_type glm5_next_text",
+   "position_encoding_type": "implied by model_type glm5_next_text",
+   "nope_layers": "implied by model_type glm5_next_text"
   },
   "num_architecture_keys": 49
  },
@@ -28180,7 +29344,17 @@
    "shared_expert_intermediate_size": 640,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "architecture_class": "Qwen4ExpForConditionalGeneration"
+   "architecture_class": "Qwen4ExpForConditionalGeneration",
+   "attention_kind": "GQA",
+   "sequence_mixer": "gated_deltanet",
+   "mixer_attention_ratio": 3,
+   "qk_norm": true,
+   "gated_attention": true,
+   "sparse_attention": "QSA",
+   "hyper_connections": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -28222,7 +29396,17 @@
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "mixer_attention_ratio": "derived",
+   "qk_norm": "implied by model_type qwen4_exp_text",
+   "gated_attention": "implied by model_type qwen4_exp_text",
+   "sparse_attention": "implied by model_type qwen4_exp_text",
+   "hyper_connections": "implied by model_type qwen4_exp_text",
+   "moe": "derived",
+   "norm_type": "implied by model_type qwen4_exp_text",
+   "position_encoding_type": "implied by model_type qwen4_exp_text"
   },
   "num_architecture_keys": 44
  },
@@ -28522,7 +29706,12 @@
    "mla": true,
    "v_head_dim": 256,
    "vocab_size": 120832,
-   "architecture_class": "HYV4ForCausalLM"
+   "architecture_class": "HYV4ForCausalLM",
+   "attention_kind": "MLA",
+   "sequence_mixer": "attention",
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -28568,7 +29757,12 @@
    "mla": "use_mla",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "moe": "derived",
+   "norm_type": "implied by model_type hy_v4",
+   "position_encoding_type": "implied by model_type hy_v4"
   },
   "num_architecture_keys": 46
  },
@@ -28937,7 +30131,15 @@
      "dspark_num_experts_per_tok": 3
     }
    },
-   "architecture_class": "DeepseekV41ForCausalLM"
+   "architecture_class": "DeepseekV41ForCausalLM",
+   "attention_kind": "CSA2",
+   "sequence_mixer": "attention",
+   "sparse_attention": "DSA",
+   "hyper_connections": true,
+   "moe": true,
+   "norm_type": "rmsnorm",
+   "position_encoding_type": "rope",
+   "bidirectional_attention": true
   },
   "config_canonical_raw_key": {
    "model_type": "model_type",
@@ -28983,7 +30185,15 @@
    "engram_heads": "engram_n_heads",
    "mtp_layers": "num_nextn_predict_layers",
    "dspark": "dspark_block_size",
-   "architecture_class": "architectures"
+   "architecture_class": "architectures",
+   "attention_kind": "derived",
+   "sequence_mixer": "derived",
+   "sparse_attention": "implied by model_type deepseek_v41_text",
+   "hyper_connections": "implied by model_type deepseek_v41_text",
+   "moe": "derived",
+   "norm_type": "implied by model_type deepseek_v41_text",
+   "position_encoding_type": "implied by model_type deepseek_v41_text",
+   "bidirectional_attention": "implied by model_type deepseek_v41_text"
   },
   "num_architecture_keys": 54
  }

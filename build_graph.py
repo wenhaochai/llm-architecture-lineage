@@ -4,7 +4,8 @@
 Mirror of the construction in web/lineage.js (the page rebuilds the graph live so the
 origin threshold can be tuned there; this script writes the same graph at the default).
 
-  0. One node per model name: sizes of one release collapse into the largest (SIZE_VARIANTS).
+  0. All 103 gallery models take part; sizes of one release fold together through rule 3 when they
+     share the design.
   1. Models are taken in release order. GPT-2 XL, the first, is the single origin.
   2. The model in hand is compared with every model already placed that is not a scale
      copy. The comparison is the design-change list of schema.py: design fields count when
@@ -13,7 +14,8 @@ origin threshold can be tuned there; this script writes the same graph at the de
      fields and NOT_A_CHANGE fields never count.
   3. The placed model needing the fewest changes becomes the parent. Ties: same modeling
      class, then same organisation, then the later release. Zero changes make the new model a
-     scale copy, which can never be a parent itself.
+     scale copy: it can never be a parent and is folded into its parent's node, which keeps
+     the earliest name and lists the copies as aliases.
   4. If even the closest placed model needs more than ORIGIN_THRESHOLD changes, the model
      hangs off GPT-2 XL instead.
   5. For every field the model adds or switches to, one more edge comes from the earliest
@@ -41,25 +43,7 @@ def params_total(m):
 
 M_ALL.sort(key=lambda m: (m["date"], -params_total(m), m["key"]))
 
-SIZE_VARIANTS = {  # kept key -> dropped keys
-    "qwen3-235b-a22b": ["qwen3-0-6b", "qwen3-4b", "qwen3-8b", "qwen3-32b", "qwen3-30b-a3b"],
-    "qwen3-6-35b-a3b": ["qwen3-6-27b"],
-    "gemma-3-27b": ["gemma-3-270m"],
-    "gemma-4-31b": ["gemma-4-26b-a4b", "gemma-4-12b", "gemma-4-e2b", "gemma-4-e4b"],
-    "llama-3-2-3b": ["llama-3-2-1b"],
-    "gpt-oss-120b": ["gpt-oss-20b"],
-    "olmo-3-32b": ["olmo-3-7b"],
-    "nemotron-3-nano-30b-a3b": ["nemotron-3-nano-4b"],
-    "sarvam-105b": ["sarvam-30b"],
-    "lfm2-5-8b-a1b": ["lfm2-5-1-2b", "lfm2-5-350m"],
-    "laguna-s-2-1": ["laguna-xs-2-1"],
-    "glm-4-5-355b": ["glm-4-5-air"],
-}
-DROPPED = {d: k for k, ds in SIZE_VARIANTS.items() for d in ds}
-by_all = {m["key"]: m for m in M_ALL}
-for k, ds in SIZE_VARIANTS.items():
-    by_all[k]["size_variants"] = [{"key": d, "title": by_all[d]["title"], "scale": by_all[d]["gallery"].get("scale")} for d in ds]
-M = [m for m in M_ALL if m["key"] not in DROPPED]
+M = M_ALL
 by = {m["key"]: m for m in M}
 
 ORDER = [f for g in schema.GROUPS.values() for f in g]
@@ -155,15 +139,26 @@ for x in M[1:]:
     x["generation"] = 1 + max(by[e["source"]]["generation"] for e in parents[x["key"]])
     placed.append(x)
 
+# a scale copy is the same design: fold it into the model it copies, which keeps the earliest name
+for m in M:
+    m["aliases"], m["merged_into"] = [], None
+for m in M:
+    if m["scale_copy"]:
+        p = by[m["primary_parent"]]
+        p["aliases"].append({"key": m["key"], "title": m["title"], "date": m["date"], "org": m["org"], "scale": m["gallery"].get("scale")})
+        m["merged_into"] = p["key"]
+        edges = [e for e in edges if e["target"] != m["key"]]
+        children[p["key"]] = [e for e in children[p["key"]] if e["target"] != m["key"]]
 for m in M:
     m["is_terminal"] = not children[m["key"]]
 
-graph = {"nodes": M, "edges": edges, "size_variants": SIZE_VARIANTS, "n_gallery": len(M_ALL), "origin_threshold": ORIGIN_THRESHOLD,
+graph = {"nodes": M, "edges": edges, "n_gallery": len(M_ALL), "origin_threshold": ORIGIN_THRESHOLD,
          "generated": "2026-09-13", "source": "https://sebastianraschka.com/llm-architecture-gallery/ (card list + config.json links); HuggingFace config.json per model"}
 json.dump(graph, open(f"{ROOT}/data/graph.json", "w"), indent=1, ensure_ascii=False)
 
-print(f"nodes {len(M)} edges {len(edges)} :", collections.Counter(e["type"] for e in edges),
-      "| scale copies:", sum(1 for m in M if m.get("scale_copy")), "| generations:", max(m["generation"] for m in M) + 1)
+drawn = [m for m in M if not m["merged_into"]]
+print(f"models {len(M)} drawn nodes {len(drawn)} edges {len(edges)} :", collections.Counter(e["type"] for e in edges),
+      "| scale copies folded in:", sum(1 for m in M if m["scale_copy"]), "| generations:", max(m["generation"] for m in drawn) + 1)
 for e in edges:
     if e["type"] != "trait":
         print(f"{e['type']:7s} {e['source']:28s} -> {e['target']:28s} n={e['n']}")
