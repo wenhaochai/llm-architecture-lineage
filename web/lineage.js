@@ -61,7 +61,7 @@
   }
 
   /* ---------- online construction ---------- */
-  var state = { selected: 'kimi-k3', threshold: D.origin_threshold || 32 };
+  var state = { selected: 'deepseek-v4-1-flash', threshold: D.origin_threshold || 32 };
   try { var q = /[?&]model=([a-z0-9-]+)/.exec(location.search); if (q && byKey[q[1]]) state.selected = q[1]; } catch (e) {}
   var edges, parentsOf, childrenOf, visible = nodes;
   function computeGraph(thr) {
