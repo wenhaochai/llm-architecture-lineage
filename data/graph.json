@@ -2284,7 +2284,7 @@
    },
    "num_architecture_keys": 19,
    "is_root": false,
-   "primary_parent": "olmo-2-7b",
+   "primary_parent": "llama-3-8b",
    "changes": [
     {
      "field": "local_global_ratio",
@@ -2299,8 +2299,8 @@
      "kind": "add"
     },
     {
-     "field": "attention_kind",
-     "kind": "change"
+     "field": "qk_norm",
+     "kind": "add"
     },
     {
      "field": "rope_scaling_type",
@@ -2313,6 +2313,7 @@
    ],
    "scale_copy": false,
    "generation": 3,
+   "parent_via": "olmo-2-7b",
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -4857,11 +4858,11 @@
    },
    "num_architecture_keys": 16,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [
     {
-     "field": "rope_scaling_type",
-     "kind": "drop"
+     "field": "tie_embeddings",
+     "kind": "add"
     },
     {
      "field": "nope_layers",
@@ -4869,7 +4870,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 3,
+   "generation": 2,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -7107,7 +7108,7 @@
    "generation": 8,
    "aliases": [],
    "merged_into": null,
-   "is_terminal": false
+   "is_terminal": true
   },
   {
    "key": "qwen3-next-80b-a3b",
@@ -7933,15 +7934,15 @@
    },
    "num_architecture_keys": 19,
    "is_root": false,
-   "primary_parent": "olmo-2-7b",
+   "primary_parent": "llama-3-8b",
    "changes": [
     {
      "field": "layer_types",
      "kind": "add"
     },
     {
-     "field": "qk_norm",
-     "kind": "drop"
+     "field": "attention_kind",
+     "kind": "change"
     },
     {
      "field": "loop_passes",
@@ -7949,7 +7950,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 3,
+   "generation": 2,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -12143,14 +12144,26 @@
    },
    "num_architecture_keys": 37,
    "is_root": false,
-   "primary_parent": "arcee-ai-trinity-large-400b",
+   "primary_parent": "qwen3-235b-a22b",
    "changes": [
     {
-     "field": "sliding_window_pattern",
-     "kind": "drop"
+     "field": "layer_types",
+     "kind": "add"
+    },
+    {
+     "field": "local_global_ratio",
+     "kind": "add"
+    },
+    {
+     "field": "sliding_window",
+     "kind": "add"
     },
     {
      "field": "attention_impl_type",
+     "kind": "add"
+    },
+    {
+     "field": "gated_attention",
      "kind": "add"
     },
     {
@@ -12162,23 +12175,15 @@
      "kind": "add"
     },
     {
-     "field": "nope_layers",
-     "kind": "drop"
-    },
-    {
      "field": "activation",
      "kind": "drop"
     },
     {
-     "field": "num_shared_experts",
-     "kind": "drop"
-    },
-    {
-     "field": "dense_prefix_layers",
-     "kind": "drop"
-    },
-    {
      "field": "moe_layer_schedule",
+     "kind": "change"
+    },
+    {
+     "field": "router_scoring",
      "kind": "add"
     },
     {
@@ -12188,14 +12193,11 @@
     {
      "field": "norm_zero_centered",
      "kind": "add"
-    },
-    {
-     "field": "mup",
-     "kind": "drop"
     }
    ],
    "scale_copy": false,
-   "generation": 7,
+   "generation": 6,
+   "parent_via": "qwen3-next-80b-a3b",
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -13636,7 +13638,7 @@
    },
    "num_architecture_keys": 43,
    "is_root": false,
-   "primary_parent": "mistral-large-3",
+   "primary_parent": "deepseek-v3",
    "changes": [
     {
      "field": "sequence_mixer",
@@ -13672,11 +13674,11 @@
     },
     {
      "field": "router_scoring",
-     "kind": "add"
+     "kind": "change"
     },
     {
-     "field": "router_topk_method",
-     "kind": "add"
+     "field": "router_normalize_weights",
+     "kind": "drop"
     },
     {
      "field": "router_expert_bias",
@@ -13684,7 +13686,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 4,
+   "generation": 3,
    "aliases": [
     {
      "key": "ling-2-6-1t",
@@ -14960,7 +14962,7 @@
    "generation": 8,
    "aliases": [],
    "merged_into": null,
-   "is_terminal": false
+   "is_terminal": true
   },
   {
    "key": "mistral-small-4",
@@ -15566,10 +15568,14 @@
    },
    "num_architecture_keys": 30,
    "is_root": false,
-   "primary_parent": "nemotron-3-super-120b-a12b",
+   "primary_parent": "nemotron-3-nano-30b-a3b",
    "changes": [
     {
      "field": "layer_types",
+     "kind": "change"
+    },
+    {
+     "field": "mixer_attention_ratio",
      "kind": "change"
     },
     {
@@ -15585,16 +15591,12 @@
      "kind": "drop"
     },
     {
-     "field": "moe_latent_size",
-     "kind": "drop"
-    },
-    {
      "field": "router_normalize_weights",
      "kind": "drop"
     }
    ],
    "scale_copy": false,
-   "generation": 9,
+   "generation": 8,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -19530,7 +19532,7 @@
    "primary_parent": "ling-2-5-1t",
    "changes": [],
    "scale_copy": true,
-   "generation": 5,
+   "generation": 4,
    "aliases": [],
    "merged_into": "ling-2-5-1t",
    "is_terminal": true
@@ -19783,7 +19785,7 @@
    },
    "num_architecture_keys": 23,
    "is_root": false,
-   "primary_parent": "sarvam-30b",
+   "primary_parent": "glm-4-5-355b",
    "changes": [
     {
      "field": "attention_bias",
@@ -19795,15 +19797,15 @@
     },
     {
      "field": "router_scoring",
-     "kind": "change"
+     "kind": "add"
     },
     {
-     "field": "norm_type",
-     "kind": "change"
+     "field": "router_expert_bias",
+     "kind": "add"
     }
    ],
    "scale_copy": false,
-   "generation": 7,
+   "generation": 6,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -20874,7 +20876,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 8,
+   "generation": 7,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -21094,15 +21096,15 @@
    },
    "num_architecture_keys": 18,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [
     {
-     "field": "rope_scaling_type",
-     "kind": "drop"
+     "field": "tie_embeddings",
+     "kind": "add"
     }
    ],
    "scale_copy": false,
-   "generation": 3,
+   "generation": 2,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -21369,7 +21371,7 @@
    },
    "num_architecture_keys": 22,
    "is_root": false,
-   "primary_parent": "grok-2-5-270b",
+   "primary_parent": "glm-4-5-air",
    "changes": [
     {
      "field": "tie_embeddings",
@@ -21380,32 +21382,32 @@
      "kind": "add"
     },
     {
-     "field": "sliding_window",
-     "kind": "drop"
-    },
-    {
-     "field": "sliding_window_pattern",
-     "kind": "drop"
-    },
-    {
      "field": "attention_kind",
      "kind": "change"
     },
     {
-     "field": "rope_scaling_type",
-     "kind": "change"
+     "field": "attention_bias",
+     "kind": "drop"
     },
     {
-     "field": "activation",
+     "field": "rope_scaling_type",
      "kind": "add"
     },
     {
-     "field": "residual_moe",
+     "field": "num_shared_experts",
+     "kind": "drop"
+    },
+    {
+     "field": "dense_prefix_layers",
+     "kind": "drop"
+    },
+    {
+     "field": "router_normalize_weights",
      "kind": "drop"
     }
    ],
    "scale_copy": false,
-   "generation": 9,
+   "generation": 7,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -23590,15 +23592,15 @@
    },
    "num_architecture_keys": 41,
    "is_root": false,
-   "primary_parent": "nemotron-3-super-120b-a12b",
+   "primary_parent": "nemotron-3-nano-30b-a3b",
    "changes": [
     {
-     "field": "mixer_attention_ratio",
-     "kind": "change"
+     "field": "moe_latent_size",
+     "kind": "add"
     }
    ],
    "scale_copy": false,
-   "generation": 9,
+   "generation": 8,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -24991,7 +24993,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 4,
+   "generation": 3,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -25712,7 +25714,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 9,
+   "generation": 8,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -27518,7 +27520,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 10,
+   "generation": 9,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -28044,7 +28046,7 @@
    },
    "num_architecture_keys": 34,
    "is_root": false,
-   "primary_parent": "granite-4-1-30b",
+   "primary_parent": "llama-3-2-3b",
    "changes": [
     {
      "field": "layer_types",
@@ -28064,11 +28066,11 @@
     },
     {
      "field": "rope_scaling_type",
-     "kind": "add"
+     "kind": "change"
     }
    ],
    "scale_copy": false,
-   "generation": 4,
+   "generation": 3,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -32510,10 +32512,12 @@
   {
    "source": "olmo-2-7b",
    "target": "gemma-3-27b",
-   "type": "parent",
-   "fields": [],
-   "n": 6,
-   "mech": 1
+   "type": "trait",
+   "fields": [
+    "qk_norm"
+   ],
+   "n": 1,
+   "mech": null
   },
   {
    "source": "llama-3-8b",
@@ -32568,7 +32572,7 @@
    "mech": 0
   },
   {
-   "source": "llama-3-2-3b",
+   "source": "llama-3-8b",
    "target": "smollm3-3b",
    "type": "parent",
    "fields": [],
@@ -32632,7 +32636,7 @@
    "mech": 0
   },
   {
-   "source": "olmo-2-7b",
+   "source": "llama-3-8b",
    "target": "ouro-thinking-2-6b",
    "type": "parent",
    "fields": [],
@@ -32734,12 +32738,14 @@
    "mech": 0
   },
   {
-   "source": "arcee-ai-trinity-large-400b",
+   "source": "qwen3-next-80b-a3b",
    "target": "step-3-5-flash-196b",
-   "type": "parent",
-   "fields": [],
-   "n": 12,
-   "mech": 1
+   "type": "trait",
+   "fields": [
+    "gated_attention"
+   ],
+   "n": 1,
+   "mech": null
   },
   {
    "source": "deepseek-v3-2",
@@ -32776,7 +32782,7 @@
    "mech": null
   },
   {
-   "source": "mistral-large-3",
+   "source": "deepseek-v3",
    "target": "ling-2-5-1t",
    "type": "parent",
    "fields": [],
@@ -32844,7 +32850,7 @@
    "mech": 0
   },
   {
-   "source": "nemotron-3-super-120b-a12b",
+   "source": "nemotron-3-nano-30b-a3b",
    "target": "nemotron-3-nano-4b",
    "type": "parent",
    "fields": [],
@@ -32928,7 +32934,7 @@
    "mech": 1
   },
   {
-   "source": "sarvam-30b",
+   "source": "glm-4-5-355b",
    "target": "tencent-hy3-preview-295b-a21b",
    "type": "parent",
    "fields": [],
@@ -32952,7 +32958,7 @@
    "mech": 0
   },
   {
-   "source": "llama-3-2-3b",
+   "source": "llama-3-8b",
    "target": "granite-4-1-30b",
    "type": "parent",
    "fields": [],
@@ -32960,7 +32966,7 @@
    "mech": 0
   },
   {
-   "source": "grok-2-5-270b",
+   "source": "glm-4-5-air",
    "target": "zaya1-8b",
    "type": "parent",
    "fields": [],
@@ -33018,7 +33024,7 @@
    "mech": 0
   },
   {
-   "source": "nemotron-3-super-120b-a12b",
+   "source": "nemotron-3-nano-30b-a3b",
    "target": "nemotron-3-ultra-550b-a55b",
    "type": "parent",
    "fields": [],
@@ -33100,7 +33106,7 @@
    "mech": 1
   },
   {
-   "source": "granite-4-1-30b",
+   "source": "llama-3-2-3b",
    "target": "antares-1b",
    "type": "parent",
    "fields": [],

@@ -14,7 +14,7 @@ origin threshold can be tuned there; this script writes the same graph at the de
      fields and NOT_A_CHANGE fields never count.
   3. Candidates are ranked by the number of mechanism-level changes (schema.MECHANISM: attention
      kind, sequence mixer, MoE, sparse attention, positions, ...), then by the total number of
-     changes, then by the tie rules: same modeling class, same organisation, later release. Zero changes make the new model a
+     changes, then by the tie rules: same modeling class, same organisation, earlier release. Zero changes make the new model a
      scale copy: it can never be a parent and is folded into its parent's node, which keeps
      the earliest name and lists the copies as aliases.
   4. If even the closest placed model needs more than ORIGIN_THRESHOLD changes, the model
@@ -115,7 +115,8 @@ for x in M[1:]:
         return (mech, len(ch), -(p["architecture_class"] == x["architecture_class"]), -(p["org"] == x["org"]), p["date"] < "" or p["date"])
     for p in eligible:
         r = rank(p)
-        if best is None or (r[0], r[1], r[2], r[3]) < (best_r[0], best_r[1], best_r[2], best_r[3]) or ((r[0], r[1], r[2], r[3]) == (best_r[0], best_r[1], best_r[2], best_r[3]) and p["date"] > best["date"]):
+        # exact ties go to the earlier release: it is the source of that design, later ones repeat it
+        if best is None or (r[0], r[1], r[2], r[3]) < (best_r[0], best_r[1], best_r[2], best_r[3]) or ((r[0], r[1], r[2], r[3]) == (best_r[0], best_r[1], best_r[2], best_r[3]) and (p["date"], p["key"]) < (best["date"], best["key"])):
             best, best_r, best_n = p, r, r[1]
     if best is None or best_n > ORIGIN_THRESHOLD:
         x["primary_parent"], x["changes"], x["scale_copy"] = origin["key"], changes(x, origin), False

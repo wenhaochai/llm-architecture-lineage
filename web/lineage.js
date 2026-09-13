@@ -78,13 +78,13 @@
     }
     nodes.slice(1).forEach(function (x) {
       var eligible = placed.filter(function (p) { return !p.scale_copy; });
-      // rank: fewer mechanism-level changes, then fewer changes overall, then same modeling class, same organisation, later release
+      // rank: fewer mechanism-level changes, then fewer changes overall, then same modeling class, same organisation, earlier release
       var best = null, bestKey = null, bestN = Infinity;
       eligible.forEach(function (p) {
         var ch = changes(x, p);
         var key = [mechCount(ch), ch.length, -(p.architecture_class === x.architecture_class), -(p.org === x.org)];
         var better = !best;
-        if (best) { for (var i = 0; i < key.length; i++) { if (key[i] !== bestKey[i]) { better = key[i] < bestKey[i]; break; } } if (!better && key.join() === bestKey.join() && p.date > best.date) better = true; }
+        if (best) { for (var i = 0; i < key.length; i++) { if (key[i] !== bestKey[i]) { better = key[i] < bestKey[i]; break; } } if (!better && key.join() === bestKey.join() && (p.date < best.date || (p.date === best.date && p.key < best.key))) better = true; } // exact ties go to the earlier release
         if (better) { best = p; bestKey = key; bestN = ch.length; }
       });
       if (!best || bestN > thr) {
