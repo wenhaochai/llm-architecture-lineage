@@ -2,7 +2,7 @@
 
 An interactive lineage graph of the open-weight models in Sebastian Raschka's
 [LLM Architecture Gallery](https://sebastianraschka.com/llm-architecture-gallery/),
-built from each model's `config.json` alone: 103 gallery models, 69 nodes once models that only
+built from each model's `config.json` alone: 103 gallery models, 65 nodes once models that only
 change scale fold into the design they copy.
 
 **Live page:** https://wenhaochai.com/blogs/llm-architecture-lineage.html
@@ -55,7 +55,7 @@ merge several spellings: seven names for the number of active experts, six for
 the norm epsilon), each assigned to one of four sections that follow the forward pass of a decoder
 block (token mixing and channel mixing carry subsections). Nested sub-configs are flattened into
 the same fields and per-layer index lists become layer schedules by kind. `KEYS.md` lists every key's fate.
-Each canonical field is tagged design (67), scale (66) or tuning (42) in `schema.py`. The change
+Each canonical field is tagged design (61), scale (67) or tuning (47) in `schema.py`. The change
 line under a model compares canonical configs with the first parent: design fields count when
 their value differs (layer schedules by the kinds of layer they contain), scale fields never
 count by value and 16 of them count on appearance because they mark a mechanism (`PRESENCE`),
@@ -83,7 +83,7 @@ never be a parent. If even the closest placed model needs more than `ORIGIN_THRE
 (`trait`) comes from the earliest placed model that already carried it. Generation is one more
 than the largest generation among a node's parents and is the column in the figure.
 
-Result: 103 models, 34 folded as scale copies, 69 drawn nodes, 84 edges after reduction (62
+Result: 103 models, 38 folded as scale copies, 65 drawn nodes, 79 edges after reduction (57
 parent, 22 trait), 10 generations.
 
 ## Caveats

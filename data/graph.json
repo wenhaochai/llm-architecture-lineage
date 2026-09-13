@@ -431,6 +431,20 @@
    "generation": 1,
    "aliases": [
     {
+     "key": "llama-3-2-3b",
+     "title": "Llama 3.2 (3B)",
+     "date": "2024-09-25",
+     "org": "Meta",
+     "scale": "3B parameters"
+    },
+    {
+     "key": "llama-3-2-1b",
+     "title": "Llama 3.2 (1B)",
+     "date": "2024-09-25",
+     "org": "Meta",
+     "scale": "1B parameters"
+    },
+    {
      "key": "phi-4",
      "title": "Phi-4 (14B)",
      "date": "2024-12-12",
@@ -450,6 +464,27 @@
      "date": "2026-02-10",
      "org": "BOSS Zhipin",
      "scale": "3B parameters"
+    },
+    {
+     "key": "granite-4-1-30b",
+     "title": "Granite 4.1 (30B)",
+     "date": "2026-04-29",
+     "org": "IBM",
+     "scale": "30B parameters"
+    },
+    {
+     "key": "vibethinker-3b",
+     "title": "VibeThinker-3B (3B)",
+     "date": "2026-06-15",
+     "org": "Weibo",
+     "scale": "3B parameters"
+    },
+    {
+     "key": "antares-1b",
+     "title": "Antares (1B)",
+     "date": "2026-07-21",
+     "org": "Cisco",
+     "scale": "1B parameters"
     }
    ],
    "merged_into": null,
@@ -681,39 +716,12 @@
    "num_architecture_keys": 15,
    "is_root": false,
    "primary_parent": "llama-3-8b",
-   "changes": [
-    {
-     "field": "tie_embeddings",
-     "kind": "add"
-    }
-   ],
-   "scale_copy": false,
+   "changes": [],
+   "scale_copy": true,
    "generation": 2,
-   "aliases": [
-    {
-     "key": "llama-3-2-1b",
-     "title": "Llama 3.2 (1B)",
-     "date": "2024-09-25",
-     "org": "Meta",
-     "scale": "1B parameters"
-    },
-    {
-     "key": "granite-4-1-30b",
-     "title": "Granite 4.1 (30B)",
-     "date": "2026-04-29",
-     "org": "IBM",
-     "scale": "30B parameters"
-    },
-    {
-     "key": "vibethinker-3b",
-     "title": "VibeThinker-3B (3B)",
-     "date": "2026-06-15",
-     "org": "Weibo",
-     "scale": "3B parameters"
-    }
-   ],
-   "merged_into": null,
-   "is_terminal": false
+   "aliases": [],
+   "merged_into": "llama-3-8b",
+   "is_terminal": true
   },
   {
    "key": "llama-3-2-1b",
@@ -940,12 +948,12 @@
    },
    "num_architecture_keys": 15,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [],
    "scale_copy": true,
-   "generation": 3,
+   "generation": 2,
    "aliases": [],
-   "merged_into": "llama-3-2-3b",
+   "merged_into": "llama-3-8b",
    "is_terminal": true
   },
   {
@@ -3606,6 +3614,20 @@
      "date": "2025-04-28",
      "org": "Alibaba Cloud",
      "scale": "8B parameters"
+    },
+    {
+     "key": "qwen3-4b",
+     "title": "Qwen3 (4B)",
+     "date": "2025-04-28",
+     "org": "Alibaba Cloud",
+     "scale": "4B parameters"
+    },
+    {
+     "key": "qwen3-0-6b",
+     "title": "Qwen3 (0.6B)",
+     "date": "2025-04-28",
+     "org": "Alibaba Cloud",
+     "scale": "0.6B parameters"
     }
    ],
    "merged_into": null,
@@ -4266,24 +4288,11 @@
    "num_architecture_keys": 17,
    "is_root": false,
    "primary_parent": "qwen3-32b",
-   "changes": [
-    {
-     "field": "tie_embeddings",
-     "kind": "add"
-    }
-   ],
-   "scale_copy": false,
+   "changes": [],
+   "scale_copy": true,
    "generation": 5,
-   "aliases": [
-    {
-     "key": "qwen3-0-6b",
-     "title": "Qwen3 (0.6B)",
-     "date": "2025-04-28",
-     "org": "Alibaba Cloud",
-     "scale": "0.6B parameters"
-    }
-   ],
-   "merged_into": null,
+   "aliases": [],
+   "merged_into": "qwen3-32b",
    "is_terminal": true
   },
   {
@@ -4491,12 +4500,12 @@
    },
    "num_architecture_keys": 17,
    "is_root": false,
-   "primary_parent": "qwen3-4b",
+   "primary_parent": "qwen3-32b",
    "changes": [],
    "scale_copy": true,
-   "generation": 6,
+   "generation": 5,
    "aliases": [],
-   "merged_into": "qwen3-4b",
+   "merged_into": "qwen3-32b",
    "is_terminal": true
   },
   {
@@ -4704,7 +4713,7 @@
    },
    "num_architecture_keys": 16,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [
     {
      "field": "nope_layers",
@@ -4712,7 +4721,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 3,
+   "generation": 2,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -7370,12 +7379,6 @@
     "vocab_size": 200064
    },
    "config_canonical": {
-    "layer_types": {
-     "_list_len": 62,
-     "_counts": {
-      "1": 62
-     }
-    },
     "head_dim": 128,
     "activation": "silu",
     "hidden_size": 3072,
@@ -7399,7 +7402,6 @@
     "rope_theta": 5000000,
     "partial_rotary_factor": 64,
     "router_scoring": "sigmoid",
-    "shared_expert_intermediate_size": 0,
     "shared_expert_mode": "sigmoid",
     "tie_embeddings": false,
     "qk_norm": true,
@@ -7414,7 +7416,6 @@
     "router_normalize_weights": true
    },
    "config_canonical_raw_key": {
-    "layer_types": "attn_type_list",
     "head_dim": "head_dim",
     "activation": "hidden_act",
     "hidden_size": "hidden_size",
@@ -7433,7 +7434,6 @@
     "rope_theta": "rope_theta",
     "partial_rotary_factor": "rotary_dim",
     "router_scoring": "scoring_func",
-    "shared_expert_intermediate_size": "shared_intermediate_size",
     "shared_expert_mode": "shared_moe_mode",
     "tie_embeddings": "tie_word_embeddings",
     "qk_norm": "use_qk_norm",
@@ -7451,10 +7451,6 @@
    "is_root": false,
    "primary_parent": "qwen3-235b-a22b",
    "changes": [
-    {
-     "field": "layer_types",
-     "kind": "add"
-    },
     {
      "field": "qk_norm_type",
      "kind": "add"
@@ -7656,12 +7652,6 @@
     "activation": "silu",
     "hidden_size": 2048,
     "intermediate_size": 5632,
-    "layer_types": {
-     "_list_len": 48,
-     "_counts": {
-      "full_attention": 48
-     }
-    },
     "max_position_embeddings": 65536,
     "num_heads": 16,
     "num_layers": 48,
@@ -7683,7 +7673,6 @@
     "activation": "hidden_act",
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
-    "layer_types": "layer_types",
     "max_position_embeddings": "max_position_embeddings",
     "num_heads": "num_attention_heads",
     "num_layers": "num_hidden_layers",
@@ -7704,10 +7693,6 @@
    "is_root": false,
    "primary_parent": "llama-3-8b",
    "changes": [
-    {
-     "field": "layer_types",
-     "kind": "add"
-    },
     {
      "field": "attention_kind",
      "kind": "change"
@@ -9148,7 +9133,22 @@
    ],
    "scale_copy": false,
    "generation": 3,
-   "aliases": [],
+   "aliases": [
+    {
+     "key": "glm-5-744b",
+     "title": "GLM-5 (744B)",
+     "date": "2026-02-11",
+     "org": "Z.ai",
+     "scale": "744B total, 40B active (5.4% active)"
+    },
+    {
+     "key": "glm-5-1",
+     "title": "GLM-5.1 (744B)",
+     "date": "2026-04-07",
+     "org": "Z.ai",
+     "scale": "744B total, 40B active (5.4% active)"
+    }
+   ],
    "merged_into": null,
    "is_terminal": false
   },
@@ -11060,10 +11060,6 @@
     {
      "field": "router_scoring",
      "kind": "change"
-    },
-    {
-     "field": "mup",
-     "kind": "add"
     }
    ],
    "scale_copy": false,
@@ -11346,10 +11342,6 @@
    "is_root": false,
    "primary_parent": "mistral-large-3",
    "changes": [
-    {
-     "field": "mla_scale_lora",
-     "kind": "add"
-    },
     {
      "field": "num_shared_experts",
      "kind": "drop"
@@ -11685,7 +11677,6 @@
     "router_normalize_weights": true,
     "router_scoring": "sigmoid",
     "router_scaling_factor": 3.0,
-    "attention_impl_type": "GQA",
     "tie_embeddings": false,
     "rope_theta": {
      "_list_len": 48,
@@ -11768,7 +11759,6 @@
     "router_normalize_weights": "norm_expert_weight",
     "router_scoring": "moe_router_activation",
     "router_scaling_factor": "moe_router_scaling_factor",
-    "attention_impl_type": "att_impl_type",
     "tie_embeddings": "tie_word_embeddings",
     "rope_theta": "rope_theta",
     "gated_attention": "use_head_wise_attn_gate",
@@ -11802,14 +11792,6 @@
     {
      "field": "layer_types",
      "kind": "change"
-    },
-    {
-     "field": "attention_impl_type",
-     "kind": "add"
-    },
-    {
-     "field": "rope_scaling_layer_types",
-     "kind": "add"
     },
     {
      "field": "moe_layer_schedule",
@@ -12342,29 +12324,12 @@
    "num_architecture_keys": 36,
    "is_root": false,
    "primary_parent": "deepseek-v3-2",
-   "changes": [
-    {
-     "field": "index_rope_interleave",
-     "kind": "add"
-    },
-    {
-     "field": "rope_interleave",
-     "kind": "add"
-    }
-   ],
-   "scale_copy": false,
+   "changes": [],
+   "scale_copy": true,
    "generation": 4,
-   "aliases": [
-    {
-     "key": "glm-5-1",
-     "title": "GLM-5.1 (744B)",
-     "date": "2026-04-07",
-     "org": "Z.ai",
-     "scale": "744B total, 40B active (5.4% active)"
-    }
-   ],
-   "merged_into": null,
-   "is_terminal": false
+   "aliases": [],
+   "merged_into": "deepseek-v3-2",
+   "is_terminal": true
   },
   {
    "key": "minimax-m2-5-230b",
@@ -12548,12 +12513,6 @@
     "vocab_size": 200064
    },
    "config_canonical": {
-    "layer_types": {
-     "_list_len": 62,
-     "_counts": {
-      "1": 62
-     }
-    },
     "head_dim": 128,
     "activation": "silu",
     "hidden_size": 3072,
@@ -12569,7 +12528,6 @@
     "rope_theta": 5000000,
     "partial_rotary_factor": 64,
     "router_scoring": "sigmoid",
-    "shared_expert_intermediate_size": 0,
     "tie_embeddings": false,
     "qk_norm": true,
     "router_expert_bias": true,
@@ -12583,7 +12541,6 @@
     "router_normalize_weights": true
    },
    "config_canonical_raw_key": {
-    "layer_types": "attn_type_list",
     "head_dim": "head_dim",
     "activation": "hidden_act",
     "hidden_size": "hidden_size",
@@ -12599,7 +12556,6 @@
     "rope_theta": "rope_theta",
     "partial_rotary_factor": "rotary_dim",
     "router_scoring": "scoring_func",
-    "shared_expert_intermediate_size": "shared_intermediate_size",
     "tie_embeddings": "tie_word_embeddings",
     "qk_norm": "use_qk_norm",
     "router_expert_bias": "use_routing_bias",
@@ -12831,16 +12787,12 @@
     "intermediate_size": 11008,
     "norm_eps": 1e-05,
     "layer_types": {
-     "_raw": {
-      "layer_types": {
-       "_list_len": 36,
-       "_counts": {
-        "sliding_attention": 27,
-        "full_attention": 9
-       }
-      },
-      "order_of_interleaved_layers": "local_attn_first"
-     }
+     "_list_len": 36,
+     "_counts": {
+      "sliding_attention": 27,
+      "full_attention": 9
+     },
+     "_ratio": "3:1"
     },
     "output_multiplier": 1.0,
     "max_position_embeddings": 5000000,
@@ -12898,7 +12850,7 @@
    },
    "num_architecture_keys": 28,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [
     {
      "field": "layer_types",
@@ -12913,10 +12865,6 @@
      "kind": "add"
     },
     {
-     "field": "activation_gated",
-     "kind": "add"
-    },
-    {
      "field": "norm_type",
      "kind": "change"
     },
@@ -12927,6 +12875,7 @@
    ],
    "scale_copy": false,
    "generation": 7,
+   "parent_via": "olmo-3-32b",
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -13252,10 +13201,6 @@
     },
     {
      "field": "qk_norm",
-     "kind": "add"
-    },
-    {
-     "field": "rope_interleave",
      "kind": "add"
     },
     {
@@ -14820,10 +14765,6 @@
    "primary_parent": "mistral-large-3",
    "changes": [
     {
-     "field": "rope_interleave",
-     "kind": "add"
-    },
-    {
      "field": "dense_prefix_layers",
      "kind": "drop"
     }
@@ -15301,12 +15242,6 @@
     "vocab_size": 200064
    },
    "config_canonical": {
-    "layer_types": {
-     "_list_len": 62,
-     "_counts": {
-      "1": 62
-     }
-    },
     "head_dim": 128,
     "activation": "silu",
     "hidden_size": 3072,
@@ -15322,7 +15257,6 @@
     "rope_theta": 5000000,
     "partial_rotary_factor": 64,
     "router_scoring": "sigmoid",
-    "shared_expert_intermediate_size": 0,
     "tie_embeddings": false,
     "qk_norm": true,
     "router_expert_bias": true,
@@ -15336,7 +15270,6 @@
     "router_normalize_weights": true
    },
    "config_canonical_raw_key": {
-    "layer_types": "attn_type_list",
     "head_dim": "head_dim",
     "activation": "hidden_act",
     "hidden_size": "hidden_size",
@@ -15352,7 +15285,6 @@
     "rope_theta": "rope_theta",
     "partial_rotary_factor": "rotary_dim",
     "router_scoring": "scoring_func",
-    "shared_expert_intermediate_size": "shared_intermediate_size",
     "tie_embeddings": "tie_word_embeddings",
     "qk_norm": "use_qk_norm",
     "router_expert_bias": "use_routing_bias",
@@ -15604,7 +15536,6 @@
     "head_dim": 256,
     "activation": "gelu",
     "hidden_size": 5376,
-    "per_layer_embedding_dim": 0,
     "intermediate_size": 21504,
     "layer_types": {
      "_list_len": 60,
@@ -15619,7 +15550,6 @@
     "global_num_kv_heads": 4,
     "num_layers": 60,
     "num_kv_heads": 16,
-    "kv_shared_layers": 0,
     "norm_eps": 1e-06,
     "sliding_window": 1024,
     "tie_embeddings": true,
@@ -15646,7 +15576,6 @@
     "head_dim": "head_dim",
     "activation": "hidden_activation",
     "hidden_size": "hidden_size",
-    "per_layer_embedding_dim": "hidden_size_per_layer_input",
     "intermediate_size": "intermediate_size",
     "layer_types": "layer_types",
     "max_position_embeddings": "max_position_embeddings",
@@ -15654,7 +15583,6 @@
     "global_num_kv_heads": "num_global_key_value_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
-    "kv_shared_layers": "num_kv_shared_layers",
     "norm_eps": "rms_norm_eps",
     "sliding_window": "sliding_window",
     "tie_embeddings": "tie_word_embeddings",
@@ -15676,10 +15604,6 @@
    "is_root": false,
    "primary_parent": "gemma-3-27b",
    "changes": [
-    {
-     "field": "tie_embeddings",
-     "kind": "add"
-    },
     {
      "field": "global_kv_unified",
      "kind": "add"
@@ -15929,7 +15853,6 @@
     "head_dim": 256,
     "activation": "gelu",
     "hidden_size": 2816,
-    "per_layer_embedding_dim": 0,
     "intermediate_size": 2112,
     "layer_types": {
      "_list_len": 30,
@@ -15946,7 +15869,6 @@
     "global_num_kv_heads": 2,
     "num_layers": 30,
     "num_kv_heads": 8,
-    "kv_shared_layers": 0,
     "norm_eps": 1e-06,
     "sliding_window": 1024,
     "tie_embeddings": true,
@@ -15976,7 +15898,6 @@
     "head_dim": "head_dim",
     "activation": "hidden_activation",
     "hidden_size": "hidden_size",
-    "per_layer_embedding_dim": "hidden_size_per_layer_input",
     "intermediate_size": "intermediate_size",
     "layer_types": "layer_types",
     "max_position_embeddings": "max_position_embeddings",
@@ -15986,7 +15907,6 @@
     "global_num_kv_heads": "num_global_key_value_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
-    "kv_shared_layers": "num_kv_shared_layers",
     "norm_eps": "rms_norm_eps",
     "sliding_window": "sliding_window",
     "tie_embeddings": "tie_word_embeddings",
@@ -16321,15 +16241,11 @@
    },
    "num_architecture_keys": 28,
    "is_root": false,
-   "primary_parent": "gemma-4-31b",
+   "primary_parent": "gemma-3-27b",
    "changes": [
     {
      "field": "per_layer_embedding_dim",
      "kind": "add"
-    },
-    {
-     "field": "global_kv_unified",
-     "kind": "drop"
     },
     {
      "field": "kv_shared_layers",
@@ -16337,7 +16253,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 5,
+   "generation": 4,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -16952,12 +16868,12 @@
    },
    "num_architecture_keys": 36,
    "is_root": false,
-   "primary_parent": "glm-5-744b",
+   "primary_parent": "deepseek-v3-2",
    "changes": [],
    "scale_copy": true,
-   "generation": 5,
+   "generation": 4,
    "aliases": [],
-   "merged_into": "glm-5-744b",
+   "merged_into": "deepseek-v3-2",
    "is_terminal": true
   },
   {
@@ -20234,14 +20150,6 @@
    "primary_parent": "step-3-5-flash-196b",
    "changes": [
     {
-     "field": "attention_impl_type",
-     "kind": "drop"
-    },
-    {
-     "field": "rope_scaling_layer_types",
-     "kind": "drop"
-    },
-    {
      "field": "dense_prefix_layers",
      "kind": "add"
     },
@@ -20482,12 +20390,12 @@
    },
    "num_architecture_keys": 18,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [],
    "scale_copy": true,
-   "generation": 3,
+   "generation": 2,
    "aliases": [],
-   "merged_into": "llama-3-2-3b",
+   "merged_into": "llama-3-8b",
    "is_terminal": true
   },
   {
@@ -20687,12 +20595,6 @@
     "head_dim": 128,
     "activation": "silu",
     "hidden_size": 2048,
-    "layer_types": {
-     "_list_len": 40,
-     "_counts": {
-      "hybrid": 40
-     }
-    },
     "lm_head_bias": false,
     "max_position_embeddings": 131072,
     "moe_intermediate_size": 2048,
@@ -20722,7 +20624,6 @@
     "head_dim": "head_dim",
     "activation": "hidden_act",
     "hidden_size": "hidden_size",
-    "layer_types": "layer_types",
     "lm_head_bias": "lm_head_bias",
     "max_position_embeddings": "max_position_embeddings",
     "moe_intermediate_size": "moe_intermediate_size",
@@ -20750,14 +20651,6 @@
    "is_root": false,
    "primary_parent": "grok-2-5-270b",
    "changes": [
-    {
-     "field": "tie_embeddings",
-     "kind": "add"
-    },
-    {
-     "field": "layer_types",
-     "kind": "add"
-    },
     {
      "field": "attention_kind",
      "kind": "change"
@@ -20997,16 +20890,12 @@
     "intermediate_size": 4096,
     "norm_eps": 1e-05,
     "layer_types": {
-     "_raw": {
-      "layer_types": {
-       "_list_len": 32,
-       "_counts": {
-        "sliding_attention": 24,
-        "full_attention": 8
-       }
-      },
-      "order_of_interleaved_layers": "local_attn_first"
-     }
+     "_list_len": 32,
+     "_counts": {
+      "sliding_attention": 24,
+      "full_attention": 8
+     },
+     "_ratio": "3:1"
     },
     "output_multiplier": 1.0,
     "max_position_embeddings": 200000,
@@ -21345,10 +21234,6 @@
    "primary_parent": "glm-4-5-air",
    "changes": [
     {
-     "field": "tie_embeddings",
-     "kind": "add"
-    },
-    {
      "field": "layer_types",
      "kind": "add"
     },
@@ -21619,19 +21504,15 @@
    },
    "num_architecture_keys": 23,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [
     {
      "field": "layer_types",
      "kind": "add"
-    },
-    {
-     "field": "activation_gated",
-     "kind": "add"
     }
    ],
    "scale_copy": false,
-   "generation": 3,
+   "generation": 2,
    "aliases": [
     {
      "key": "lfm2-5-350m",
@@ -21898,7 +21779,7 @@
    "primary_parent": "lfm2-5-1-2b",
    "changes": [],
    "scale_copy": true,
-   "generation": 4,
+   "generation": 3,
    "aliases": [],
    "merged_into": "lfm2-5-1-2b",
    "is_terminal": true
@@ -22124,7 +22005,6 @@
      }
     },
     "max_position_embeddings": 131072,
-    "sliding_window_max_layers": 0,
     "moe_intermediate_size": 896,
     "router_normalize_weights": true,
     "num_heads": 32,
@@ -22157,7 +22037,6 @@
     "layer_types": "layer_types",
     "moe_layer_schedule": "mlp_layer_types",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "moe_intermediate_size": "moe_intermediate_size",
     "router_normalize_weights": "norm_topk_prob",
     "num_heads": "num_attention_heads",
@@ -22430,7 +22309,6 @@
     "head_dim": 256,
     "activation": "gelu",
     "hidden_size": 3840,
-    "per_layer_embedding_dim": 0,
     "intermediate_size": 15360,
     "layer_types": {
      "_list_len": 48,
@@ -22445,7 +22323,6 @@
     "global_num_kv_heads": 1,
     "num_layers": 48,
     "num_kv_heads": 8,
-    "kv_shared_layers": 0,
     "norm_eps": 1e-06,
     "sliding_window": 1024,
     "tie_embeddings": true,
@@ -22472,7 +22349,6 @@
     "head_dim": "head_dim",
     "activation": "hidden_activation",
     "hidden_size": "hidden_size",
-    "per_layer_embedding_dim": "hidden_size_per_layer_input",
     "intermediate_size": "intermediate_size",
     "layer_types": "layer_types",
     "max_position_embeddings": "max_position_embeddings",
@@ -22480,7 +22356,6 @@
     "global_num_kv_heads": "num_global_key_value_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
-    "kv_shared_layers": "num_kv_shared_layers",
     "norm_eps": "rms_norm_eps",
     "sliding_window": "sliding_window",
     "tie_embeddings": "tie_word_embeddings",
@@ -23127,14 +23002,6 @@
    "is_root": false,
    "primary_parent": "command-a-218b-a25b",
    "changes": [
-    {
-     "field": "tie_embeddings",
-     "kind": "drop"
-    },
-    {
-     "field": "layer_types",
-     "kind": "change"
-    },
     {
      "field": "num_shared_experts",
      "kind": "drop"
@@ -24183,12 +24050,12 @@
    },
    "num_architecture_keys": 15,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
+   "primary_parent": "llama-3-8b",
    "changes": [],
    "scale_copy": true,
-   "generation": 3,
+   "generation": 2,
    "aliases": [],
-   "merged_into": "llama-3-2-3b",
+   "merged_into": "llama-3-8b",
    "is_terminal": true
   },
   {
@@ -24516,7 +24383,7 @@
    },
    "num_architecture_keys": 41,
    "is_root": false,
-   "primary_parent": "glm-5-744b",
+   "primary_parent": "deepseek-v3-2",
    "changes": [
     {
      "field": "index_layer_types",
@@ -24528,7 +24395,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 5,
+   "generation": 4,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -25568,10 +25435,6 @@
    "primary_parent": "gemma-4-26b-a4b",
    "changes": [
     {
-     "field": "tie_embeddings",
-     "kind": "drop"
-    },
-    {
      "field": "global_kv_unified",
      "kind": "drop"
     },
@@ -26582,7 +26445,6 @@
       "48": 12
      }
     },
-    "router_logit_softcapping": 0.0,
     "rope_theta": 500000.0,
     "partial_rotary_factor": 0.5,
     "rope_scaling_type": "yarn",
@@ -26622,7 +26484,6 @@
     "router_input_scaling": "moe_apply_router_weight_on_input",
     "router_scaling_factor": "moe_routed_scaling_factor",
     "attention_heads_per_layer": "num_attention_heads_per_layer",
-    "router_logit_softcapping": "moe_router_logit_softcapping",
     "rope_theta": "rope_parameters.full_attention.rope_theta",
     "partial_rotary_factor": "rope_parameters.full_attention.partial_rotary_factor",
     "rope_scaling_type": "rope_parameters.full_attention.rope_type",
@@ -27082,20 +26943,12 @@
     "activation": "silu",
     "hidden_size": 2048,
     "intermediate_size": 4096,
-    "layer_types": {
-     "_list_len": 40,
-     "_counts": {
-      "attention": 40
-     }
-    },
     "output_multiplier": 8,
     "max_position_embeddings": 131072,
     "norm_type": "rmsnorm",
     "num_heads": 16,
-    "experts_per_tok": 0,
     "num_layers": 40,
     "num_kv_heads": 4,
-    "num_experts": 0,
     "position_encoding_type": "rope",
     "residual_multiplier": 0.22,
     "norm_eps": 1e-05,
@@ -27113,15 +26966,12 @@
     "activation": "hidden_act",
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
-    "layer_types": "layer_types",
     "output_multiplier": "logits_scaling",
     "max_position_embeddings": "max_position_embeddings",
     "norm_type": "normalization_function",
     "num_heads": "num_attention_heads",
-    "experts_per_tok": "num_experts_per_tok",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
-    "num_experts": "num_local_experts",
     "position_encoding_type": "position_embedding_type",
     "residual_multiplier": "residual_multiplier",
     "norm_eps": "rms_norm_eps",
@@ -27134,17 +26984,12 @@
    },
    "num_architecture_keys": 34,
    "is_root": false,
-   "primary_parent": "llama-3-2-3b",
-   "changes": [
-    {
-     "field": "layer_types",
-     "kind": "add"
-    }
-   ],
-   "scale_copy": false,
-   "generation": 3,
+   "primary_parent": "llama-3-8b",
+   "changes": [],
+   "scale_copy": true,
+   "generation": 2,
    "aliases": [],
-   "merged_into": null,
+   "merged_into": "llama-3-8b",
    "is_terminal": true
   },
   {
@@ -28268,7 +28113,6 @@
     "experts_per_tok": 8,
     "num_layers": 42,
     "num_kv_heads": 32,
-    "linear_num_key_heads": 0,
     "num_shared_experts": 1,
     "partial_rotary_factor": {
      "_raw": {
@@ -28345,7 +28189,6 @@
     "experts_per_tok": "num_experts_per_tok",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
-    "linear_num_key_heads": "num_kv_heads_for_linear_attn",
     "num_shared_experts": "num_shared_experts",
     "partial_rotary_factor": "partial_rotary_factor",
     "qk_nope_head_dim": "qk_nope_head_dim",
@@ -28681,10 +28524,6 @@
    "changes": [
     {
      "field": "moe",
-     "kind": "drop"
-    },
-    {
-     "field": "mup",
      "kind": "drop"
     }
    ],
@@ -30005,7 +29844,6 @@
     "num_kv_heads": 64,
     "q_lora_rank": 1536,
     "qk_nope_head_dim": 256,
-    "qk_rope_head_dim": 0,
     "norm_eps": 1e-05,
     "router_scaling_factor": 2.5,
     "router_scoring": "sigmoid",
@@ -30060,7 +29898,6 @@
     "num_kv_heads": "num_key_value_heads",
     "q_lora_rank": "q_lora_rank",
     "qk_nope_head_dim": "qk_nope_head_dim",
-    "qk_rope_head_dim": "qk_rope_head_dim",
     "norm_eps": "rms_norm_eps",
     "router_scaling_factor": "routed_scaling_factor",
     "router_scoring": "scoring_func",
@@ -30769,12 +30606,6 @@
     },
     "intermediate_size": 18432,
     "kv_lora_rank": 512,
-    "layer_types": {
-     "_list_len": 78,
-     "_counts": {
-      "deepseek_sparse_attention": 78
-     }
-    },
     "attention_sinks": true,
     "max_position_embeddings": 1048576,
     "moe_intermediate_size": 2048,
@@ -30823,7 +30654,6 @@
     "index_layer_types": "indexer_types",
     "intermediate_size": "intermediate_size",
     "kv_lora_rank": "kv_lora_rank",
-    "layer_types": "layer_types",
     "attention_sinks": "learnable_sink",
     "max_position_embeddings": "max_position_embeddings",
     "moe_intermediate_size": "moe_intermediate_size",
@@ -30860,10 +30690,6 @@
    "is_root": false,
    "primary_parent": "deepseek-v3-2",
    "changes": [
-    {
-     "field": "layer_types",
-     "kind": "add"
-    },
     {
      "field": "gated_attention",
      "kind": "add"
@@ -31389,14 +31215,6 @@
   },
   {
    "source": "llama-3-8b",
-   "target": "llama-3-2-3b",
-   "type": "parent",
-   "fields": [],
-   "n": 1,
-   "mech": 0
-  },
-  {
-   "source": "llama-3-8b",
    "target": "olmo-2-7b",
    "type": "parent",
    "fields": [],
@@ -31468,15 +31286,7 @@
    "mech": 1
   },
   {
-   "source": "qwen3-32b",
-   "target": "qwen3-4b",
-   "type": "parent",
-   "fields": [],
-   "n": 1,
-   "mech": 0
-  },
-  {
-   "source": "llama-3-2-3b",
+   "source": "llama-3-8b",
    "target": "smollm3-3b",
    "type": "parent",
    "fields": [],
@@ -31536,16 +31346,16 @@
    "target": "minimax-m2-230b",
    "type": "parent",
    "fields": [],
-   "n": 5,
-   "mech": 1
+   "n": 4,
+   "mech": 0
   },
   {
    "source": "llama-3-8b",
    "target": "ouro-thinking-2-6b",
    "type": "parent",
    "fields": [],
-   "n": 3,
-   "mech": 3
+   "n": 2,
+   "mech": 2
   },
   {
    "source": "qwen3-next-80b-a3b",
@@ -31620,7 +31430,7 @@
    "target": "arcee-ai-trinity-large-400b",
    "type": "parent",
    "fields": [],
-   "n": 6,
+   "n": 5,
    "mech": 2
   },
   {
@@ -31638,7 +31448,7 @@
    "target": "longcat-flash-lite-68-5b-a3b",
    "type": "parent",
    "fields": [],
-   "n": 4,
+   "n": 3,
    "mech": 0
   },
   {
@@ -31646,7 +31456,7 @@
    "target": "step-3-5-flash-196b",
    "type": "parent",
    "fields": [],
-   "n": 7,
+   "n": 5,
    "mech": 1
   },
   {
@@ -31660,28 +31470,12 @@
    "mech": null
   },
   {
-   "source": "deepseek-v3-2",
-   "target": "glm-5-744b",
-   "type": "parent",
-   "fields": [],
-   "n": 2,
-   "mech": 0
-  },
-  {
    "source": "minimax-m2-230b",
    "target": "minimax-m2-5-230b",
    "type": "parent",
    "fields": [],
    "n": 1,
    "mech": 0
-  },
-  {
-   "source": "llama-3-2-3b",
-   "target": "tiny-aya-3-35b",
-   "type": "parent",
-   "fields": [],
-   "n": 6,
-   "mech": 3
   },
   {
    "source": "arcee-ai-trinity-large-400b",
@@ -31698,7 +31492,7 @@
    "target": "ling-2-5-1t",
    "type": "parent",
    "fields": [],
-   "n": 4,
+   "n": 3,
    "mech": 2
   },
   {
@@ -31758,7 +31552,7 @@
    "target": "mistral-small-4",
    "type": "parent",
    "fields": [],
-   "n": 2,
+   "n": 1,
    "mech": 0
   },
   {
@@ -31774,7 +31568,7 @@
    "target": "gemma-4-31b",
    "type": "parent",
    "fields": [],
-   "n": 2,
+   "n": 1,
    "mech": 0
   },
   {
@@ -31796,11 +31590,11 @@
    "mech": null
   },
   {
-   "source": "gemma-4-31b",
+   "source": "gemma-3-27b",
    "target": "gemma-4-e4b",
    "type": "parent",
    "fields": [],
-   "n": 3,
+   "n": 2,
    "mech": 2
   },
   {
@@ -31860,7 +31654,7 @@
    "target": "laguna-xs-2",
    "type": "parent",
    "fields": [],
-   "n": 7,
+   "n": 5,
    "mech": 0
   },
   {
@@ -31868,8 +31662,8 @@
    "target": "zaya1-8b",
    "type": "parent",
    "fields": [],
-   "n": 4,
-   "mech": 2
+   "n": 2,
+   "mech": 1
   },
   {
    "source": "tiny-aya-3-35b",
@@ -31884,15 +31678,15 @@
    "target": "lfm2-5-8b-a1b",
    "type": "parent",
    "fields": [],
-   "n": 5,
+   "n": 4,
    "mech": 1
   },
   {
-   "source": "llama-3-2-3b",
+   "source": "llama-3-8b",
    "target": "lfm2-5-1-2b",
    "type": "parent",
    "fields": [],
-   "n": 2,
+   "n": 1,
    "mech": 1
   },
   {
@@ -31918,8 +31712,8 @@
    "target": "north-mini-code-30b-a3b",
    "type": "parent",
    "fields": [],
-   "n": 5,
-   "mech": 1
+   "n": 3,
+   "mech": 0
   },
   {
    "source": "sarvam-30b",
@@ -31930,7 +31724,7 @@
    "mech": 1
   },
   {
-   "source": "glm-5-744b",
+   "source": "deepseek-v3-2",
    "target": "glm-5-2",
    "type": "parent",
    "fields": [],
@@ -31950,7 +31744,7 @@
    "target": "inkling",
    "type": "parent",
    "fields": [],
-   "n": 11,
+   "n": 10,
    "mech": 1
   },
   {
@@ -31976,14 +31770,6 @@
   {
    "source": "llama-3-8b",
    "target": "nanbeige-4-2-3b",
-   "type": "parent",
-   "fields": [],
-   "n": 1,
-   "mech": 1
-  },
-  {
-   "source": "llama-3-2-3b",
-   "target": "antares-1b",
    "type": "parent",
    "fields": [],
    "n": 1,
@@ -32038,7 +31824,7 @@
    "target": "muse-glimmer-30b",
    "type": "parent",
    "fields": [],
-   "n": 2,
+   "n": 1,
    "mech": 1
   },
   {

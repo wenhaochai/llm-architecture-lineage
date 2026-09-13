@@ -245,7 +245,7 @@ CANONICAL_GROUP = {canon: g for g, canons in GROUPS.items() for canon in canons}
 # model, not a different architecture; only appearing or disappearing counts.
 SCALE = {
     "hidden_size", "num_layers", "intermediate_size", "dense_prefix_intermediate_size", "vocab_size", "vocab_size_unpadded",
-    "max_position_embeddings", "num_heads", "num_kv_heads", "head_dim", "v_head_dim", "q_lora_rank", "kv_lora_rank", "o_lora_rank",
+    "max_position_embeddings", "tie_embeddings", "num_heads", "num_kv_heads", "head_dim", "v_head_dim", "q_lora_rank", "kv_lora_rank", "o_lora_rank",
     "o_groups", "qk_rope_head_dim", "qk_nope_head_dim", "num_experts", "experts_per_tok", "num_shared_experts",
     "shared_expert_intermediate_size", "moe_intermediate_size", "dense_prefix_layers", "router_num_groups", "router_topk_groups",
     "moe_latent_size", "router_hidden_size", "index_topk", "index_num_heads", "index_head_dim", "index_kv_heads", "sliding_window",
@@ -261,7 +261,7 @@ TUNING = {
     "norm_eps", "norm_eps_post", "norm_eps_cell", "norm_beta_attention", "norm_beta_linear_attention", "norm_beta_mlp",
     "activation_clamp", "activation_clamp_shared_expert", "activation_clamp_experts", "activation_situ_beta", "polynorm_output_scale",
     "polynorm_bias_clamp", "attention_scale", "attention_value_scale", "attention_logit_softcapping", "attention_temperature_tuning",
-    "attention_log_scaling", "rope_theta", "rope_theta_per_layer", "rope_theta_local", "rope_scaling_type", "rope_scaling_factor", "rope_scaling_params",
+    "attention_log_scaling", "rope_theta", "rope_theta_per_layer", "rope_theta_local", "rope_scaling_type", "rope_scaling_factor", "rope_scaling_params", "rope_scaling_layer_types", "rope_interleave", "index_rope_interleave", "mla_scale_lora", "mup",
     "rope_original_max_position", "partial_rotary_factor", "swa_rope_theta", "compress_rope_theta", "router_scaling_factor",
     "router_logit_softcapping", "mamba_time_step", "mlstm_gate_softcap", "hyper_connection_params", "residual_multiplier",
     "embedding_multiplier", "output_multiplier", "final_logit_softcapping", "loop_exit_threshold", "kda_config", "candidate_selection",
@@ -298,7 +298,7 @@ ACTIVATION_ALIAS = {"gelu_new": "gelu", "gelu_pytorch_tanh": "gelu", "gelu_tanh"
 # ratio, so the ratios, the interval and the window switches restate it. They stay on the card and
 # never enter the change list.
 RESTATED = {"local_global_ratio", "mixer_attention_ratio", "hybrid_attention_interval",
-            "sliding_window_pattern", "sliding_window_enabled", "sliding_window_max_layers"}
+            "sliding_window_pattern", "sliding_window_enabled", "sliding_window_max_layers", "activation_gated"}
 # Fields that only exist when a mechanism is present. When the mechanism itself changes, that one
 # change says everything; its details are skipped so a dense-to-MoE step is not counted five times.
 CONDITIONAL = {}

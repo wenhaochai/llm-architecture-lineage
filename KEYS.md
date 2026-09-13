@@ -1,10 +1,10 @@
 # From 571 config keys to the canonical fields
 
-The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **155** that carry no architecture, and `schema.py` renames the remaining **416** into **170** canonical fields, every raw key covered exactly once. Nested sub-configs (`linear_attn_config`, `rope_scaling`, `attention_other_setting`, `sparse_attention_config`) are flattened into the same fields, per-layer index lists become layer schedules by kind with a rounded ratio, 5 canonical fields are derived (`attention_kind`, `attention_residuals`, `local_global_ratio`, `mixer_attention_ratio`, `sequence_mixer`), and traits the modeling class implies are filled in by `extract.py` with the implying model type recorded as their source.
+The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **155** that carry no architecture, and `schema.py` renames the remaining **416** into **170** canonical fields, every raw key covered exactly once. Nested sub-configs are flattened into the same fields, per-layer index lists become layer schedules by kind with a rounded ratio, 5 fields are derived (`attention_kind`, `attention_residuals`, `local_global_ratio`, `mixer_attention_ratio`, `sequence_mixer`), and traits the modeling class implies are filled in with the implying model type as their source.
 
-A key written with its default says what an absent key says: `NO_EFFECT` values are dropped, `DEFAULTS` and `DEFAULTS_IF_MOE` fill the absent ones. Fields sit in four sections that follow the forward pass of a decoder block; token mixing and channel mixing have subsections. Each field is tagged **design** (67), **scale** (66) or **tuning** (42), and 19 design fields are **mechanism**-level.
+A key written with its default says what an absent key says: `NO_EFFECT` values and zeros are dropped, `DEFAULTS` and `DEFAULTS_IF_MOE` fill the absent ones. Each field is tagged **design** (61), **scale** (67) or **tuning** (47); 19 design fields are **mechanism**-level and rank candidate parents before anything else.
 
-The change list between a model and a candidate parent: a design field counts when its value differs (layer schedules compared by the kinds of layer they contain and their ratio); a scale field never counts by value, and 15 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields never count; `RESTATED` fields (6) say what the layer schedule already says; and a field in `CONDITIONAL` is skipped when the mechanism it belongs to is itself the change, so dense to MoE is one change.
+The change list between a model and a candidate parent: a design field counts when its value differs (schedules by their layer kinds and ratio); a scale field never counts by value, and 15 of them (`PRESENCE`) count when they appear; tuning fields never count; `RESTATED` fields (7) say what the layer schedule or the activation already says; and a field in `CONDITIONAL` is skipped when the mechanism it belongs to is itself the change.
 
 ## Dropped
 
@@ -38,7 +38,7 @@ The change list between a model and a candidate parent: a design field counts wh
 |---|---|---|---|
 | Embeddings & output | `vocab_size` | scale | `vocab_size` ×103 |
 | Embeddings & output | `vocab_size_unpadded` | scale | `unpadded_vocab_size` ×1 |
-| Embeddings & output | `tie_embeddings` | design | `tie_word_embeddings` ×89, `tie_embedding` ×2, `use_embedding_sharing` ×2 |
+| Embeddings & output | `tie_embeddings` | scale | `tie_word_embeddings` ×89, `tie_embedding` ×2, `use_embedding_sharing` ×2 |
 | Embeddings & output | `lm_head_bias` | design | `lm_head_bias` ×1 |
 | Embeddings & output | `embedding_multiplier` | tuning | `embedding_multiplier` ×2, `embedding_multiplier_scale` ×1 |
 | Embeddings & output | `output_multiplier` | tuning | `logits_scaling` ×2, `output_multiplier` ×1, `output_multiplier_scale` ×1, `logits_mup_width_multiplier` ×1, `logit_scale` ×3 |
@@ -99,7 +99,7 @@ The change list between a model and a candidate parent: a design field counts wh
 | Token mixing › Latent attention | `o_groups` | scale | `o_groups` ×3 |
 | Token mixing › Latent attention | `qk_rope_head_dim` | scale | `qk_rope_head_dim` ×25 |
 | Token mixing › Latent attention | `qk_nope_head_dim` | scale | `qk_nope_head_dim` ×21 |
-| Token mixing › Latent attention | `mla_scale_lora` | design | `mla_scale_q_lora` ×1, `mla_scale_kv_lora` ×1 |
+| Token mixing › Latent attention | `mla_scale_lora` | tuning | `mla_scale_q_lora` ×1, `mla_scale_kv_lora` ×1 |
 | Token mixing › Latent attention | `mla_nope` | design | `mla_use_nope` ×3, `use_mla_nope` ×1 |
 | Token mixing › Sparse attention & indexer | `sparse_attention` | design · mechanism | `use_dsa` ×1, `sparse_attention_config` ×1 |
 | Token mixing › Sparse attention & indexer | `index_topk` | scale · presence | `index_topk` ×9, `indexer_budget` ×1 |
@@ -109,7 +109,7 @@ The change list between a model and a candidate parent: a design field counts wh
 | Token mixing › Sparse attention & indexer | `index_layer_types` | design | `indexer_types` ×3 |
 | Token mixing › Sparse attention & indexer | `index_kpool` | tuning | `index_kpool` ×1, `index_kpool_always_select_tail` ×1, `index_kpool_compress` ×1, `indexer_compress_ratio` ×1 |
 | Token mixing › Sparse attention & indexer | `index_share_layers` | design | `index_source_layer_ids` ×1, `index_topk_pattern` ×1, `index_topk_freq` ×1, `index_skip_topk_offset` ×1 |
-| Token mixing › Sparse attention & indexer | `index_rope_interleave` | design | `indexer_rope_interleave` ×4 |
+| Token mixing › Sparse attention & indexer | `index_rope_interleave` | tuning | `indexer_rope_interleave` ×4 |
 | Token mixing › Sparse attention & indexer | `compress_ratios` | design | `compress_ratios` ×3 |
 | Token mixing › Sparse attention & indexer | `compress_rope_theta` | tuning | `compress_rope_theta` ×3 |
 | Token mixing › Sparse attention & indexer | `candidate_selection` | tuning | `candidate_source_layer_id` ×1, `candidate_topk_blocks` ×1, `candidate_block_size` ×1 |
@@ -146,9 +146,9 @@ The change list between a model and a candidate parent: a design field counts wh
 | Token mixing › Positions | `rope_scaling_factor` | tuning | `rope_factor` ×1, `scaling_factor` ×1 |
 | Token mixing › Positions | `rope_scaling_params` | tuning | `mscale` ×1, `beta_fast` ×1, `beta_slow` ×1, `attn_factor` ×1, `extrapolation_factor` ×1 |
 | Token mixing › Positions | `rope_original_max_position` | tuning | `original_max_position_embeddings` ×2, `initial_context_length` ×2, `original_seq_len` ×1 |
-| Token mixing › Positions | `rope_scaling_layer_types` | design | `yarn_only_types` ×1 |
+| Token mixing › Positions | `rope_scaling_layer_types` | tuning | `yarn_only_types` ×1 |
 | Token mixing › Positions | `partial_rotary_factor` | tuning | `partial_rotary_factor` ×26, `partial_rotary_factors` ×1, `rotary_pct` ×2, `rotary_dim` ×7 |
-| Token mixing › Positions | `rope_interleave` | design | `rope_interleave` ×7 |
+| Token mixing › Positions | `rope_interleave` | tuning | `rope_interleave` ×7 |
 | Token mixing › Positions | `nope_layers` | design · mechanism | `no_rope_layers` ×1, `no_rope_layer_interval` ×1, `use_rope_layers` ×1 |
 | Token mixing › Positions | `relative_position_bias` | scale | `d_rel` ×1, `rel_extent` ×1 |
 | Channel mixing › Dense FFN | `intermediate_size` | scale | `intermediate_size` ×92, `ffn_hidden_size` ×1, `intermediate_size_mlp` ×1, `mlp_intermediate_size` ×1, `block_ff_dim` ×2, `dense_intermediate_size` ×2 |
@@ -157,7 +157,7 @@ The change list between a model and a candidate parent: a design field counts wh
 | Channel mixing › Dense FFN | `ffn_round_to_multiple` | scale | `ffn_round_up_to_multiple_of` ×1, `block_multiple_of` ×2, `block_auto_adjust_ff_dim` ×2, `mlstm_round_up_to_multiple_of` ×1 |
 | Channel mixing › Dense FFN | `mlp_bias` | design | `mlp_bias` ×12 |
 | Channel mixing › Dense FFN | `activation` | design | `hidden_act` ×76, `hidden_activation` ×8, `activation_function` ×1, `mlp_hidden_act` ×6 |
-| Channel mixing › Dense FFN | `activation_gated` | design | `use_gated_activation` ×3, `block_use_swiglu` ×2 |
+| Channel mixing › Dense FFN | `activation_gated` | design · restated | `use_gated_activation` ×3, `block_use_swiglu` ×2 |
 | Channel mixing › Dense FFN | `activation_clamp` | tuning | `swiglu_limit` ×8, `swiglu_limits` ×1, `swiglu_alpha` ×1, `hidden_clamp` ×1 |
 | Channel mixing › Dense FFN | `activation_clamp_shared_expert` | tuning | `swiglu_limits_shared` ×1, `share_expert_swiglu_limit_list` ×1 |
 | Channel mixing › Dense FFN | `activation_clamp_experts` | tuning | `expert_swiglu_limit_list` ×1 |
@@ -208,6 +208,6 @@ The change list between a model and a candidate parent: a design field counts wh
 | Block structure & residual stream | `attention_residuals` | design · mechanism | *derived* |
 | Block structure & residual stream | `attention_residual_block` | scale | `attn_res_block_size` ×1 |
 | Block structure & residual stream | `residual_multiplier` | tuning | `residual_multiplier` ×2 |
-| Block structure & residual stream | `mup` | design | `mup_enabled` ×1 |
+| Block structure & residual stream | `mup` | tuning | `mup_enabled` ×1 |
 | Block structure & residual stream | `loop_passes` | scale · mechanism · presence | `num_loops` ×1, `total_ut_steps` ×1 |
 | Block structure & residual stream | `loop_exit_threshold` | tuning | `early_exit_threshold` ×1 |

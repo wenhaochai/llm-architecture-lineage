@@ -565,6 +565,13 @@ def extract(card):
             if str(raw_used.get(k, "")).startswith("mamba"):
                 norm.pop(k, None); raw_used.pop(k, None)
     # one layer schedule per model, with the rounded mixer ratio, so the schedule alone states the mix
+    lt0 = norm.get("layer_types")
+    if isinstance(lt0, dict) and "_raw" in lt0:  # several spellings: keep the one that is a real schedule
+        sched = [(rk, rv) for rk, rv in lt0["_raw"].items() if isinstance(rv, dict) and len(rv.get("_counts") or {}) > 1]
+        if sched:
+            norm["layer_types"], raw_used["layer_types"] = sched[0][1], sched[0][0]
+        else:
+            del norm["layer_types"]; raw_used.pop("layer_types", None)
     if "layer_types" not in norm:
         if m["hybrid_mixer"] and m["linear_layers"] and m["full_attention_layers_in_hybrid"]:
             norm["layer_types"] = schedule({m["hybrid_mixer"]: m["linear_layers"], "attention": m["full_attention_layers_in_hybrid"]},
@@ -591,6 +598,15 @@ def extract(card):
                     norm["dense_prefix_layers"] = len(dense); raw_used["dense_prefix_layers"] = key
                 break
 
+    # a schedule with one kind of layer says only "every layer the same", which is the default
+    lt = norm.get("layer_types")
+    if isinstance(lt, dict) and len(lt.get("_counts") or {}) < 2:
+        del norm["layer_types"]; raw_used.pop("layer_types", None)
+    # an implementation-type key that names the attention kind restates it
+    ait = norm.get("attention_impl_type")
+    if isinstance(ait, str) and ait.lower().replace("-", "") == str(m["attention_class"]).lower().replace("-", ""):
+        del norm["attention_impl_type"]; raw_used.pop("attention_impl_type", None)
+
     # bare switches (use_rmsnorm=True, use_pos_enc=True, use_dsa=True) name no design; give them the
     # value the rest of the gallery uses for the same thing, so spellings never read as changes
     if norm.get("sparse_attention") is True:
@@ -613,10 +629,11 @@ def extract(card):
         norm["parallel_block"] = "parallel" in norm["parallel_block"].lower()
     if norm.get("gated_attention_type") is True:
         del norm["gated_attention_type"]; raw_used.pop("gated_attention_type", None)
-    # null and empty values carry no information; several spellings with one value collapse to that value
+    # null, empty and zero values carry no information: the comparison already reads 0 as absent,
+    # so a field written as 0 must not sit on the card either
     for k in list(norm):
         v = norm[k]
-        if v is None or v == [] or v == {} or v == "":
+        if v is None or v == [] or v == {} or v == "" or (isinstance(v, (int, float)) and not isinstance(v, bool) and v == 0):
             del norm[k]; raw_used.pop(k, None); continue
         if isinstance(v, dict) and "_raw" in v:
             v["_raw"] = {rk: rv for rk, rv in v["_raw"].items() if rv not in (None, [], {}, "")}
