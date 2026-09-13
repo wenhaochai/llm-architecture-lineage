@@ -9,17 +9,14 @@
 <body>
 <div class="page">
   <h1>The Open LLM Architecture Lineage</h1>
-  <p class="lede">103 open-weight models from Sebastian Raschka's <a href="https://sebastianraschka.com/llm-architecture-gallery/">LLM Architecture Gallery</a>, linked to their closest architectural ancestors by <code>config.json</code> similarity and laid out by generation. Hover a node for its architecture, click it to trace its lineage. Method and data: <a href="https://github.com/wenhaochai/llm-architecture-lineage">github.com/wenhaochai/llm-architecture-lineage</a>.</p>
+  <p class="lede">103 open-weight models (83 once sizes of one release are folded together) from Sebastian Raschka's <a href="https://sebastianraschka.com/llm-architecture-gallery/">LLM Architecture Gallery</a>, linked to their closest architectural ancestors by <code>config.json</code> similarity and laid out by generation. Hover a node for its architecture, click it to trace its lineage. Method and data: <a href="https://github.com/wenhaochai/llm-architecture-lineage">github.com/wenhaochai/llm-architecture-lineage</a>.</p>
   <div id="lineage"></div>
-  <h3 style="margin-top:40px">All 103 configs</h3>
-  <div class="lin-table" id="lineage-table"></div>
   <p class="foot">Written version with the full method: <a href="https://wenhaochai.com/blogs/llm-architecture-lineage.html">wenhaochai.com/blogs/llm-architecture-lineage.html</a></p>
 </div>
 <script src="data.js"></script>
 <script src="lineage.js"></script>
 <script>
   Lineage.build(document.getElementById('lineage'));
-  Lineage.table(document.getElementById('lineage-table'));
 </script>
 </body>
 </html>

@@ -10,21 +10,44 @@ Rules (all deterministic, documented in the page's Method panel):
       +  2 if same model_type family
       +  2 if identical vocab_size (same tokenizer)
       +  1 if same organisation
-  3. Primary parent of b = argmax_a Score(a -> b), if Jaccard >= 0.62 (0.45 when same org), else b is a root.
+  3. Primary parent of b = argmax_a Score(a -> b), if Jaccard >= 0.62 (0.45 when same org); otherwise b
+     hangs off GPT-2 XL, the single origin of the graph (edge type "origin").
      Edge type "nearest" (or "same-code" when architecture class is identical).
   4. Same-day siblings with identical model_type + org attach to the largest one
      of the day (edge type "variant") instead of competing for earlier parents.
   5. Trait-origin edges: for each notable trait of b that its primary parent
      lacks, add an edge from the earliest earlier model carrying that trait
      (ties -> highest Score). Edge type "trait".
+  0. One node per model name: sizes of one release collapse into the largest (SIZE_VARIANTS).
   6. Generation (the x position in the figure): roots are generation 0; every
      other model is one generation past the largest generation among its parents.
 """
 import json, math, os, collections
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-M = json.load(open(f"{ROOT}/data/metadata.json"))
-M.sort(key=lambda m: (m["date"], m["key"]))
+M_ALL = json.load(open(f"{ROOT}/data/metadata.json"))
+M_ALL.sort(key=lambda m: (m["date"], m["key"]))
+
+# One node per model name: when a release differs only in parameter count, keep the largest size.
+SIZE_VARIANTS = {  # kept key -> dropped keys
+    "qwen3-235b-a22b": ["qwen3-0-6b", "qwen3-4b", "qwen3-8b", "qwen3-32b", "qwen3-30b-a3b"],
+    "qwen3-6-35b-a3b": ["qwen3-6-27b"],
+    "gemma-3-27b": ["gemma-3-270m"],
+    "gemma-4-31b": ["gemma-4-26b-a4b", "gemma-4-12b", "gemma-4-e2b", "gemma-4-e4b"],
+    "llama-3-2-3b": ["llama-3-2-1b"],
+    "gpt-oss-120b": ["gpt-oss-20b"],
+    "olmo-3-32b": ["olmo-3-7b"],
+    "nemotron-3-nano-30b-a3b": ["nemotron-3-nano-4b"],
+    "sarvam-105b": ["sarvam-30b"],
+    "lfm2-5-8b-a1b": ["lfm2-5-1-2b", "lfm2-5-350m"],
+    "laguna-s-2-1": ["laguna-xs-2-1"],
+    "glm-4-5-355b": ["glm-4-5-air"],
+}
+DROPPED = {d: k for k, ds in SIZE_VARIANTS.items() for d in ds}
+by_all = {m["key"]: m for m in M_ALL}
+for k, ds in SIZE_VARIANTS.items():
+    by_all[k]["size_variants"] = [{"key": d, "title": by_all[d]["title"], "scale": by_all[d]["gallery"].get("scale")} for d in ds]
+M = [m for m in M_ALL if m["key"] not in DROPPED]
 by = {m["key"]: m for m in M}
 
 # ----------------------------------------------------------------------------
@@ -179,8 +202,15 @@ for i, b in enumerate(M):
     b["candidates"] = [{"key": x["key"], "score": round(s[0], 2), "jaccard": round(s[1], 3)} for s, x in scored[:5]]
     thr = JACC_MIN_SAME_ORG if a["org"] == b["org"] else JACC_MIN
     if j < thr:
-        b["primary_parent"] = None
-        b["root_reason"] = f"no earlier model shares enough architecture (best weighted Jaccard {j:.2f} < {thr})"
+        # GPT-2 XL is the single origin of the graph: a model that no earlier model resembles enough hangs off it directly
+        origin = M[0]
+        tot0, j0, nc0, bonus0 = score(origin, b)
+        edges.append({"source": origin["key"], "target": b["key"], "type": "origin", "score": round(tot0, 2), "jaccard": round(j0, 3), "numeric": round(nc0, 3),
+                      "bonus": bonus0, "shared": sorted(k for k in b["traits"] if origin["traits"].get(k) == b["traits"][k]),
+                      "differs": sorted(k for k in set(b["traits"]) | set(origin["traits"]) if origin["traits"].get(k) != b["traits"].get(k)),
+                      "why": f"no earlier model shares enough architecture (best weighted Jaccard {j:.2f} < {thr}); attached to the origin"})
+        b["primary_parent"] = origin["key"]
+        b["root_reason"] = None
     else:
         etype = "same-code" if "same architecture class" in bonus else "nearest"
         edges.append({"source": a["key"], "target": b["key"], "type": etype, "score": round(tot, 2), "jaccard": round(j, 3), "numeric": round(nc, 3),
@@ -253,7 +283,7 @@ for m in M:
     m["is_terminal"] = children[m["key"]] == 0
     m["is_root"] = not m.get("primary_parent")
 
-graph = {"nodes": M, "edges": edges, "trait_weights": W, "trait_labels": LABEL, "jaccard_min": JACC_MIN, "jaccard_min_same_org": JACC_MIN_SAME_ORG,
+graph = {"nodes": M, "edges": edges, "size_variants": SIZE_VARIANTS, "n_gallery": len(M_ALL), "trait_weights": W, "trait_labels": LABEL, "jaccard_min": JACC_MIN, "jaccard_min_same_org": JACC_MIN_SAME_ORG,
          "generated": "2026-09-13", "source": "https://sebastianraschka.com/llm-architecture-gallery/ (card list + config.json links); HuggingFace config.json per model"}
 json.dump(graph, open(f"{ROOT}/data/graph.json", "w"), indent=1, ensure_ascii=False)
 

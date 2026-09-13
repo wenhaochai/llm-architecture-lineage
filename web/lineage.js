@@ -89,27 +89,33 @@
     return e;
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function shortName(n) { return n.title.replace(/\s*\([^)]*\)\s*$/, ''); }
-  function attnLabel(n) {
-    var a = n.attention_class;
-    if (n.swa && n.swa_ratio) a += ' · ' + T('local:global ' + n.swa_local_layers + ':' + n.swa_global_layers, '局部:全局 ' + n.swa_local_layers + ':' + n.swa_global_layers);
-    if (n.sparse_attention) a += ' · ' + n.sparse_attention;
-    if (n.gated_attention) a += ' · ' + T('gated', '门控');
-    return a;
+  function shortName(n) { return n.name || n.title; }
+  var NEG = { no: 1, none: 1, dense: 1, 'attention-only': 1, rope: 1, rmsnorm: 1, 'silu/swiglu': 1 };
+  function tl(k) { return (D.trait_labels || {})[k] || k; }
+  function novelty(n) {
+    // what the model changes relative to its primary parent, read off the trait set; falls back to scale
+    var p = n.primary_parent ? byKey[n.primary_parent] : null;
+    if (!p) return { parent: null, items: [signature(n)] };
+    var items = [], keys = {};
+    Object.keys(n.traits).concat(Object.keys(p.traits)).forEach(function (k) { keys[k] = 1; });
+    Object.keys(keys).forEach(function (k) {
+      var a = p.traits[k], b = n.traits[k];
+      if (a === b) return;
+      if (b === undefined || NEG[b]) items.push(T('drops ', '去掉 ') + tl(k) + (a && !NEG[a] && a !== 'yes' ? ' ' + a : ''));
+      else if (a === undefined || NEG[a]) items.push(T('adds ', '新增 ') + tl(k) + (b === 'yes' ? '' : ' ' + b));
+      else items.push(tl(k) + ' ' + a + ' → ' + b);
+    });
+    if (!items.length) {
+      [['num_layers', T('layers', '层')], ['hidden_size', 'd_model'], ['num_heads', T('heads', '头')], ['num_kv_heads', 'KV'], ['num_experts', T('experts', '专家')], ['experts_per_tok', 'top-k'], ['vocab_size', T('vocab', '词表')], ['max_position_embeddings', T('context', '上下文')]].forEach(function (f) {
+        if (n[f[0]] != null && p[f[0]] != null && n[f[0]] !== p[f[0]] && items.length < 4) items.push(f[1] + ' ' + p[f[0]].toLocaleString() + ' → ' + n[f[0]].toLocaleString());
+      });
+    }
+    if (!items.length) items.push(T('same design', '设计相同'));
+    return { parent: p, items: items };
   }
-  function ffnLabel(n) {
-    if (!n.is_moe) return T('dense', '稠密');
-    var s = n.num_experts + ' ' + T('experts', '专家') + ', top-' + n.experts_per_tok;
-    if (n.shared_experts) s += ' + ' + n.shared_experts + ' ' + T('shared', '共享');
-    if (n.dense_prefix_layers) s += ', ' + n.dense_prefix_layers + ' ' + T('dense prefix', '稠密前缀层');
-    return s;
-  }
-  function mixerLabel(n) {
-    var m = n.hybrid_mixer;
-    if (!m) return T('attention only', '纯注意力');
-    var s = MIXER_LABEL[m] ? T(MIXER_LABEL[m][0], MIXER_LABEL[m][1]) : m;
-    if (n.linear_layers && n.full_attention_layers_in_hybrid) s += ' ' + n.linear_layers + ' : ' + n.full_attention_layers_in_hybrid + ' ' + T('attention', '注意力');
-    return s;
+  function noveltyHTML(n, cls) {
+    var d = novelty(n);
+    return '<p class="' + cls + '"><span class="sp-vs">' + (d.parent ? T('from ', '承自 ') + esc(shortName(d.parent)) : T('origin', '起点')) + '</span>' + esc(d.items.join(' · ')) + '</p>';
   }
 
   /* ---------- render ---------- */
@@ -118,19 +124,6 @@
     root = container;
     root.innerHTML = '';
     root.className = 'lin';
-
-    var bar = el('div', { 'class': 'lin-bar' });
-    // search
-    var search = el('input', { 'class': 'lin-search', id: 'lin-search', type: 'search', list: 'lin-models', placeholder: T('Find a model…', '搜索模型…'), 'aria-label': T('Find a model', '搜索模型') });
-    var dl = el('datalist', { id: 'lin-models' });
-    nodes.forEach(function (n) { dl.appendChild(el('option', { value: n.title })); });
-    search.addEventListener('change', function () {
-      var v = search.value.trim().toLowerCase();
-      var hit = nodes.filter(function (n) { return n.title.toLowerCase() === v; })[0] || nodes.filter(function (n) { return n.title.toLowerCase().indexOf(v) >= 0; })[0];
-      if (hit) { state.selected = hit.key; draw(); }
-    });
-    bar.appendChild(el('div', { 'class': 'lin-ctl' }, [search, dl]));
-    root.appendChild(bar);
 
     svgHost = el('div', { 'class': 'lin-svg' });
     root.appendChild(svgHost);
@@ -168,7 +161,7 @@
       var p = pos[n.key];
       var isSel = n.key === state.selected, inLin = !!lin.nodes[n.key];
       var fill = isSel ? ACCENT_DEEP : inLin ? ACCENT : GREY, stroke = isSel ? ACCENT_DEEP : 'var(--paper)';
-      var r = isSel ? 7 : inLin ? 5.5 : 4.5;
+      var r = isSel ? 7.5 : inLin ? 6 : 5;
       var g = el('g', { 'class': 'lin-n' + (isSel ? ' sel' : '') + (inLin ? ' lin' : ''), 'data-key': n.key, tabindex: 0, role: 'button', 'aria-label': n.title });
       var shape = n.is_terminal
         ? el('rect', { x: p.x - r, y: p.y - r, width: 2 * r, height: 2 * r, fill: fill, stroke: stroke, 'stroke-width': isSel ? 2 : inLin ? 1.5 : 1 })
@@ -177,7 +170,7 @@
       g.appendChild(shape);
       if (isSel || inLin) {
         var right = p.x < W * 0.86;
-        g.appendChild(el('text', { x: p.x + (right ? 9 : -9), y: p.y + 3.5, 'text-anchor': right ? 'start' : 'end', 'font-size': isSel ? 11 : 9.5, 'font-weight': isSel ? 600 : 400,
+        g.appendChild(el('text', { x: p.x + (right ? 9 : -9), y: p.y + 3.5, 'text-anchor': right ? 'start' : 'end', 'font-size': isSel ? 13 : 11, 'font-weight': isSel ? 600 : 400,
           fill: isSel ? 'var(--ink)' : inLin ? 'var(--ink-2)' : 'var(--ink-4)', 'paint-order': 'stroke', stroke: 'var(--paper)', 'stroke-width': 3, 'stroke-linejoin': 'round', text: shortName(n) }));
       }
       g.addEventListener('mouseenter', function (ev) { showTip(n, ev); });
@@ -204,9 +197,9 @@
   }
   function showTip(n, ev) {
     tip.innerHTML = '<div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span></div>' +
-      '<div class="tp-title">' + esc(n.title) + '</div>' +
-      '<div class="tp-sig">' + esc(signature(n)) + '</div>' +
-      '<div class="tp-foot"><span>' + n.num_layers + ' ' + T('layers', '层') + ' · d ' + n.hidden_size + '</span><span>' + T('generation ', '第 ') + n.generation + T('', ' 代') + '</span></div>';
+      '<div class="tp-title">' + esc(shortName(n)) + '</div>' +
+      noveltyHTML(n, 'tp-sig') +
+      '<div class="tp-foot"><span>' + esc((n.gallery.scale || '').replace(/ \(.*\)$/, '')) + '</span><span>' + n.num_layers + ' ' + T('layers', '层') + ' · d ' + n.hidden_size + '</span></div>';
     tip.hidden = false;
     moveTip(ev);
   }
@@ -224,108 +217,105 @@
   function renderPanel(lin) {
     var n = byKey[state.selected];
     if (!n) { panel.innerHTML = ''; return; }
-    var kv = [
-      [T('Attention', '注意力'), attnLabel(n)], [T('Sequence mixer', '序列混合器'), mixerLabel(n)], [T('FFN', 'FFN'), ffnLabel(n)],
-      [T('Depth / width', '深度 / 宽度'), n.num_layers + ' ' + T('layers', '层') + ', d = ' + n.hidden_size + (n.intermediate_size ? ', FFN ' + n.intermediate_size : '') + (n.moe_intermediate_size ? ', ' + T('expert', '专家') + ' ' + n.moe_intermediate_size : '')],
-      [T('Heads', '注意力头'), n.num_heads ? (n.num_heads + (n.num_kv_heads && n.attention_class !== 'MLA' ? ' query / ' + n.num_kv_heads + ' KV' : '') + (n.head_dim ? ', head_dim ' + n.head_dim : '')) : '–'],
-      n.kv_lora_rank ? [T('Latent ranks', '潜在秩'), 'kv ' + n.kv_lora_rank + (n.q_lora_rank ? ', q ' + n.q_lora_rank : '') + (n.qk_rope_head_dim != null ? ', rope ' + n.qk_rope_head_dim + ' / nope ' + n.qk_nope_head_dim : '') + (n.v_head_dim ? ', v ' + n.v_head_dim : '')] : null,
-      [T('Positions', '位置编码'), (n.position_encoding === 'rope' ? 'RoPE' + (n.rope_theta ? ' θ = ' + Number(n.rope_theta).toLocaleString() : '') + (n.rope_scaling_type ? ', ' + n.rope_scaling_type + (n.rope_scaling_factor ? ' ×' + n.rope_scaling_factor : '') : '') + (n.partial_rotary ? T(', partial', '，部分维度') : '') : n.position_encoding) + (n.nope && n.nope !== 'none' ? ' · NoPE ' + n.nope : '')],
-      [T('Extras', '其他'), extras(n)],
-      [T('Vocab / context', '词表 / 上下文'), (n.vocab_size ? n.vocab_size.toLocaleString() : '–') + ' / ' + (n.max_position_embeddings ? n.max_position_embeddings.toLocaleString() : '–') + (n.tie_embeddings ? T(', tied embeddings', '，共享嵌入') : '')],
-      [T('Modeling class', '建模类'), (n.architecture_class || '–') + (n.model_type ? ' · ' + n.model_type : '')]
-    ].filter(Boolean);
-    var h = '<div class="lin-ph"><div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span><span>' + T('generation ', '第 ') + n.generation + T('', ' 代') + (n.is_root ? T(' · root', ' · 根') : '') + '</span></div>' +
-      '<h3>' + esc(n.title) + '</h3><p class="lin-sig">' + esc(signature(n)) + '</p><div class="lin-links">' +
-      (n.gallery.config_url ? '<a href="' + esc(n.gallery.config_url) + '" target="_blank" rel="noopener">config.json</a>' : '') +
-      (n.gallery.report_url ? '<a href="' + esc(n.gallery.report_url) + '" target="_blank" rel="noopener">' + T('tech report', '技术报告') + '</a>' : '') +
-      '<a href="' + esc(n.gallery.card_url) + '" target="_blank" rel="noopener">' + T('gallery card', '图库卡片') + '</a></div></div>';
-    h += '<div class="lin-cols"><dl class="lin-kv">' + kv.map(function (p) { return '<div><dt>' + esc(p[0]) + '</dt><dd>' + esc(p[1]) + '</dd></div>'; }).join('') + '</dl>';
-    h += '<div class="lin-rel">';
+    var dash = '–';
+    function row(label, value) { return value == null || value === '' ? '' : '<div class="sp-row"><span>' + esc(label) + '</span><b>' + esc(value) + '</b></div>'; }
+    function group(title, rows) { var body = rows.join(''); return body ? '<div class="sp-group"><h4>' + esc(title) + '</h4>' + body + '</div>' : ''; }
+    var isMLA = n.attention_class === 'MLA';
+    var attn = group(T('Attention', '注意力'), [
+      row(T('Mechanism', '机制'), n.attention_class === 'none (mLSTM)' ? T('none · mLSTM', '无 · mLSTM') : n.attention_class + (n.gated_attention ? T(', gated', '，门控') : '')),
+      row(T('Heads', '头数'), n.num_heads ? (isMLA ? n.num_heads : n.num_heads + ' / ' + (n.num_kv_heads || dash) + ' KV') : null),
+      row('head_dim', n.head_dim),
+      isMLA ? row(T('Latent ranks', '潜在秩'), 'kv ' + n.kv_lora_rank + (n.q_lora_rank ? ' · q ' + n.q_lora_rank : '')) : '',
+      isMLA && n.qk_rope_head_dim != null ? row(T('RoPE / NoPE dims', 'RoPE / NoPE 维'), n.qk_rope_head_dim + ' / ' + (n.qk_nope_head_dim == null ? dash : n.qk_nope_head_dim)) : '',
+      n.swa ? row(T('Local : global layers', '局部 : 全局层'), n.swa_local_layers ? n.swa_local_layers + ' : ' + n.swa_global_layers + (n.sliding_window ? T(', window ', '，窗口 ') + n.sliding_window : '') : T('yes', '有')) : '',
+      n.sparse_attention ? row(T('Sparse', '稀疏'), n.sparse_attention + (n.index_topk ? ' · top-' + n.index_topk : '')) : '',
+      row('QK-Norm', n.qk_norm ? T('yes', '有') : null),
+      n.attention_sinks ? row(T('Sinks', '注意力汇'), T('yes', '有')) : '',
+      n.chunked_attention ? row(T('Chunked', '分块'), T('yes', '有')) : ''
+    ]);
+    var mixer = n.hybrid_mixer ? group(T('Sequence mixer', '序列混合器'), [
+      row(T('Type', '类型'), MIXER_LABEL[n.hybrid_mixer] ? T(MIXER_LABEL[n.hybrid_mixer][0], MIXER_LABEL[n.hybrid_mixer][1]) : n.hybrid_mixer),
+      row(T('Mixer : attention layers', '混合层 : 注意力层'), n.linear_layers && n.full_attention_layers_in_hybrid ? n.linear_layers + ' : ' + n.full_attention_layers_in_hybrid : null),
+      row(T('Mixer heads', '混合器头'), n.linear_num_value_heads ? n.linear_num_value_heads + (n.linear_value_head_dim ? ' × ' + n.linear_value_head_dim : '') : (n.mamba_num_heads ? n.mamba_num_heads + (n.mamba_head_dim ? ' × ' + n.mamba_head_dim : '') : null)),
+      row(T('State size', '状态维'), n.ssm_state_size),
+      row(T('Conv kernel', '卷积核'), n.conv_kernel)
+    ]) : '';
+    var ffn = group(T('Feed-forward', '前馈'), n.is_moe ? [
+      row(T('Experts', '专家'), n.num_experts + T(' routed', ' 路由') + ' · top-' + n.experts_per_tok + (n.shared_experts ? ' · ' + n.shared_experts + T(' shared', ' 共享') : '')),
+      row(T('Expert width', '专家宽度'), n.moe_intermediate_size),
+      row(T('Dense prefix layers', '稠密前缀层'), n.dense_prefix_layers),
+      row(T('Router', '路由器'), [n.router_scoring, n.topk_method, n.expert_groups && n.expert_groups > 1 ? n.expert_groups + T(' groups', ' 组') : null].filter(Boolean).join(' · ') || null),
+      n.latent_moe ? row(T('Latent MoE', '潜在 MoE'), n.moe_latent_size || T('yes', '有')) : '',
+      row(T('Activation', '激活'), n.activation && n.activation !== 'silu' ? n.activation : null)
+    ] : [
+      row(T('Type', '类型'), T('dense', '稠密')),
+      row(T('Width', '宽度'), n.intermediate_size),
+      row(T('Activation', '激活'), n.activation)
+    ]);
+    var shape = group(T('Shape', '尺度'), [
+      row(T('Parameters', '参数量'), n.gallery.scale || null),
+      row(T('Other sizes', '其他尺寸'), n.size_variants ? n.size_variants.map(function (v) { return (v.scale || v.title).split(',')[0].replace(/ total$/, ''); }).join(', ') : null),
+      row(T('Layers', '层数'), n.num_layers + (n.looped && n.loop_passes ? ' × ' + n.loop_passes + T(' passes', ' 遍') : '')),
+      row('d_model', n.hidden_size),
+      row(T('Vocabulary', '词表'), n.vocab_size ? n.vocab_size.toLocaleString() : null),
+      row(T('Context', '上下文'), n.max_position_embeddings ? n.max_position_embeddings.toLocaleString() : null),
+      row(T('Embeddings', '嵌入'), n.tie_embeddings ? T('tied', '共享') : T('untied', '独立')),
+      row(T('Norm', '归一化'), (n.norm_type === 'layernorm' ? 'LayerNorm' : 'RMSNorm') + (n.post_norm ? T(', post-norm', '，后置') : ''))
+    ]);
+    var pos = group(T('Positions & residual', '位置与残差'), [
+      row(T('Encoding', '编码'), n.position_encoding === 'rope' ? 'RoPE' + (n.partial_rotary ? T(' (partial)', '（部分维度）') : '') : n.position_encoding),
+      row('θ', n.rope_theta ? Number(n.rope_theta).toLocaleString() : null),
+      row(T('Scaling', '缩放'), n.rope_scaling_type ? n.rope_scaling_type + (n.rope_scaling_factor ? ' × ' + n.rope_scaling_factor : '') : null),
+      n.nope && n.nope !== 'none' ? row('NoPE', n.nope) : '',
+      n.mtp ? row('MTP', n.mtp_layers > 1 ? n.mtp_layers + T(' heads', ' 个头') : T('1 head', '1 个头')) : '',
+      n.mhc ? row(T('Hyper-connections', '超连接'), n.hc_streams ? n.hc_streams + T(' streams', ' 路') : T('yes', '有')) : '',
+      n.kv_sharing ? row(T('Cross-layer KV', '跨层 KV'), n.kv_shared_layers ? n.kv_shared_layers + T(' layers shared', ' 层共享') : T('yes', '有')) : '',
+      n.per_layer_embeddings ? row(T('Per-layer embeddings', '逐层嵌入'), n.hidden_size_per_layer_input || T('yes', '有')) : '',
+      n.encoder_decoder ? row(T('Structure', '结构'), T('encoder-decoder', '编码器-解码器')) : ''
+    ]);
+    function sameName(o) { return nodes.some(function (x) { return x !== o && shortName(x) === shortName(o); }); }
+    function rel(title, list, side) {
+      var h = '<div class="sp-rel"><h4>' + esc(title) + '</h4>';
+      if (!list.length) h += '<p class="sp-none">' + esc(side === 'up' ? (n.is_root ? T('root', '根节点') : dash) : T('none yet', '暂无')) + '</p>';
+      list.forEach(function (e) {
+        var o = byKey[side === 'up' ? e.source : e.target];
+        var why = e.type === 'origin' ? T('origin of the graph', '图的起点') : e.type === 'trait' ? T('first with ', '首见 ') + (e.traits || []).map(function (t) { return t.split(' = ')[0]; }).join(', ')
+          : e.type === 'variant' ? T('same release', '同批发布')
+          : e.type === 'same-code' ? T('same modeling class', '同一建模类') : T('closest config', '最近 config');
+        h += '<div class="sp-node"><button type="button" data-go="' + esc(o.key) + '">' + esc(shortName(o)) + (o.gallery.scale && sameName(o) ? ' <i>' + esc(o.gallery.scale.split(',')[0]) + '</i>' : '') + '</button><span>' + esc(why) + '</span></div>';
+      });
+      return h + '</div>';
+    }
     var ps = parentsOf[n.key].slice().sort(function (a, b) { return b.score - a.score; });
-    h += '<h4>' + T('Parents', '父节点') + ' <span>' + ps.length + '</span></h4>';
-    if (!ps.length) h += '<p class="lin-note">' + esc(T('Root: ', '根节点：') + (n.root_reason || '')) + '</p>';
-    ps.forEach(function (e) { h += edgeRow(e, byKey[e.source]); });
     var cs = childrenOf[n.key].slice().sort(function (a, b) { return byKey[a.target].date < byKey[b.target].date ? -1 : 1; });
-    h += '<h4>' + T('Children', '子节点') + ' <span>' + cs.length + '</span></h4>';
-    if (!cs.length) h += '<p class="lin-note">' + T('Terminal node: nothing in the gallery descends from it yet.', '终端节点：图库中尚无模型继承它。') + '</p>';
-    cs.forEach(function (e) { h += edgeRow(e, byKey[e.target]); });
-    if (n.introduces && n.introduces.length) h += '<h4>' + T('First in the gallery', '图库首见') + '</h4><p class="lin-note">' + esc(n.introduces.join('; ')) + '</p>';
-    h += '</div></div>';
-    if (n.provenance) h += '<p class="lin-prov">' + T('Config provenance: ', '配置来源：') + esc(n.provenance) + '</p>';
-    // the complete config, every key
-    var keys = Object.keys(n.config_full || {}).sort();
-    h += '<details class="lin-full"><summary>' + T('Full config', '完整 config') + ' <span>' + keys.length + ' ' + T('keys', '个字段') + '</span></summary><dl class="lin-raw">';
-    keys.forEach(function (k) { h += '<div><dt>' + esc(k) + '</dt><dd>' + esc(fmtVal(n.config_full[k])) + '</dd></div>'; });
-    h += '</dl></details>';
-    var nl = Object.keys(lin.nodes).length;
-    h += '<p class="lin-prov">' + T('Lineage shown: ' + nl + ' models, ' + Object.keys(lin.edges).length + ' edges.', '当前谱系：' + nl + ' 个模型，' + Object.keys(lin.edges).length + ' 条边。') + '</p>';
+    var cc = n.config_canonical || {}, rawOf = n.config_canonical_raw_key || {};
+    var nCanon = Object.keys(cc).length;
+    var h = '<div class="sp-head"><div><div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span>' + (n.gallery.scale ? '<span>' + esc(n.gallery.scale) + '</span>' : '') + '</div><h3>' + esc(shortName(n)) + '</h3>' + noveltyHTML(n, 'sp-sig') + '</div>' +
+      '<div class="sp-links">' + (n.gallery.config_url ? '<a href="' + esc(n.gallery.config_url) + '" target="_blank" rel="noopener">config.json</a>' : '') +
+      (n.gallery.report_url ? '<a href="' + esc(n.gallery.report_url) + '" target="_blank" rel="noopener">' + T('report', '技术报告') + '</a>' : '') +
+      '<a href="' + esc(n.gallery.card_url) + '" target="_blank" rel="noopener">' + T('gallery', '图库') + '</a></div></div>';
+    h += '<div class="sp-grid">' + attn + mixer + ffn + shape + pos + '</div>';
+    h += '<div class="sp-rels">' + rel(T('Parents', '父节点'), ps, 'up') + rel(T('Children', '子节点'), cs, 'down') + '</div>';
+    h += '<details class="lin-full"><summary>' + T('Config after key drop and renaming', '清理并统一命名后的 config') + ' <span>' + nCanon + ' ' + T('fields from ', '个字段，来自 ') + (n.num_architecture_keys || nCanon) + ' ' + T('architecture keys', '个架构 key') + '</span>' + (n.provenance ? '<em>' + esc(T('provenance: ', '来源：') + n.provenance) + '</em>' : '') + '</summary>';
+    var groups = D.schema_groups || {};
+    Object.keys(groups).forEach(function (g) {
+      var fields = groups[g].filter(function (f) { return f in cc; });
+      if (!fields.length) return;
+      h += '<div class="cf-group"><h5>' + esc(g) + '</h5><dl class="lin-raw">';
+      fields.forEach(function (f) { var r = rawOf[f]; h += '<div><dt>' + esc(f) + (r && r !== f ? '<i>' + esc(r) + '</i>' : '') + '</dt><dd>' + esc(fmtVal(cc[f])) + '</dd></div>'; });
+      h += '</dl></div>';
+    });
+    h += '</details>';
     panel.innerHTML = h;
     panel.querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { state.selected = b.getAttribute('data-go'); draw(); panel.scrollIntoView({ block: 'nearest' }); }); });
   }
   function fmtVal(v) {
     if (v === null || v === undefined) return 'null';
+    if (typeof v === 'object' && v._raw) return Object.keys(v._raw).map(function (k) { return k + ' = ' + fmtVal(v._raw[k]); }).join(' · ');
     if (typeof v === 'object' && v._list_len) return T('list of ' + v._list_len + ': ', '共 ' + v._list_len + ' 项：') + Object.keys(v._counts).map(function (k) { return k + ' ×' + v._counts[k]; }).join(', ');
     if (typeof v === 'object') return JSON.stringify(v);
     return String(v);
   }
-  function extras(n) {
-    var x = [];
-    if (n.mtp) x.push('MTP' + (n.mtp_layers > 1 ? ' ×' + n.mtp_layers : ''));
-    if (n.qk_norm) x.push('QK-Norm');
-    if (n.nope && n.nope !== 'none') x.push('NoPE (' + n.nope + ')');
-    if (n.mhc) x.push('mHC');
-    if (n.kv_sharing) x.push(T('cross-layer KV sharing', '跨层 KV 共享'));
-    if (n.per_layer_embeddings) x.push(T('per-layer embeddings', '逐层嵌入'));
-    if (n.looped) x.push(T('looped depth', '循环深度'));
-    if (n.shortconv) x.push('ShortConv');
-    if (n.attention_sinks) x.push(T('attention sinks', '注意力汇'));
-    if (n.chunked_attention) x.push(T('chunked attention', '分块注意力'));
-    if (n.latent_moe) x.push('latent MoE');
-    if (n.encoder_decoder) x.push(T('encoder-decoder', '编码器-解码器'));
-    if (n.activation && n.activation !== 'silu') x.push(n.activation);
-    if (n.norm_type === 'layernorm') x.push('LayerNorm');
-    return x.length ? x.join(', ') : '–';
-  }
-  function edgeRow(e, other) {
-    var why;
-    if (e.type === 'trait') why = T('earliest gallery model with ', '图库中最早具备 ') + (e.traits || []).join('; ');
-    else if (e.type === 'variant') why = T('same-day release, same modeling class', '同日发布，同一建模类');
-    else if (e.type === 'same-code') why = T('closest config, same modeling class; shares ', '最近 config，同一建模类；共享 ') + (e.shared || []).length + ' / ' + Object.keys(other.traits).length + T(' traits', ' 个特征');
-    else why = T('closest config; shares ', '最近 config；共享 ') + (e.shared || []).length + ' / ' + Object.keys(other.traits).length + T(' traits', ' 个特征');
-    return '<div class="lin-edge"><button type="button" data-go="' + esc(other.key) + '">' + esc(other.title) + '</button><span class="lin-why">' + esc(why) + '</span></div>';
-  }
 
-  /* ---------- metadata table ---------- */
-  function buildTable(container) {
-    function v(x) { return x === null || x === undefined || x === false ? '–' : (x === true ? '✓' : x); }
-    var cols = [
-      [T('Model', '模型'), function (n) { return n.title; }], [T('Org', '机构'), function (n) { return n.org; }], [T('Date', '日期'), function (n) { return n.date; }], [T('Gen', '代'), function (n) { return n.generation; }],
-      [T('Class', '建模类'), function (n) { return v(n.architecture_class); }], ['model_type', function (n) { return v(n.model_type); }],
-      [T('Attention', '注意力'), function (n) { return n.attention_class; }], ['L', function (n) { return v(n.num_layers); }], ['d', function (n) { return v(n.hidden_size); }], ['FFN', function (n) { return v(n.intermediate_size); }],
-      ['H', function (n) { return v(n.num_heads); }], ['KV', function (n) { return n.attention_class === 'MLA' ? 'latent' : v(n.num_kv_heads); }], ['head_dim', function (n) { return v(n.head_dim); }],
-      ['q_lora', function (n) { return v(n.q_lora_rank); }], ['kv_lora', function (n) { return v(n.kv_lora_rank); }], ['rope/nope dim', function (n) { return n.qk_rope_head_dim != null ? n.qk_rope_head_dim + '/' + v(n.qk_nope_head_dim) : '–'; }],
-      [T('Local:global', '局部:全局'), function (n) { return n.swa && n.swa_local_layers ? n.swa_local_layers + ':' + n.swa_global_layers : (n.swa ? '✓' : '–'); }], [T('Window', '窗口'), function (n) { return v(n.sliding_window); }],
-      [T('Mixer', '混合器'), function (n) { return n.hybrid_mixer ? n.hybrid_mixer + (n.linear_layers && n.full_attention_layers_in_hybrid ? ' ' + n.linear_layers + ':' + n.full_attention_layers_in_hybrid : '') : '–'; }],
-      [T('Sparse', '稀疏'), function (n) { return v(n.sparse_attention) + (n.index_topk ? ' top-' + n.index_topk : ''); }],
-      [T('Experts', '专家'), function (n) { return n.is_moe ? n.num_experts + '/' + n.experts_per_tok + (n.shared_experts ? '+' + n.shared_experts : '') : '–'; }],
-      [T('Expert FFN', '专家 FFN'), function (n) { return v(n.moe_intermediate_size); }], [T('Dense prefix', '稠密前缀'), function (n) { return v(n.dense_prefix_layers); }],
-      [T('Router', '路由'), function (n) { return n.is_moe ? [n.router_scoring, n.topk_method, n.expert_groups && n.expert_groups > 1 ? n.expert_groups + 'g/' + v(n.topk_group) : null, n.routed_scaling_factor != null ? '×' + n.routed_scaling_factor : null].filter(Boolean).join(' ') || '–' : '–'; }],
-      ['MTP', function (n) { return n.mtp ? (n.mtp_layers || 1) : '–'; }], ['QK-Norm', function (n) { return v(n.qk_norm); }], [T('Gated', '门控'), function (n) { return v(n.gated_attention); }],
-      ['NoPE', function (n) { return n.nope && n.nope !== 'none' ? n.nope : '–'; }], ['rope_theta', function (n) { return v(n.rope_theta); }], [T('RoPE scaling', 'RoPE 缩放'), function (n) { return n.rope_scaling_type ? n.rope_scaling_type + (n.rope_scaling_factor ? ' ×' + n.rope_scaling_factor : '') : '–'; }],
-      [T('Partial RoPE', '部分 RoPE'), function (n) { return n.partial_rotary_factor != null && n.partial_rotary_factor !== 1 ? n.partial_rotary_factor : (n.rotary_dim ? n.rotary_dim + 'd' : '–'); }],
-      [T('Activation', '激活'), function (n) { return v(n.activation); }], [T('Norm', '归一化'), function (n) { return v(n.norm_type) + (n.norm_eps ? ' ' + n.norm_eps : ''); }],
-      [T('Attn bias', '注意力偏置'), function (n) { return v(n.attention_bias); }], [T('Tied emb.', '共享嵌入'), function (n) { return v(n.tie_embeddings); }],
-      [T('Vocab', '词表'), function (n) { return v(n.vocab_size); }], [T('Context', '上下文'), function (n) { return v(n.max_position_embeddings); }],
-      ['mHC', function (n) { return n.mhc ? (n.hc_streams || '✓') : '–'; }], [T('KV share', 'KV 共享'), function (n) { return v(n.kv_shared_layers); }], ['PLE', function (n) { return v(n.hidden_size_per_layer_input); }],
-      [T('Loops', '循环'), function (n) { return v(n.loop_passes); }], [T('Sinks', '注意力汇'), function (n) { return v(n.attention_sinks); }], [T('Softcap', '软上限'), function (n) { return v(n.final_logit_softcapping); }],
-      ['Mamba', function (n) { return n.mamba_num_heads ? n.mamba_num_heads + 'h×' + v(n.mamba_head_dim) + ' s' + v(n.ssm_state_size) : '–'; }],
-      [T('Linear attn', '线性注意力'), function (n) { return n.linear_num_value_heads ? v(n.linear_num_key_heads) + '/' + n.linear_num_value_heads + 'h×' + v(n.linear_value_head_dim) : '–'; }],
-      [T('Conv', '卷积'), function (n) { return v(n.conv_kernel); }], ['dtype', function (n) { return v(n.dtype); }], [T('Keys', '字段数'), function (n) { return v(n.num_config_keys); }]
-    ];
-    var h = '<table><thead><tr>' + cols.map(function (c) { return '<th>' + esc(c[0]) + '</th>'; }).join('') + '</tr></thead><tbody>';
-    nodes.forEach(function (n) { h += '<tr>' + cols.map(function (c, i) { return '<td' + (i === 0 ? ' class="m"' : '') + '>' + esc(c[1](n)) + '</td>'; }).join('') + '</tr>'; });
-    container.innerHTML = h + '</tbody></table>';
-  }
-
-  window.Lineage = { build: build, table: buildTable, state: state, nodes: nodes, edges: edges };
+  window.Lineage = { build: build, state: state, nodes: nodes, edges: edges };
 })();

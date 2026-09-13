@@ -8,6 +8,8 @@ Output: metadata.json (list of dicts, one per gallery card) with
     read directly from a config key or implied by the modeling class / model_type).
 """
 import json, glob, os, re, collections
+from key_taxonomy import DROP as NON_ARCH
+import schema
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 cards = json.load(open(f"{ROOT}/data/cards.json"))
@@ -412,6 +414,27 @@ def extract(card):
     if tc is not c:
         m["config_wrapper"] = {k: compact(v) for k, v in c.items() if not isinstance(v, dict) or k in ("vision_config", "audio_config")}
         m["config_wrapper"] = {k: ("<omitted sub-config>" if isinstance(v, dict) and k in ("vision_config", "audio_config") else v) for k, v in m["config_wrapper"].items()}
+    # ---- canonical config: every architecture key renamed through schema.ALIASES ------
+    norm = collections.OrderedDict()
+    raw_used = {}
+    for k, v in tc.items():
+        if k in NON_ARCH or k == "architectures":
+            continue
+        canon = schema.RAW_TO_CANONICAL.get(k)
+        if canon is None:
+            raise KeyError(f"{key}: architecture key {k!r} missing from schema.ALIASES")
+        if canon in norm:  # several spellings present in one config -> keep each under its raw name
+            if not isinstance(norm[canon], dict) or "_raw" not in norm[canon]:
+                norm[canon] = {"_raw": {raw_used[canon]: norm[canon]}}
+            norm[canon]["_raw"][k] = compact(v)
+        else:
+            norm[canon] = compact(v)
+            raw_used[canon] = k
+    if archs:
+        norm["architecture_class"] = archs[0]; raw_used["architecture_class"] = "architectures"
+    m["config_canonical"] = dict(norm)
+    m["config_canonical_raw_key"] = raw_used
+    m["num_architecture_keys"] = sum(1 for k in tc if k not in NON_ARCH)
     return m
 
 
