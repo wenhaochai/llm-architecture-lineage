@@ -165,11 +165,13 @@ for e in edges:
     if any(e["source"] in anc[o] for o in others):
         children[e["source"]] = [c for c in children[e["source"]] if c is not e]
         parents[e["target"]] = [p for p in parents[e["target"]] if p is not e]
-        if e["type"] != "trait":  # the closest design is still reached, through another parent
-            by[e["target"]]["parent_via"] = next((o for o in others if e["source"] in anc[o]), None)
     else:
         kept.append(e)
 edges = kept
+for m in M:  # a reduced primary edge: the closest design is still reached, through a parent that survived
+    m["parent_via"] = None
+    if m["primary_parent"] and not any(e["source"] == m["primary_parent"] for e in parents[m["key"]]):
+        m["parent_via"] = next((e["source"] for e in parents[m["key"]] if m["primary_parent"] in anc[e["source"]]), None)
 
 # a scale copy is the same design: fold it into the model it copies, which keeps the earliest name
 for m in M:

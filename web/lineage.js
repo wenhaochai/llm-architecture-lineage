@@ -129,12 +129,15 @@
       if (redundant) {
         childrenOf[e.source] = childrenOf[e.source].filter(function (c) { return c !== e; });
         parentsOf[e.target] = parentsOf[e.target].filter(function (p) { return p !== e; });
-        if (e.type !== 'trait') { // the closest design is still reached, through another parent
-          var via = parentsOf[e.target].filter(function (o) { return anc[o.source] && anc[o.source][e.source]; })[0];
-          byKey[e.target].parentVia = via ? via.source : null;
-        }
       }
       return !redundant;
+    });
+    nodes.forEach(function (n) { // a reduced primary edge: the closest design is still reached, through a parent that survived
+      n.parentVia = null;
+      if (n.parent && !parentsOf[n.key].some(function (e) { return e.source === n.parent; })) {
+        var via = parentsOf[n.key].filter(function (e) { return anc[e.source] && anc[e.source][n.parent]; })[0];
+        n.parentVia = via ? via.source : null;
+      }
     });
     // a scale copy is the same design: fold it into the model it copies; that node keeps the earliest name
     nodes.forEach(function (n) { n.aliases = []; n.hidden = false; });

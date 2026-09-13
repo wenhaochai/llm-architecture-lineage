@@ -7,7 +7,7 @@ Output: metadata.json (list of dicts, one per gallery card) with
   - provenance (which repo/file the config came from, and whether a trait is
     read directly from a config key or implied by the modeling class / model_type).
 """
-import json, glob, os, re, collections
+import json, collections, glob, os, re, collections
 from key_taxonomy import DROP as NON_ARCH
 import schema
 
@@ -148,6 +148,16 @@ def extract(card):
         m["rope_scaling_type"] = None
     m["rope_scaling"] = None  # drop the blob
 
+    # per-layer lists sometimes run on into the multi-token-prediction heads (Step 3.5 Flash, DeepSeek
+    # V4.1 carry 3 extra entries); those heads are dropped, so the lists stop at the last decoder layer
+    mtp_n = first(tc, "num_nextn_predict_layers", "mtp_num_hidden_layers", "num_mtp_modules") or 0
+    if layers and mtp_n:
+        tc = dict(tc)
+        for lk in ("layer_types", "attn_type_list", "hybrid_layer_pattern", "compress_ratios", "mlp_layer_types", "moe_layer_freq",
+                   "indexer_types", "local_layer_ids", "swiglu_limits", "swiglu_limits_shared", "rope_theta", "partial_rotary_factors", "use_rope_layers"):
+            v = tc.get(lk)
+            if isinstance(v, list) and len(v) == layers + mtp_n:
+                tc[lk] = v[:layers]
     lt = first(tc, "layer_types", "layers_block_type", "attn_type_list")
     lt_counts = count_layer_types(lt)
 
@@ -229,16 +239,16 @@ def extract(card):
         has_swa = False
     if mt == "git":  # Grok: sliding_window_size=-1, global_attn_every_n=1 -> every layer global
         has_swa = False
-    if mt == "deepseek_v41_text" and sw:  # SWA-only layers + CSA2/SWA layers (compress_ratios)
-        has_swa = True
+    if mt in ("deepseek_v4", "deepseek_v41_text") and sw:  # compress_ratio 0 marks a sliding-window-only layer; the rest are compressed (CSA)
         cr = first(tc, "compress_ratios") or []
         swa_layers, full_layers = sum(1 for x in cr if x == 0), sum(1 for x in cr if x != 0)
+        has_swa = swa_layers > 0
         int_pat = None
     if has_swa and not swa_layers and int_pat and layers:
         full_layers = layers // int_pat
         swa_layers = layers - full_layers
     swa_ratio = round(swa_layers / full_layers, 2) if (swa_layers and full_layers) else (int_pat - 1 if int_pat else None)
-    if mt == 'deepseek_v41_text':
+    if mt in ("deepseek_v4", "deepseek_v41_text"):
         swa_ratio = None  # SWA-only layers + CSA2/SWA layers; ratio not comparable
     m.update(swa=has_swa, sliding_window=sw if has_swa else None, swa_local_layers=swa_layers if has_swa and swa_layers else None,
              swa_global_layers=full_layers if has_swa and swa_layers else None, swa_ratio=swa_ratio if has_swa else None,
@@ -367,7 +377,7 @@ def extract(card):
     m["moe_latent_size"] = first(tc, "moe_latent_size")
     m["index_n_heads"] = first(tc, "index_n_heads", "indexer_n_heads")
     m["index_head_dim"] = first(tc, "index_head_dim", "indexer_head_dim")
-    m["compress_ratios"] = sorted(set(first(tc, "compress_ratios") or [])) or None
+    m["compress_ratios"] = sorted(set(x for x in (first(tc, "compress_ratios") or []) if x)) or None
     m["mamba_num_heads"] = first(tc, "mamba_num_heads", "mamba_n_heads")
     m["mamba_head_dim"] = first(tc, "mamba_head_dim", "mamba_d_head")
     m["ssm_state_size"] = first(tc, "ssm_state_size", "mamba_d_state")
@@ -581,11 +591,49 @@ def extract(card):
             norm["layer_types"] = schedule({"sliding_attention": m["swa_local_layers"], "full_attention": m["swa_global_layers"]},
                                            m["swa_local_layers"] + m["swa_global_layers"])
             raw_used["layer_types"] = "derived"
+    cr = norm.get("compress_ratios")  # the 0 entries are the sliding-window layers, already in layer_types
+    if isinstance(cr, dict) and cr.get("_counts", {}).get("0") and isinstance(norm.get("layer_types"), dict):
+        n0 = cr["_counts"].pop("0"); cr["_list_len"] -= n0
     lt = norm.get("layer_types")
     if isinstance(lt, dict) and lt.get("_counts"):
-        top = sorted(lt["_counts"].items(), key=lambda kv: -kv[1])
-        if len(top) >= 2 and top[1][1]:
-            lt["_ratio"] = f"{round(top[0][1] / top[1][1])}:1"
+        # the ratio is a design parameter only when the schedule repeats a period; a minority kind that
+        # sits in one block at the front or back is a fixed count and gets no ratio
+        seq = None
+        lt_src = raw_used.get("layer_types")
+        if isinstance(tc.get(lt_src), list) and not all(isinstance(x, int) for x in tc[lt_src]):  # a list of kinds, not of indices
+            seq = [str(x) for x in tc[lt_src]]
+        elif lt_src == "derived" and mt in ("deepseek_v4", "deepseek_v41_text"):
+            seq = ["s" if x == 0 else "f" for x in (first(tc, "compress_ratios") or [])]
+        elif isinstance(tc.get("hybrid_override_pattern"), str):
+            seq = list(tc["hybrid_override_pattern"])
+        elif lt_src == "local_layer_ids" and layers:
+            ids = set(tc["local_layer_ids"]); base = 1 if max(ids) >= layers else 0  # lists are 0- or 1-indexed
+            seq = ["s" if i + base in ids else "f" for i in range(layers)]
+        elif lt_src == "gqa_layers" and layers:
+            ids = set(tc["gqa_layers"]); base = 1 if max(ids) >= layers else 0
+            seq = ["f" if i + base in ids else "k" for i in range(layers)]
+        elif isinstance(tc.get("linear_attn_config"), dict) and isinstance(tc["linear_attn_config"].get("full_attn_layers"), list):
+            lac_ = tc["linear_attn_config"]; full_ids = set(lac_.get("full_attn_layers") or [])
+            seq = ["f" if i in full_ids else "k" for i in sorted(full_ids | set(lac_.get("kda_layers") or []))]
+        ratio = None
+        if seq and len(set(seq)) >= 2:
+            period = next((p for p in range(2, len(seq) // 2 + 1) if all(seq[i] == seq[i % p] for i in range(len(seq)))), None)
+            if period:
+                top = sorted(collections.Counter(seq[:period]).items(), key=lambda kv: -kv[1])
+                ratio = f"{round(top[0][1] / top[1][1])}:1" if top[1][1] else None
+            else:
+                minority = min(set(seq), key=seq.count); idx = [i for i, x in enumerate(seq) if x == minority]
+                block = idx == list(range(idx[0], idx[-1] + 1)) and (idx[0] == 0 or idx[-1] == len(seq) - 1)
+                if not block:
+                    top = sorted(collections.Counter(seq).items(), key=lambda kv: -kv[1]); ratio = f"{round(top[0][1] / top[1][1])}:1"
+        else:
+            top = sorted(lt["_counts"].items(), key=lambda kv: -kv[1])
+            if len(top) >= 2 and top[1][1]:
+                ratio = f"{round(top[0][1] / top[1][1])}:1"
+        if ratio:
+            lt["_ratio"] = ratio
+        else:
+            lt.pop("_ratio", None)
     # a MoE schedule that is dense at the front says the same as a dense-prefix count
     sched_raw = raw_used.get("moe_layer_schedule")
     for key in ("moe_layer_freq", "mlp_layer_types", "mlp_only_layers"):

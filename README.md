@@ -2,7 +2,7 @@
 
 An interactive lineage graph of the open-weight models in Sebastian Raschka's
 [LLM Architecture Gallery](https://sebastianraschka.com/llm-architecture-gallery/),
-built from each model's `config.json` alone: 103 gallery models, 65 nodes once models that only
+built from each model's `config.json` alone: 103 gallery models, 66 nodes once models that only
 change scale fold into the design they copy.
 
 **Live page:** https://wenhaochai.com/blogs/llm-architecture-lineage.html
@@ -54,11 +54,14 @@ leftovers, 11 multi-token-prediction heads, and the 2 keys naming the modeling c
 merge several spellings: seven names for the number of active experts, six for
 the norm epsilon), each assigned to one of four sections that follow the forward pass of a decoder
 block (token mixing and channel mixing carry subsections). Nested sub-configs are flattened into
-the same fields and per-layer index lists become layer schedules by kind. `KEYS.md` lists every key's fate.
+the same fields and per-layer index lists become layer schedules by kind; a list that runs on into the
+multi-token-prediction heads is cut at the last decoder layer. A schedule's ratio is read off its repeating
+period, and a minority kind sitting in one block at the front carries no ratio (the two sliding-window layers
+that open DeepSeek V4-Flash, which its config writes as compression ratio 0). `KEYS.md` lists every key's fate.
 Each canonical field is tagged design (61), scale (67) or tuning (47) in `schema.py`. The change
 line under a model compares canonical configs with the first parent: design fields count when
-their value differs (layer schedules by the kinds of layer they contain), scale fields never
-count by value and 16 of them count on appearance because they mark a mechanism (`PRESENCE`),
+their value differs (layer schedules by their layer kinds and period ratio), scale fields never
+count by value and 15 of them count on appearance because they mark a mechanism (`PRESENCE`),
 tuning fields never count; `RESTATED` fields say what the layer schedule already says; and a field
 in `CONDITIONAL` is skipped when the mechanism it belongs to is itself the change. A key written
 with its default is settled to the same value as an absent key (`DEFAULTS`, `NO_EFFECT`). A wider or deeper copy of the same
@@ -79,11 +82,11 @@ QK-Norm, attention residuals, gated residuals), then by the total number of chan
 release (the earlier of two equally close designs is where that design came from). Zero changes make it a scale copy: it is folded into
 its parent's node, which keeps the earliest name and lists the copies as aliases, and it can
 never be a parent. If even the closest placed model needs more than `ORIGIN_THRESHOLD` changes
-(32), the model hangs off GPT-2 XL; no model currently does, the largest gap being 13. For every field the model adds or switches to, one more edge
+(32), the model hangs off GPT-2 XL; no model currently does, the largest gap being 10. For every field the model adds or switches to, one more edge
 (`trait`) comes from the earliest placed model that already carried it. Generation is one more
 than the largest generation among a node's parents and is the column in the figure.
 
-Result: 103 models, 38 folded as scale copies, 65 drawn nodes, 79 edges after reduction (57
+Result: 103 models, 37 folded as scale copies, 66 drawn nodes, 80 edges after reduction (58
 parent, 22 trait), 10 generations.
 
 ## Caveats
@@ -98,7 +101,7 @@ between two configs; which papers a team actually read is a separate question.
 data/cards.json        gallery card list with config / report links
 data/configs/*.json    one config per model (with _provenance where non-canonical)
 data/metadata.json     per-model canonical config + derived traits (all 103 models)
-data/graph.json        83 nodes, edges with per-edge justification, trait weights, generations
+data/graph.json        103 nodes (37 folded), edges with per-edge fields, generations
 web/index.html         standalone viewer
 web/lineage.js         renderer (no dependencies)
 web/data.js            trimmed graph for the viewer
