@@ -98,7 +98,7 @@
       // second kind of edge: the earliest placed model that already carried what x adds or switches to
       var origins = {};
       x.changes.forEach(function (c) {
-        if (c.kind === 'drop') return;
+        if (c.kind === 'drop' || !MECH[c.field]) return; // only mechanisms get an origin edge
         var src = null;
         eligible.forEach(function (p) {
           if (p.key === x.parent) return;

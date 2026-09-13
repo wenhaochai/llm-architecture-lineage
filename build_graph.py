@@ -19,8 +19,8 @@ origin threshold can be tuned there; this script writes the same graph at the de
      the earliest name and lists the copies as aliases.
   4. If even the closest placed model needs more than ORIGIN_THRESHOLD changes, the model
      hangs off GPT-2 XL instead.
-  5. For every field the model adds or switches to, one more edge comes from the earliest
-     placed model that already carried the same value (second kind of edge, "trait").
+  5. For every mechanism-level field the model adds or switches to, one more edge comes from
+     the earliest placed model that already carried the same value (second kind of edge, "trait").
   6. Transitive reduction: an edge A -> C is dropped when A already reaches C through another
      parent of C.
   7. Generation = 1 + max generation over all parents; it is the column in the figure.
@@ -125,7 +125,7 @@ for x in M[1:]:
         add_edge(best, x, "parent", [], best_n)
     origins = collections.OrderedDict()
     for c in x["changes"]:
-        if c["kind"] == "drop":
+        if c["kind"] == "drop" or c["field"] not in schema.MECHANISM:  # only mechanisms get an origin edge
             continue
         src = None
         for p in eligible:
