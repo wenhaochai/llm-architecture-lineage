@@ -164,7 +164,7 @@
    "vocab_size": 50257
   },
   "config_canonical": {
-   "activation": "gelu_new",
+   "activation": "gelu",
    "norm_eps": 1e-05,
    "max_position_embeddings": 1024,
    "hidden_size": 1600,
@@ -174,7 +174,9 @@
    "attention_kind": "MHA",
    "sequence_mixer": "attention",
    "norm_type": "layernorm",
-   "position_encoding_type": "learned_absolute"
+   "position_encoding_type": "learned_absolute",
+   "attention_bias": false,
+   "tie_embeddings": false
   },
   "config_canonical_raw_key": {
    "activation": "activation_function",
@@ -187,7 +189,9 @@
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "norm_type": "implied by model_type gpt2",
-   "position_encoding_type": "implied by model_type gpt2"
+   "position_encoding_type": "implied by model_type gpt2",
+   "attention_bias": "default",
+   "tie_embeddings": "default"
   },
   "num_architecture_keys": 8
  },
@@ -1022,7 +1026,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 163840,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 8,
    "num_experts": 256,
    "num_shared_experts": 1,
@@ -1070,7 +1073,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -1305,7 +1307,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 163840,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 8,
    "num_experts": 256,
    "num_shared_experts": 1,
@@ -1353,7 +1354,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -1576,7 +1576,7 @@
   "config_canonical": {
    "attention_bias": false,
    "head_dim": 128,
-   "activation": "gelu_pytorch_tanh",
+   "activation": "gelu",
    "hidden_size": 5376,
    "intermediate_size": 21504,
    "max_position_embeddings": 131072,
@@ -1597,7 +1597,16 @@
    "local_global_ratio": 5,
    "qk_norm": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "layer_types": {
+    "_list_len": 62,
+    "_counts": {
+     "sliding_attention": 52,
+     "full_attention": 10
+    },
+    "_ratio": "5:1"
+   },
+   "tie_embeddings": false
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -1623,7 +1632,9 @@
    "local_global_ratio": "derived",
    "qk_norm": "implied by model_type gemma3_text",
    "norm_type": "implied by model_type gemma3_text",
-   "position_encoding_type": "implied by model_type gemma3_text"
+   "position_encoding_type": "implied by model_type gemma3_text",
+   "layer_types": "derived",
+   "tie_embeddings": "default"
   },
   "num_architecture_keys": 19
  },
@@ -1811,7 +1822,9 @@
    "attention_kind": "GQA",
    "sequence_mixer": "attention",
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "tie_embeddings": false
   },
   "config_canonical_raw_key": {
    "head_dim": "head_dim",
@@ -1828,7 +1841,9 @@
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "norm_type": "implied by model_type mistral",
-   "position_encoding_type": "implied by model_type mistral"
+   "position_encoding_type": "implied by model_type mistral",
+   "attention_bias": "default",
+   "tie_embeddings": "default"
   },
   "num_architecture_keys": 12
  },
@@ -2139,7 +2154,10 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "tie_embeddings": false,
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -2166,7 +2184,10 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type llama4_text",
-   "position_encoding_type": "implied by model_type llama4_text"
+   "position_encoding_type": "implied by model_type llama4_text",
+   "tie_embeddings": "default",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 24
  },
@@ -2550,7 +2571,6 @@
   },
   "config_canonical": {
    "attention_bias": false,
-   "moe_layer_schedule": 1,
    "head_dim": 128,
    "activation": "silu",
    "hidden_size": 4096,
@@ -2572,11 +2592,11 @@
    "qk_norm": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "moe_layer_schedule": "decoder_sparse_step",
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -2598,7 +2618,8 @@
    "qk_norm": "implied by model_type qwen3_moe",
    "moe": "derived",
    "norm_type": "implied by model_type qwen3_moe",
-   "position_encoding_type": "implied by model_type qwen3_moe"
+   "position_encoding_type": "implied by model_type qwen3_moe",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 23
  },
@@ -2776,7 +2797,6 @@
   },
   "config_canonical": {
    "attention_bias": false,
-   "moe_layer_schedule": 1,
    "head_dim": 128,
    "activation": "silu",
    "hidden_size": 2048,
@@ -2798,11 +2818,11 @@
    "qk_norm": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "moe_layer_schedule": "decoder_sparse_step",
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -2824,7 +2844,8 @@
    "qk_norm": "implied by model_type qwen3_moe",
    "moe": "derived",
    "norm_type": "implied by model_type qwen3_moe",
-   "position_encoding_type": "implied by model_type qwen3_moe"
+   "position_encoding_type": "implied by model_type qwen3_moe",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 23
  },
@@ -3853,7 +3874,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 131072,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 1,
    "num_experts": 384,
    "num_shared_experts": 1,
@@ -3894,7 +3914,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -4140,7 +4159,8 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -4171,7 +4191,8 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type glm4_moe",
-   "position_encoding_type": "implied by model_type glm4_moe"
+   "position_encoding_type": "implied by model_type glm4_moe",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 25
  },
@@ -4379,7 +4400,8 @@
     "_counts": {
      "sliding_attention": 18,
      "full_attention": 18
-    }
+    },
+    "_ratio": "1:1"
    },
    "max_position_embeddings": 131072,
    "num_heads": 64,
@@ -4407,7 +4429,9 @@
    "attention_sinks": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -4438,7 +4462,9 @@
    "attention_sinks": "implied by model_type gpt_oss",
    "moe": "derived",
    "norm_type": "implied by model_type gpt_oss",
-   "position_encoding_type": "implied by model_type gpt_oss"
+   "position_encoding_type": "implied by model_type gpt_oss",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 21
  },
@@ -4646,7 +4672,8 @@
     "_counts": {
      "sliding_attention": 12,
      "full_attention": 12
-    }
+    },
+    "_ratio": "1:1"
    },
    "max_position_embeddings": 131072,
    "num_heads": 64,
@@ -4674,7 +4701,9 @@
    "attention_sinks": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -4705,7 +4734,9 @@
    "attention_sinks": "implied by model_type gpt_oss",
    "moe": "derived",
    "norm_type": "implied by model_type gpt_oss",
-   "position_encoding_type": "implied by model_type gpt_oss"
+   "position_encoding_type": "implied by model_type gpt_oss",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 21
  },
@@ -4892,7 +4923,7 @@
    "sliding_window_pattern": 6,
    "attention_bias": false,
    "head_dim": 256,
-   "activation": "gelu_pytorch_tanh",
+   "activation": "gelu",
    "hidden_size": 640,
    "intermediate_size": 2048,
    "layer_types": {
@@ -4900,7 +4931,8 @@
     "_counts": {
      "sliding_attention": 15,
      "full_attention": 3
-    }
+    },
+    "_ratio": "5:1"
    },
    "max_position_embeddings": 32768,
    "num_heads": 4,
@@ -4918,7 +4950,8 @@
    "local_global_ratio": 5,
    "qk_norm": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "tie_embeddings": false
   },
   "config_canonical_raw_key": {
    "sliding_window_pattern": "_sliding_window_pattern",
@@ -4944,7 +4977,8 @@
    "local_global_ratio": "derived",
    "qk_norm": "implied by model_type gemma3_text",
    "norm_type": "implied by model_type gemma3_text",
-   "position_encoding_type": "implied by model_type gemma3_text"
+   "position_encoding_type": "implied by model_type gemma3_text",
+   "tie_embeddings": "default"
   },
   "num_architecture_keys": 21
  },
@@ -5140,7 +5174,6 @@
    "rope_theta": 208533496,
    "attention_temperature_tuning": 1024,
    "sliding_window_pattern": 1,
-   "rope_scaling_type": "original",
    "rope_original_max_position": 8192,
    "rope_scaling_factor": 16.0,
    "rope_scaling_params": {
@@ -5155,7 +5188,12 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "tie_embeddings": false,
+   "activation": "silu",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "embedding_multiplier": "embedding_multiplier_scale",
@@ -5179,7 +5217,6 @@
    "rope_theta": "rope_theta",
    "attention_temperature_tuning": "attn_temperature_len",
    "sliding_window_pattern": "global_attn_every_n",
-   "rope_scaling_type": "rope_type",
    "rope_original_max_position": "original_max_position_embeddings",
    "rope_scaling_factor": "scaling_factor",
    "rope_scaling_params": "extrapolation_factor",
@@ -5187,7 +5224,12 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type git",
-   "position_encoding_type": "implied by model_type git"
+   "position_encoding_type": "implied by model_type git",
+   "attention_bias": "default",
+   "tie_embeddings": "default",
+   "activation": "default",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 29
  },
@@ -5371,7 +5413,6 @@
    "vocab_size": 151936
   },
   "config_canonical": {
-   "moe_layer_schedule": 1,
    "hybrid_attention_interval": 4,
    "head_dim": 256,
    "activation": "silu",
@@ -5403,10 +5444,19 @@
    "gated_attention": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "layer_types": {
+    "_list_len": 48,
+    "_counts": {
+     "gated_deltanet": 36,
+     "attention": 12
+    },
+    "_ratio": "3:1"
+   },
+   "attention_bias": false,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
-   "moe_layer_schedule": "decoder_sparse_step",
    "hybrid_attention_interval": "full_attention_interval",
    "head_dim": "head_dim",
    "activation": "hidden_act",
@@ -5438,7 +5488,10 @@
    "gated_attention": "implied by model_type qwen3_next",
    "moe": "derived",
    "norm_type": "implied by model_type qwen3_next",
-   "position_encoding_type": "implied by model_type qwen3_next"
+   "position_encoding_type": "implied by model_type qwen3_next",
+   "layer_types": "derived",
+   "attention_bias": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 28
  },
@@ -5675,7 +5728,9 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "router_normalize_weights": true
   },
   "config_canonical_raw_key": {
    "layer_types": "attn_type_list",
@@ -5707,7 +5762,9 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type minimax_m2",
-   "position_encoding_type": "implied by model_type minimax_m2"
+   "position_encoding_type": "implied by model_type minimax_m2",
+   "attention_bias": "default",
+   "router_normalize_weights": "default"
   },
   "num_architecture_keys": 27
  },
@@ -5941,7 +5998,6 @@
    "mla_nope": true,
    "max_position_embeddings": 1048576,
    "moe_intermediate_size": 1024,
-   "moe_layer_schedule": 1,
    "router_normalize_weights": true,
    "router_scoring": "sigmoid",
    "num_heads": 32,
@@ -5966,7 +6022,8 @@
     "_counts": {
      "kda": 20,
      "full_attention": 7
-    }
+    },
+    "_ratio": "3:1"
    },
    "linear_num_value_heads": 32,
    "linear_value_head_dim": 128,
@@ -5979,7 +6036,8 @@
    "moe": true,
    "norm_type": "rmsnorm",
    "position_encoding_type": "rope",
-   "nope_layers": "partial"
+   "nope_layers": "partial",
+   "attention_bias": false
   },
   "config_canonical_raw_key": {
    "dense_prefix_layers": "first_k_dense_replace",
@@ -5991,7 +6049,6 @@
    "mla_nope": "mla_use_nope",
    "max_position_embeddings": "model_max_length",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_normalize_weights": "moe_renormalize",
    "router_scoring": "moe_router_activation_func",
    "num_heads": "num_attention_heads",
@@ -6023,7 +6080,8 @@
    "moe": "derived",
    "norm_type": "implied by model_type kimi_linear",
    "position_encoding_type": "implied by model_type kimi_linear",
-   "nope_layers": "implied by model_type kimi_linear"
+   "nope_layers": "implied by model_type kimi_linear",
+   "attention_bias": "default"
   },
   "num_architecture_keys": 32
  },
@@ -6216,7 +6274,8 @@
     "_counts": {
      "sliding_attention": 48,
      "full_attention": 16
-    }
+    },
+    "_ratio": "3:1"
    },
    "max_position_embeddings": 65536,
    "num_heads": 40,
@@ -6461,7 +6520,8 @@
     "_counts": {
      "sliding_attention": 24,
      "full_attention": 8
-    }
+    },
+    "_ratio": "3:1"
    },
    "max_position_embeddings": 65536,
    "num_heads": 32,
@@ -6725,7 +6785,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 163840,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 8,
    "num_experts": 256,
    "num_shared_experts": 1,
@@ -6777,7 +6836,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -7029,7 +7087,6 @@
    "router_scaling_factor": 1.0,
    "moe_intermediate_size": 4096,
    "num_shared_experts": 1,
-   "moe_layer_schedule": 1,
    "activation": "silu",
    "rope_scaling_type": "yarn",
    "rope_scaling_factor": 36,
@@ -7046,7 +7103,10 @@
    "mla": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "hidden_size": "hidden_size",
@@ -7073,7 +7133,6 @@
    "router_scaling_factor": "routed_scaling_factor",
    "moe_intermediate_size": "moe_intermediate_size",
    "num_shared_experts": "n_shared_experts",
-   "moe_layer_schedule": "moe_layer_freq",
    "activation": "hidden_act",
    "rope_scaling_type": "rope_scaling.rope_type",
    "rope_scaling_factor": "rope_scaling.factor",
@@ -7084,7 +7143,10 @@
    "mla": "implied by model_type mistral_large3",
    "moe": "derived",
    "norm_type": "implied by model_type mistral_large3",
-   "position_encoding_type": "implied by model_type mistral_large3"
+   "position_encoding_type": "implied by model_type mistral_large3",
+   "attention_bias": "default",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 27
  },
@@ -7301,7 +7363,8 @@
      "mamba2": 23,
      "attention": 6,
      "moe": 23
-    }
+    },
+    "_ratio": "1:1"
    },
    "intermediate_size": 1856,
    "norm_eps": 1e-05,
@@ -7343,7 +7406,8 @@
    "mixer_attention_ratio": 4,
    "moe": true,
    "norm_type": "rmsnorm",
-   "nope_layers": "full"
+   "nope_layers": "full",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias / use_bias",
@@ -7386,7 +7450,8 @@
    "mixer_attention_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type nemotron_h",
-   "nope_layers": "implied by model_type nemotron_h"
+   "nope_layers": "implied by model_type nemotron_h",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 40
  },
@@ -7615,7 +7680,8 @@
     "_counts": {
      "sliding_attention": 39,
      "full_attention": 9
-    }
+    },
+    "_ratio": "4:1"
    },
    "attention_sinks": {
     "_raw": {
@@ -7624,13 +7690,6 @@
     }
    },
    "chunked_attention_size": 128,
-   "moe_layer_schedule": {
-    "_list_len": 48,
-    "_counts": {
-     "1": 47,
-     "0": 1
-    }
-   },
    "moe_intermediate_size": 2048,
    "num_experts": 256,
    "experts_per_tok": 8,
@@ -7652,7 +7711,8 @@
    "local_global_ratio": 4,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 1
   },
   "config_canonical_raw_key": {
    "attention_value_scale": "attention_value_scale",
@@ -7676,7 +7736,6 @@
    "layer_types": "hybrid_layer_pattern",
    "attention_sinks": "add_swa_attention_sink_bias",
    "chunked_attention_size": "attention_chunk_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "moe_intermediate_size": "moe_intermediate_size",
    "num_experts": "n_routed_experts",
    "experts_per_tok": "num_experts_per_tok",
@@ -7693,7 +7752,8 @@
    "local_global_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type mimo_v2_flash",
-   "position_encoding_type": "implied by model_type mimo_v2_flash"
+   "position_encoding_type": "implied by model_type mimo_v2_flash",
+   "dense_prefix_layers": "moe_layer_freq"
   },
   "num_architecture_keys": 38
  },
@@ -7910,7 +7970,8 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -7941,7 +8002,8 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type glm4_moe",
-   "position_encoding_type": "implied by model_type glm4_moe"
+   "position_encoding_type": "implied by model_type glm4_moe",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 25
  },
@@ -8145,7 +8207,8 @@
     "_counts": {
      "sliding_attention": 45,
      "full_attention": 15
-    }
+    },
+    "_ratio": "3:1"
    },
    "max_position_embeddings": 262144,
    "moe_intermediate_size": 3072,
@@ -8175,7 +8238,8 @@
    "moe": true,
    "norm_type": "rmsnorm",
    "position_encoding_type": "rope",
-   "nope_layers": "global"
+   "nope_layers": "global",
+   "attention_bias": false
   },
   "config_canonical_raw_key": {
    "sliding_window_pattern": "global_attn_every_n_layers",
@@ -8212,7 +8276,8 @@
    "moe": "derived",
    "norm_type": "implied by model_type afmoe",
    "position_encoding_type": "implied by model_type afmoe",
-   "nope_layers": "implied by model_type afmoe"
+   "nope_layers": "implied by model_type afmoe",
+   "attention_bias": "default"
   },
   "num_architecture_keys": 29
  },
@@ -8433,7 +8498,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 202752,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 1,
    "num_experts": 256,
    "num_shared_experts": 1,
@@ -8454,7 +8518,6 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 256,
    "vocab_size": 154880,
-   "rope_scaling_type": "default",
    "rope_theta": 1000000,
    "attention_kind": "MLA",
    "sequence_mixer": "attention",
@@ -8478,7 +8541,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -8499,7 +8561,6 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
@@ -8730,7 +8791,8 @@
      "mamba2": 40,
      "attention": 8,
      "moe": 40
-    }
+    },
+    "_ratio": "1:1"
    },
    "intermediate_size": 2688,
    "norm_eps": 1e-05,
@@ -8773,7 +8835,8 @@
    "mixer_attention_ratio": 5,
    "moe": true,
    "norm_type": "rmsnorm",
-   "nope_layers": "full"
+   "nope_layers": "full",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias / use_bias",
@@ -8817,7 +8880,8 @@
    "mixer_attention_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type nemotron_h",
-   "nope_layers": "implied by model_type nemotron_h"
+   "nope_layers": "implied by model_type nemotron_h",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 41
  },
@@ -9048,7 +9112,7 @@
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
-   "activation": "gelu_pytorch_tanh",
+   "activation": "gelu",
    "hidden_size": 5376,
    "per_layer_embedding_dim": 0,
    "intermediate_size": 21504,
@@ -9057,7 +9121,8 @@
     "_counts": {
      "sliding_attention": 50,
      "full_attention": 10
-    }
+    },
+    "_ratio": "5:1"
    },
    "max_position_embeddings": 262144,
    "num_heads": 32,
@@ -9347,7 +9412,7 @@
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
-   "activation": "gelu_pytorch_tanh",
+   "activation": "gelu",
    "hidden_size": 2816,
    "per_layer_embedding_dim": 0,
    "intermediate_size": 2112,
@@ -9356,7 +9421,8 @@
     "_counts": {
      "sliding_attention": 25,
      "full_attention": 5
-    }
+    },
+    "_ratio": "5:1"
    },
    "max_position_embeddings": 262144,
    "moe_intermediate_size": 704,
@@ -9382,7 +9448,9 @@
    "local_global_ratio": 5,
    "qk_norm": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -9420,7 +9488,9 @@
    "local_global_ratio": "derived",
    "qk_norm": "implied by model_type gemma4_text",
    "norm_type": "implied by model_type gemma4_text",
-   "position_encoding_type": "implied by model_type gemma4_text"
+   "position_encoding_type": "implied by model_type gemma4_text",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 28
  },
@@ -9648,7 +9718,7 @@
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
-   "activation": "gelu_pytorch_tanh",
+   "activation": "gelu",
    "hidden_size": 3840,
    "per_layer_embedding_dim": 0,
    "intermediate_size": 15360,
@@ -9657,7 +9727,8 @@
     "_counts": {
      "sliding_attention": 40,
      "full_attention": 8
-    }
+    },
+    "_ratio": "5:1"
    },
    "max_position_embeddings": 262144,
    "num_heads": 16,
@@ -10118,7 +10189,6 @@
   },
   "config_canonical": {
    "attention_bias": false,
-   "moe_layer_schedule": 1,
    "head_dim": 128,
    "activation": "silu",
    "hidden_size": 2048,
@@ -10140,11 +10210,11 @@
    "qk_norm": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "moe_layer_schedule": "decoder_sparse_step",
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -10166,7 +10236,8 @@
    "qk_norm": "implied by model_type qwen3_moe",
    "moe": "derived",
    "norm_type": "implied by model_type qwen3_moe",
-   "position_encoding_type": "implied by model_type qwen3_moe"
+   "position_encoding_type": "implied by model_type qwen3_moe",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 23
  },
@@ -10444,7 +10515,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 262144,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 1,
    "num_experts": 384,
    "num_shared_experts": 1,
@@ -10492,7 +10562,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -10860,7 +10929,8 @@
     "_counts": {
      "sliding_attention": 36,
      "full_attention": 12
-    }
+    },
+    "_ratio": "3:1"
    },
    "partial_rotary_factor": {
     "_list_len": 48,
@@ -10900,7 +10970,9 @@
    "sequence_mixer": "attention",
    "local_global_ratio": 3,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "activation": "silu"
   },
   "config_canonical_raw_key": {
    "rope_scaling_layer_types": "yarn_only_types",
@@ -10945,7 +11017,9 @@
    "sequence_mixer": "derived",
    "local_global_ratio": "derived",
    "norm_type": "implied by model_type step3p5",
-   "position_encoding_type": "implied by model_type step3p5"
+   "position_encoding_type": "implied by model_type step3p5",
+   "attention_bias": "default",
+   "activation": "default"
   },
   "num_architecture_keys": 37
  },
@@ -11369,7 +11443,9 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "router_normalize_weights": true
   },
   "config_canonical_raw_key": {
    "layer_types": "attn_type_list",
@@ -11397,7 +11473,9 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type minimax_m2",
-   "position_encoding_type": "implied by model_type minimax_m2"
+   "position_encoding_type": "implied by model_type minimax_m2",
+   "attention_bias": "default",
+   "router_normalize_weights": "default"
   },
   "num_architecture_keys": 21
  },
@@ -11915,7 +11993,16 @@
    "mla": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "layer_types": {
+    "_list_len": 80,
+    "_counts": {
+     "lightning": 70,
+     "attention": 10
+    },
+    "_ratio": "7:1"
+   },
+   "router_normalize_weights": true
   },
   "config_canonical_raw_key": {
    "dense_prefix_layers": "first_k_dense_replace",
@@ -11962,7 +12049,9 @@
    "mla": "implied by model_type bailing_hybrid",
    "moe": "derived",
    "norm_type": "implied by model_type bailing_hybrid",
-   "position_encoding_type": "implied by model_type bailing_hybrid"
+   "position_encoding_type": "implied by model_type bailing_hybrid",
+   "layer_types": "derived",
+   "router_normalize_weights": "default"
   },
   "num_architecture_keys": 43
  },
@@ -12184,7 +12273,8 @@
     "_counts": {
      "linear_attention": 45,
      "full_attention": 15
-    }
+    },
+    "_ratio": "3:1"
    },
    "short_conv_kernel": 4,
    "linear_key_head_dim": 128,
@@ -12201,7 +12291,6 @@
    "norm_eps": 1e-06,
    "shared_expert_intermediate_size": 1024,
    "vocab_size": 248320,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "partial_rotary_factor": 0.25,
    "rope_scaling_params": {
@@ -12220,7 +12309,10 @@
    "qk_norm": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "tie_embeddings": false,
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -12245,7 +12337,6 @@
    "norm_eps": "rms_norm_eps",
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "partial_rotary_factor": "rope_parameters.partial_rotary_factor",
    "rope_scaling_params": "rope_parameters",
@@ -12255,7 +12346,10 @@
    "qk_norm": "implied by model_type qwen3_5_moe_text",
    "moe": "derived",
    "norm_type": "implied by model_type qwen3_5_moe_text",
-   "position_encoding_type": "implied by model_type qwen3_5_moe_text"
+   "position_encoding_type": "implied by model_type qwen3_5_moe_text",
+   "tie_embeddings": "default",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 24
  },
@@ -12744,7 +12838,10 @@
    "moe": true,
    "norm_type": "rmsnorm",
    "position_encoding_type": "rope",
-   "nope_layers": "partial"
+   "nope_layers": "partial",
+   "attention_bias": false,
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "rope_theta": "default_theta / rope_theta",
@@ -12780,7 +12877,10 @@
    "moe": "derived",
    "norm_type": "implied by model_type sarvam_mla",
    "position_encoding_type": "implied by model_type sarvam_mla",
-   "nope_layers": "implied by model_type sarvam_mla"
+   "nope_layers": "implied by model_type sarvam_mla",
+   "attention_bias": "default",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 26
  },
@@ -13198,7 +13298,8 @@
    "attention_kind": "none (mLSTM)",
    "sequence_mixer": "mlstm",
    "norm_type": "rmsnorm",
-   "nope_layers": "full"
+   "nope_layers": "full",
+   "activation": "silu"
   },
   "config_canonical_raw_key": {
    "norm_extra_placement": "add_out_norm",
@@ -13220,7 +13321,8 @@
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "norm_type": "implied by model_type xlstm",
-   "nope_layers": "implied by model_type xlstm"
+   "nope_layers": "implied by model_type xlstm",
+   "activation": "default"
   },
   "num_architecture_keys": 21
  },
@@ -13435,7 +13537,8 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -13466,7 +13569,8 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type glm4_moe",
-   "position_encoding_type": "implied by model_type glm4_moe"
+   "position_encoding_type": "implied by model_type glm4_moe",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 25
  },
@@ -13667,7 +13771,8 @@
    "attention_kind": "MHA",
    "sequence_mixer": "attention",
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false
   },
   "config_canonical_raw_key": {
    "head_dim": "head_dim",
@@ -13688,7 +13793,8 @@
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "norm_type": "implied by model_type ouro",
-   "position_encoding_type": "implied by model_type ouro"
+   "position_encoding_type": "implied by model_type ouro",
+   "attention_bias": "default"
   },
   "num_architecture_keys": 19
  },
@@ -13901,7 +14007,8 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -13932,7 +14039,8 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type glm4_moe",
-   "position_encoding_type": "implied by model_type glm4_moe"
+   "position_encoding_type": "implied by model_type glm4_moe",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 25
  },
@@ -14163,7 +14271,11 @@
    "mla": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "tie_embeddings": false,
+   "activation": "silu",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -14196,7 +14308,11 @@
    "mla": "implied by model_type None",
    "moe": "derived",
    "norm_type": "implied by model_type None",
-   "position_encoding_type": "implied by model_type None"
+   "position_encoding_type": "implied by model_type None",
+   "tie_embeddings": "default",
+   "activation": "default",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 26
  },
@@ -14405,7 +14521,6 @@
   },
   "config_canonical": {
    "attention_bias": false,
-   "dense_prefix_layers": 0,
    "head_dim": 128,
    "activation": "silu",
    "hidden_size": 4096,
@@ -14450,11 +14565,11 @@
    "mla": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
-   "dense_prefix_layers": "first_k_dense_replace",
    "head_dim": "head_dim / qk_head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -14491,7 +14606,8 @@
    "mla": "implied by model_type mistral4",
    "moe": "derived",
    "norm_type": "implied by model_type mistral4",
-   "position_encoding_type": "implied by model_type mistral4"
+   "position_encoding_type": "implied by model_type mistral4",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 31
  },
@@ -14696,7 +14812,8 @@
      "mamba2": 21,
      "attention": 4,
      "mlp": 17
-    }
+    },
+    "_ratio": "1:1"
    },
    "intermediate_size": 12544,
    "norm_eps": 1e-05,
@@ -14974,7 +15091,9 @@
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "router_normalize_weights": true
   },
   "config_canonical_raw_key": {
    "layer_types": "attn_type_list",
@@ -15002,7 +15121,9 @@
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type minimax_m2",
-   "position_encoding_type": "implied by model_type minimax_m2"
+   "position_encoding_type": "implied by model_type minimax_m2",
+   "attention_bias": "default",
+   "router_normalize_weights": "default"
   },
   "num_architecture_keys": 21
  },
@@ -15234,7 +15355,7 @@
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
-   "activation": "gelu_pytorch_tanh",
+   "activation": "gelu",
    "hidden_size": 1536,
    "per_layer_embedding_dim": 256,
    "intermediate_size": 6144,
@@ -15243,7 +15364,8 @@
     "_counts": {
      "sliding_attention": 28,
      "full_attention": 7
-    }
+    },
+    "_ratio": "4:1"
    },
    "max_position_embeddings": 131072,
    "num_heads": 8,
@@ -15532,7 +15654,7 @@
    "final_logit_softcapping": 30.0,
    "global_head_dim": 512,
    "head_dim": 256,
-   "activation": "gelu_pytorch_tanh",
+   "activation": "gelu",
    "hidden_size": 2560,
    "per_layer_embedding_dim": 256,
    "intermediate_size": 10240,
@@ -15541,7 +15663,8 @@
     "_counts": {
      "sliding_attention": 35,
      "full_attention": 7
-    }
+    },
+    "_ratio": "5:1"
    },
    "max_position_embeddings": 131072,
    "num_heads": 8,
@@ -16489,17 +16612,11 @@
     "_counts": {
      "sliding_attention": 30,
      "full_attention": 10
-    }
+    },
+    "_ratio": "3:1"
    },
    "router_input_scaling": false,
    "partial_rotary_factor": 0.5,
-   "moe_layer_schedule": {
-    "_list_len": 40,
-    "_counts": {
-     "sparse": 39,
-     "dense": 1
-    }
-   },
    "router_scaling_factor": 2.5,
    "attention_heads_per_layer": {
     "_list_len": 40,
@@ -16519,7 +16636,11 @@
    "gated_attention": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 1,
+   "activation": "silu",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "vocab_size": "vocab_size",
@@ -16541,7 +16662,6 @@
    "layer_types": "layer_types",
    "router_input_scaling": "moe_apply_router_weight_on_input",
    "partial_rotary_factor": "partial_rotary_factor",
-   "moe_layer_schedule": "mlp_layer_types",
    "router_scaling_factor": "moe_routed_scaling_factor",
    "attention_heads_per_layer": "num_attention_heads_per_layer",
    "rope_original_max_position": "rope_parameters.original_max_position_embeddings",
@@ -16555,7 +16675,11 @@
    "gated_attention": "implied by model_type laguna",
    "moe": "derived",
    "norm_type": "implied by model_type laguna",
-   "position_encoding_type": "implied by model_type laguna"
+   "position_encoding_type": "implied by model_type laguna",
+   "dense_prefix_layers": "mlp_layer_types",
+   "activation": "default",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 24
  },
@@ -16775,14 +16899,15 @@
    "router_hidden_size": 256,
    "tie_embeddings": true,
    "vocab_size": 262272,
-   "rope_scaling_type": "default",
    "rope_theta": 5000000,
    "rope_theta_local": 10000.0,
    "attention_kind": "CCA",
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -16804,14 +16929,15 @@
    "router_hidden_size": "router_hidden_size",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.hybrid.rope_theta",
    "rope_theta_local": "rope_parameters.hybrid_sliding.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type zaya",
-   "position_encoding_type": "implied by model_type zaya"
+   "position_encoding_type": "implied by model_type zaya",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 22
  },
@@ -17032,7 +17158,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 202752,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 1,
    "num_experts": 256,
    "num_shared_experts": 1,
@@ -17053,7 +17178,6 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 256,
    "vocab_size": 154880,
-   "rope_scaling_type": "default",
    "rope_theta": 1000000,
    "attention_kind": "MLA",
    "sequence_mixer": "attention",
@@ -17077,7 +17201,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -17098,7 +17221,6 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
@@ -17332,7 +17454,8 @@
     "_counts": {
      "linear_attention": 30,
      "full_attention": 10
-    }
+    },
+    "_ratio": "3:1"
    },
    "short_conv_kernel": 4,
    "linear_key_head_dim": 128,
@@ -17351,7 +17474,6 @@
    "shared_expert_intermediate_size": 512,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "rope_scaling_params": {
     "_raw": {
@@ -17369,7 +17491,9 @@
    "qk_norm": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -17396,7 +17520,6 @@
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "rope_scaling_params": "rope_parameters",
    "attention_kind": "derived",
@@ -17405,7 +17528,9 @@
    "qk_norm": "implied by model_type qwen3_5_moe_text",
    "moe": "derived",
    "norm_type": "implied by model_type qwen3_5_moe_text",
-   "position_encoding_type": "implied by model_type qwen3_5_moe_text"
+   "position_encoding_type": "implied by model_type qwen3_5_moe_text",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 25
  },
@@ -17683,7 +17808,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 262144,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 1,
    "num_experts": 384,
    "num_shared_experts": 1,
@@ -17731,7 +17855,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -17985,7 +18108,8 @@
     "_counts": {
      "linear_attention": 48,
      "full_attention": 16
-    }
+    },
+    "_ratio": "3:1"
    },
    "short_conv_kernel": 4,
    "linear_key_head_dim": 128,
@@ -18001,7 +18125,6 @@
    "norm_eps": 1e-06,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "rope_scaling_params": {
     "_raw": {
@@ -18043,7 +18166,6 @@
    "norm_eps": "rms_norm_eps",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "rope_scaling_params": "rope_parameters",
    "attention_kind": "derived",
@@ -18347,19 +18469,13 @@
     "_counts": {
      "sliding_attention": 39,
      "full_attention": 9
-    }
+    },
+    "_ratio": "4:1"
    },
    "intermediate_size": 16384,
    "norm_eps": 1e-05,
    "max_position_embeddings": 1048576,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": {
-    "_list_len": 48,
-    "_counts": {
-     "1": 47,
-     "0": 1
-    }
-   },
    "router_num_groups": 1,
    "num_experts": 256,
    "router_normalize_weights": true,
@@ -18377,13 +18493,13 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 128,
    "vocab_size": 152576,
-   "rope_scaling_type": "default",
    "attention_kind": "GQA",
    "sequence_mixer": "attention",
    "local_global_ratio": 4,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 1
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -18401,7 +18517,6 @@
    "norm_eps": "layernorm_epsilon",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "router_normalize_weights": "norm_topk_prob",
@@ -18419,13 +18534,13 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_scaling.rope_type",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "local_global_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type mimo_v2",
-   "position_encoding_type": "implied by model_type mimo_v2"
+   "position_encoding_type": "implied by model_type mimo_v2",
+   "dense_prefix_layers": "moe_layer_freq"
   },
   "num_architecture_keys": 40
  },
@@ -18649,19 +18764,13 @@
     "_counts": {
      "sliding_attention": 60,
      "full_attention": 10
-    }
+    },
+    "_ratio": "6:1"
    },
    "intermediate_size": 16384,
    "norm_eps": 1e-05,
    "max_position_embeddings": 1048576,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": {
-    "_list_len": 70,
-    "_counts": {
-     "1": 69,
-     "0": 1
-    }
-   },
    "router_num_groups": 1,
    "num_experts": 384,
    "router_normalize_weights": true,
@@ -18692,7 +18801,8 @@
    "local_global_ratio": 6,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 1
   },
   "config_canonical_raw_key": {
    "attention_sinks": "add_full_attention_sink_bias",
@@ -18707,7 +18817,6 @@
    "norm_eps": "layernorm_epsilon",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "router_normalize_weights": "norm_topk_prob",
@@ -18733,7 +18842,8 @@
    "local_global_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type mimo_v2",
-   "position_encoding_type": "implied by model_type mimo_v2"
+   "position_encoding_type": "implied by model_type mimo_v2",
+   "dense_prefix_layers": "moe_layer_freq"
   },
   "num_architecture_keys": 38
  },
@@ -18994,7 +19104,16 @@
    "mla": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "layer_types": {
+    "_list_len": 80,
+    "_counts": {
+     "lightning": 70,
+     "attention": 10
+    },
+    "_ratio": "7:1"
+   },
+   "router_normalize_weights": true
   },
   "config_canonical_raw_key": {
    "dense_prefix_layers": "first_k_dense_replace",
@@ -19041,7 +19160,9 @@
    "mla": "implied by model_type bailing_hybrid",
    "moe": "derived",
    "norm_type": "implied by model_type bailing_hybrid",
-   "position_encoding_type": "implied by model_type bailing_hybrid"
+   "position_encoding_type": "implied by model_type bailing_hybrid",
+   "layer_types": "derived",
+   "router_normalize_weights": "default"
   },
   "num_architecture_keys": 43
  },
@@ -19249,13 +19370,13 @@
    "router_scaling_factor": 2.826,
    "tie_embeddings": false,
    "vocab_size": 120832,
-   "rope_scaling_type": "default",
    "rope_theta": 11158840.0,
    "attention_kind": "GQA",
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false
   },
   "config_canonical_raw_key": {
    "moe_intermediate_size": "expert_hidden_dim / moe_intermediate_size",
@@ -19279,13 +19400,13 @@
    "router_scaling_factor": "router_scaling_factor",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type hy_v3",
-   "position_encoding_type": "implied by model_type hy_v3"
+   "position_encoding_type": "implied by model_type hy_v3",
+   "attention_bias": "default"
   },
   "num_architecture_keys": 23
  },
@@ -19721,7 +19842,6 @@
     }
    },
    "attention_bias": false,
-   "dense_prefix_layers": 0,
    "head_dim": 128,
    "activation": "silu",
    "hidden_size": 4096,
@@ -19770,7 +19890,6 @@
   "config_canonical_raw_key": {
    "sliding_window_pattern": "_sliding_window_pattern",
    "attention_bias": "attention_bias",
-   "dense_prefix_layers": "first_k_dense_replace",
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
@@ -20009,7 +20128,8 @@
     "_counts": {
      "conv": 10,
      "full_attention": 6
-    }
+    },
+    "_ratio": "2:1"
    },
    "max_position_embeddings": 128000,
    "num_heads": 32,
@@ -20022,7 +20142,9 @@
    "attention_kind": "GQA",
    "sequence_mixer": "liv_conv",
    "mixer_attention_ratio": 2,
-   "norm_type": "rmsnorm"
+   "norm_type": "rmsnorm",
+   "attention_bias": false,
+   "activation": "silu"
   },
   "config_canonical_raw_key": {
    "ffn_round_to_multiple": "block_auto_adjust_ff_dim",
@@ -20046,7 +20168,9 @@
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "mixer_attention_ratio": "derived",
-   "norm_type": "implied by model_type lfm2"
+   "norm_type": "implied by model_type lfm2",
+   "attention_bias": "default",
+   "activation": "default"
   },
   "num_architecture_keys": 23
  },
@@ -20255,7 +20379,8 @@
     "_counts": {
      "conv": 10,
      "full_attention": 6
-    }
+    },
+    "_ratio": "2:1"
    },
    "max_position_embeddings": 128000,
    "num_heads": 16,
@@ -20264,12 +20389,13 @@
    "tie_embeddings": true,
    "position_encoding_type": "rope",
    "vocab_size": 65536,
-   "rope_scaling_type": "default",
    "rope_theta": 1000000.0,
    "attention_kind": "GQA",
    "sequence_mixer": "liv_conv",
    "mixer_attention_ratio": 2,
-   "norm_type": "rmsnorm"
+   "norm_type": "rmsnorm",
+   "attention_bias": false,
+   "activation": "silu"
   },
   "config_canonical_raw_key": {
    "ffn_round_to_multiple": "block_auto_adjust_ff_dim",
@@ -20289,12 +20415,13 @@
    "tie_embeddings": "tie_embedding",
    "position_encoding_type": "use_pos_enc",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "mixer_attention_ratio": "derived",
-   "norm_type": "implied by model_type lfm2"
+   "norm_type": "implied by model_type lfm2",
+   "attention_bias": "default",
+   "activation": "default"
   },
   "num_architecture_keys": 23
  },
@@ -20487,7 +20614,8 @@
     "_counts": {
      "conv": 18,
      "full_attention": 6
-    }
+    },
+    "_ratio": "3:1"
    },
    "max_position_embeddings": 128000,
    "moe_intermediate_size": 1792,
@@ -20503,14 +20631,16 @@
    "tie_embeddings": true,
    "router_expert_bias": true,
    "vocab_size": 128000,
-   "rope_scaling_type": "default",
    "rope_theta": 5000000,
    "attention_kind": "GQA",
    "sequence_mixer": "liv_conv",
    "mixer_attention_ratio": 3,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false,
+   "activation": "silu",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "conv_kernel": "conv_L_cache",
@@ -20532,14 +20662,16 @@
    "tie_embeddings": "tie_word_embeddings",
    "router_expert_bias": "use_expert_bias",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "mixer_attention_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type lfm2_moe",
-   "position_encoding_type": "implied by model_type lfm2_moe"
+   "position_encoding_type": "implied by model_type lfm2_moe",
+   "attention_bias": "default",
+   "activation": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 20
  },
@@ -20754,7 +20886,8 @@
     "_counts": {
      "sliding_attention": 21,
      "full_attention": 7
-    }
+    },
+    "_ratio": "3:1"
    },
    "moe_layer_schedule": {
     "_list_len": 28,
@@ -20784,7 +20917,8 @@
    "local_global_ratio": 3,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -20816,7 +20950,8 @@
    "local_global_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type mellum",
-   "position_encoding_type": "implied by model_type mellum"
+   "position_encoding_type": "implied by model_type mellum",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 22
  },
@@ -21058,7 +21193,8 @@
      "mamba2": 48,
      "attention": 12,
      "moe": 48
-    }
+    },
+    "_ratio": "1:1"
    },
    "mamba_head_dim": 64,
    "mamba_activation": "silu",
@@ -21104,7 +21240,8 @@
    "mixer_attention_ratio": 4,
    "moe": true,
    "norm_type": "rmsnorm",
-   "nope_layers": "full"
+   "nope_layers": "full",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias / use_bias",
@@ -21147,7 +21284,8 @@
    "mixer_attention_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type nemotron_h",
-   "nope_layers": "implied by model_type nemotron_h"
+   "nope_layers": "implied by model_type nemotron_h",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 41
  },
@@ -21358,7 +21496,8 @@
     "_counts": {
      "sliding_attention": 36,
      "full_attention": 13
-    }
+    },
+    "_ratio": "3:1"
    },
    "output_multiplier": 1.0,
    "max_position_embeddings": 500000,
@@ -21368,7 +21507,6 @@
    "experts_per_tok": 8,
    "num_layers": 49,
    "num_kv_heads": 4,
-   "num_shared_experts": 0,
    "dense_prefix_intermediate_size": 3072,
    "sliding_window_pattern": 1,
    "rope_theta": 50000,
@@ -21385,7 +21523,8 @@
    "norm_type": "layernorm",
    "position_encoding_type": "rope",
    "nope_layers": "global",
-   "router_scoring": "sigmoid"
+   "router_scoring": "sigmoid",
+   "tie_embeddings": false
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -21404,7 +21543,6 @@
    "experts_per_tok": "num_experts_per_tok",
    "num_layers": "num_hidden_layers",
    "num_kv_heads": "num_key_value_heads",
-   "num_shared_experts": "num_shared_experts",
    "dense_prefix_intermediate_size": "prefix_dense_intermediate_size",
    "sliding_window_pattern": "prefix_dense_sliding_window_pattern",
    "rope_theta": "rope_theta",
@@ -21421,7 +21559,8 @@
    "norm_type": "implied by model_type cohere2_moe",
    "position_encoding_type": "implied by model_type cohere2_moe",
    "nope_layers": "implied by model_type cohere2_moe",
-   "router_scoring": "expert_selection_fn"
+   "router_scoring": "expert_selection_fn",
+   "tie_embeddings": "default"
   },
   "num_architecture_keys": 29
  },
@@ -21699,7 +21838,6 @@
    "kv_lora_rank": 512,
    "max_position_embeddings": 262144,
    "moe_intermediate_size": 2048,
-   "moe_layer_schedule": 1,
    "router_num_groups": 1,
    "num_experts": 384,
    "num_shared_experts": 1,
@@ -21747,7 +21885,6 @@
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
    "num_shared_experts": "n_shared_experts",
@@ -22035,13 +22172,6 @@
    "num_shared_experts": 1,
    "router_scoring": "sigmoid",
    "router_expert_bias": true,
-   "moe_layer_schedule": {
-    "_list_len": 60,
-    "_counts": {
-     "1": 57,
-     "0": 3
-    }
-   },
    "qk_norm_type": "per_head",
    "activation_clamp": {
     "_raw": {
@@ -22188,7 +22318,10 @@
    "attention_kind": "GQA",
    "sequence_mixer": "attention",
    "moe": true,
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 3,
+   "attention_bias": false,
+   "router_normalize_weights": true
   },
   "config_canonical_raw_key": {
    "hidden_size": "hidden_size",
@@ -22213,7 +22346,6 @@
    "num_shared_experts": "n_shared_experts",
    "router_scoring": "scoring_func",
    "router_expert_bias": "use_routing_bias",
-   "moe_layer_schedule": "moe_layer_freq",
    "qk_norm_type": "qk_norm_type",
    "activation_clamp": "swiglu_alpha",
    "router_scaling_factor": "routed_scaling_factor",
@@ -22226,7 +22358,10 @@
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "moe": "derived",
-   "position_encoding_type": "implied by model_type minimax_m3_vl"
+   "position_encoding_type": "implied by model_type minimax_m3_vl",
+   "dense_prefix_layers": "moe_layer_freq",
+   "attention_bias": "default",
+   "router_normalize_weights": "default"
   },
   "num_architecture_keys": 30
  },
@@ -22406,7 +22541,8 @@
    "attention_kind": "GQA",
    "sequence_mixer": "attention",
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "attention_bias": false
   },
   "config_canonical_raw_key": {
    "activation": "hidden_act",
@@ -22423,7 +22559,8 @@
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "norm_type": "implied by model_type qwen2",
-   "position_encoding_type": "implied by model_type qwen2"
+   "position_encoding_type": "implied by model_type qwen2",
+   "attention_bias": "default"
   },
   "num_architecture_keys": 15
  },
@@ -22675,18 +22812,6 @@
    "intermediate_size": 12288,
    "kv_lora_rank": 512,
    "max_position_embeddings": 1048576,
-   "moe_layer_schedule": {
-    "_raw": {
-     "mlp_layer_types": {
-      "_list_len": 78,
-      "_counts": {
-       "sparse": 75,
-       "dense": 3
-      }
-     },
-     "moe_layer_freq": 1
-    }
-   },
    "moe_intermediate_size": 2048,
    "router_num_groups": 1,
    "num_experts": 256,
@@ -22708,7 +22833,6 @@
    "router_topk_method": "noaux_tc",
    "v_head_dim": 256,
    "vocab_size": 154880,
-   "rope_scaling_type": "default",
    "rope_theta": 8000000,
    "attention_kind": "MLA",
    "sequence_mixer": "attention",
@@ -22733,7 +22857,6 @@
    "intermediate_size": "intermediate_size",
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
-   "moe_layer_schedule": "mlp_layer_types",
    "moe_intermediate_size": "moe_intermediate_size",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
@@ -22755,7 +22878,6 @@
    "router_topk_method": "topk_method",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
@@ -23010,21 +23132,6 @@
    "moe_intermediate_size": 512,
    "shared_expert_intermediate_size": 512,
    "router_normalize_weights": true,
-   "moe_layer_schedule": {
-    "_raw": {
-     "decoder_sparse_step": 1,
-     "mlp_only_layers": [
-      0
-     ],
-     "mlp_layer_types": {
-      "_list_len": 40,
-      "_counts": {
-       "sparse": 39,
-       "dense": 1
-      }
-     }
-    }
-   },
    "tie_embeddings": false,
    "gated_attention_type": {
     "_raw": {
@@ -23043,7 +23150,8 @@
     "_counts": {
      "sliding_attention": 30,
      "full_attention": 10
-    }
+    },
+    "_ratio": "3:1"
    },
    "router_input_scaling": false,
    "router_scaling_factor": 2.5,
@@ -23065,7 +23173,10 @@
    "gated_attention": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 1,
+   "activation": "silu",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "vocab_size": "vocab_size",
@@ -23083,7 +23194,6 @@
    "moe_intermediate_size": "moe_intermediate_size",
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "router_normalize_weights": "norm_topk_prob",
-   "moe_layer_schedule": "decoder_sparse_step",
    "tie_embeddings": "tie_word_embeddings",
    "gated_attention_type": "gating",
    "sliding_window": "sliding_window",
@@ -23102,7 +23212,10 @@
    "gated_attention": "implied by model_type laguna",
    "moe": "derived",
    "norm_type": "implied by model_type laguna",
-   "position_encoding_type": "implied by model_type laguna"
+   "position_encoding_type": "implied by model_type laguna",
+   "dense_prefix_layers": "mlp_layer_types",
+   "activation": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 27
  },
@@ -23320,7 +23433,8 @@
      "mamba2": 23,
      "attention": 6,
      "moe": 23
-    }
+    },
+    "_ratio": "1:1"
    },
    "intermediate_size": 1856,
    "norm_eps": 1e-05,
@@ -23362,7 +23476,8 @@
    "mixer_attention_ratio": 4,
    "moe": true,
    "norm_type": "rmsnorm",
-   "nope_layers": "full"
+   "nope_layers": "full",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias / use_bias",
@@ -23405,7 +23520,8 @@
    "mixer_attention_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type nemotron_h",
-   "nope_layers": "implied by model_type nemotron_h"
+   "nope_layers": "implied by model_type nemotron_h",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 40
  },
@@ -23686,7 +23802,8 @@
     "_counts": {
      "sliding_attention": 55,
      "full_attention": 11
-    }
+    },
+    "_ratio": "5:1"
    },
    "moe_layer_schedule": 2,
    "short_conv_kernel": {
@@ -23727,7 +23844,9 @@
    "attention_sinks": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "learned_relative_bias"
+   "position_encoding_type": "learned_relative_bias",
+   "tie_embeddings": false,
+   "activation": "silu"
   },
   "config_canonical_raw_key": {
    "max_position_embeddings": "model_max_length",
@@ -23767,7 +23886,9 @@
    "attention_sinks": "implied by model_type inkling_mm_model",
    "moe": "derived",
    "norm_type": "implied by model_type inkling_mm_model",
-   "position_encoding_type": "implied by model_type inkling_mm_model"
+   "position_encoding_type": "implied by model_type inkling_mm_model",
+   "tie_embeddings": "default",
+   "activation": "default"
   },
   "num_architecture_keys": 37
  },
@@ -23993,7 +24114,8 @@
     "_counts": {
      "linear_attention": 48,
      "full_attention": 16
-    }
+    },
+    "_ratio": "3:1"
    },
    "short_conv_kernel": 4,
    "linear_key_head_dim": 128,
@@ -24009,7 +24131,6 @@
    "norm_eps": 1e-06,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "rope_scaling_params": {
     "_raw": {
@@ -24051,7 +24172,6 @@
    "norm_eps": "rms_norm_eps",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "rope_scaling_params": "rope_parameters",
    "attention_kind": "derived",
@@ -24292,7 +24412,6 @@
    "tie_embeddings": true,
    "vocab_size": 100352,
    "rope_theta": 10000000,
-   "rope_scaling_type": "default",
    "attention_kind": "GQA",
    "sequence_mixer": "attention"
   },
@@ -24319,7 +24438,6 @@
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
    "rope_theta": "rope_theta",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "attention_kind": "derived",
    "sequence_mixer": "derived"
   },
@@ -24569,21 +24687,6 @@
    "moe_intermediate_size": 1024,
    "shared_expert_intermediate_size": 1024,
    "router_normalize_weights": true,
-   "moe_layer_schedule": {
-    "_raw": {
-     "decoder_sparse_step": 1,
-     "mlp_only_layers": [
-      0
-     ],
-     "mlp_layer_types": {
-      "_list_len": 48,
-      "_counts": {
-       "sparse": 47,
-       "dense": 1
-      }
-     }
-    }
-   },
    "tie_embeddings": false,
    "gated_attention_type": {
     "_raw": {
@@ -24602,7 +24705,8 @@
     "_counts": {
      "sliding_attention": 36,
      "full_attention": 12
-    }
+    },
+    "_ratio": "3:1"
    },
    "router_input_scaling": false,
    "router_scaling_factor": 2.5,
@@ -24625,7 +24729,10 @@
    "gated_attention": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 1,
+   "activation": "silu",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "vocab_size": "vocab_size",
@@ -24643,7 +24750,6 @@
    "moe_intermediate_size": "moe_intermediate_size",
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "router_normalize_weights": "norm_topk_prob",
-   "moe_layer_schedule": "decoder_sparse_step",
    "tie_embeddings": "tie_word_embeddings",
    "gated_attention_type": "gating",
    "sliding_window": "sliding_window",
@@ -24663,7 +24769,10 @@
    "gated_attention": "implied by model_type laguna",
    "moe": "derived",
    "norm_type": "implied by model_type laguna",
-   "position_encoding_type": "implied by model_type laguna"
+   "position_encoding_type": "implied by model_type laguna",
+   "dense_prefix_layers": "mlp_layer_types",
+   "activation": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 28
  },
@@ -24899,7 +25008,6 @@
    "head_dim": 192,
    "activation": "poly_norm",
    "hidden_size": 4096,
-   "moe_layer_schedule": 1,
    "intermediate_size": 12288,
    "kv_lora_rank": 512,
    "max_position_embeddings": 262144,
@@ -24954,7 +25062,16 @@
    "mla": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "layer_types": {
+    "_list_len": 53,
+    "_counts": {
+     "sliding_attention": 40,
+     "full_attention": 13
+    },
+    "_ratio": "3:1"
+   },
+   "attention_bias": false
   },
   "config_canonical_raw_key": {
    "attention_impl_type": "attention_cls",
@@ -24964,7 +25081,6 @@
    "head_dim": "head_dim",
    "activation": "hidden_act",
    "hidden_size": "hidden_size",
-   "moe_layer_schedule": "interleave_moe_layer_step",
    "intermediate_size": "intermediate_size",
    "kv_lora_rank": "kv_lora_rank",
    "max_position_embeddings": "max_position_embeddings",
@@ -25007,7 +25123,9 @@
    "mla": "implied by model_type Motif",
    "moe": "derived",
    "norm_type": "implied by model_type Motif",
-   "position_encoding_type": "implied by model_type Motif"
+   "position_encoding_type": "implied by model_type Motif",
+   "layer_types": "derived",
+   "attention_bias": "default"
   },
   "num_architecture_keys": 49
  },
@@ -25430,7 +25548,6 @@
    "rope_theta": 10000,
    "tie_embeddings": false,
    "max_position_embeddings": 1048576,
-   "dense_prefix_layers": 0,
    "position_encoding_type": "none",
    "hybrid_attention_interval": {
     "_raw": {
@@ -25471,14 +25588,18 @@
     "_counts": {
      "full_attention": 12,
      "kda": 36
-    }
+    },
+    "_ratio": "3:1"
    },
    "attention_kind": "GQA",
    "sequence_mixer": "kda",
    "mixer_attention_ratio": 3,
    "moe": true,
    "norm_type": "rmsnorm",
-   "nope_layers": "full"
+   "nope_layers": "full",
+   "attention_bias": false,
+   "activation": "silu",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "partial_rotary_factor": "partial_rotary_factor",
@@ -25494,7 +25615,6 @@
    "rope_theta": "rope_theta",
    "tie_embeddings": "tie_word_embeddings",
    "max_position_embeddings": "max_position_embeddings",
-   "dense_prefix_layers": "first_k_dense_replace",
    "position_encoding_type": "use_rope",
    "hybrid_attention_interval": "gqa_interval",
    "gated_attention": "use_gqa_gate",
@@ -25513,7 +25633,10 @@
    "mixer_attention_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type solar_open2",
-   "nope_layers": "implied by model_type solar_open2"
+   "nope_layers": "implied by model_type solar_open2",
+   "attention_bias": "default",
+   "activation": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 26
  },
@@ -25912,7 +26035,6 @@
      "routed_expert_hidden_size": 3584
     }
    },
-   "moe_layer_schedule": 1,
    "router_normalize_weights": true,
    "router_scoring": "sigmoid",
    "num_heads": 96,
@@ -25942,7 +26064,8 @@
     "_counts": {
      "kda": 69,
      "full_attention": 24
-    }
+    },
+    "_ratio": "3:1"
    },
    "linear_num_value_heads": 96,
    "linear_value_head_dim": 128,
@@ -25961,7 +26084,8 @@
    "moe": true,
    "norm_type": "rmsnorm",
    "position_encoding_type": "rope",
-   "nope_layers": "partial"
+   "nope_layers": "partial",
+   "attention_bias": false
   },
   "config_canonical_raw_key": {
    "activation_situ_beta": "activation_situ_beta",
@@ -25976,7 +26100,6 @@
    "mla_nope": "mla_use_nope",
    "gated_attention": "mla_use_output_gate",
    "moe_intermediate_size": "moe_intermediate_size",
-   "moe_layer_schedule": "moe_layer_freq",
    "router_normalize_weights": "moe_renormalize",
    "router_scoring": "moe_router_activation_func",
    "num_heads": "num_attention_heads",
@@ -26009,7 +26132,8 @@
    "moe": "derived",
    "norm_type": "implied by model_type kimi_linear",
    "position_encoding_type": "implied by model_type kimi_linear",
-   "nope_layers": "implied by model_type kimi_linear"
+   "nope_layers": "implied by model_type kimi_linear",
+   "attention_bias": "default"
   },
   "num_architecture_keys": 36
  },
@@ -26326,7 +26450,15 @@
    "moe": true,
    "norm_type": "rmsnorm",
    "position_encoding_type": "rope",
-   "gated_attention": true
+   "gated_attention": true,
+   "layer_types": {
+    "_list_len": 42,
+    "_counts": {
+     "kda": 35,
+     "attention": 7
+    },
+    "_ratio": "5:1"
+   }
   },
   "config_canonical_raw_key": {
    "activation_clamp_experts": "expert_swiglu_limit_list",
@@ -26383,7 +26515,8 @@
    "moe": "derived",
    "norm_type": "implied by model_type bailing_hybrid",
    "position_encoding_type": "implied by model_type bailing_hybrid",
-   "gated_attention": "gated_attention_proj_granularity_type"
+   "gated_attention": "gated_attention_proj_granularity_type",
+   "layer_types": "derived"
   },
   "num_architecture_keys": 57
  },
@@ -26607,7 +26740,8 @@
     "_counts": {
      "sliding_attention": 39,
      "full_attention": 13
-    }
+    },
+    "_ratio": "3:1"
    },
    "max_position_embeddings": 131072,
    "num_heads": 32,
@@ -26620,7 +26754,6 @@
    "sliding_window": 2048,
    "tie_embeddings": false,
    "vocab_size": 202048,
-   "rope_scaling_type": "default",
    "rope_theta": 500000.0,
    "attention_kind": "GQA",
    "sequence_mixer": "attention",
@@ -26651,7 +26784,6 @@
    "sliding_window": "sliding_window",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
@@ -26896,7 +27028,8 @@
      "mamba2": 23,
      "attention": 6,
      "moe": 23
-    }
+    },
+    "_ratio": "1:1"
    },
    "intermediate_size": 1856,
    "norm_eps": 1e-05,
@@ -26938,7 +27071,8 @@
    "mixer_attention_ratio": 4,
    "moe": true,
    "norm_type": "rmsnorm",
-   "nope_layers": "full"
+   "nope_layers": "full",
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias / use_bias",
@@ -26981,7 +27115,8 @@
    "mixer_attention_ratio": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type nemotron_h",
-   "nope_layers": "implied by model_type nemotron_h"
+   "nope_layers": "implied by model_type nemotron_h",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 41
  },
@@ -27207,7 +27342,8 @@
     "_counts": {
      "linear_attention": 48,
      "full_attention": 16
-    }
+    },
+    "_ratio": "3:1"
    },
    "short_conv_kernel": 4,
    "linear_key_head_dim": 128,
@@ -27223,7 +27359,6 @@
    "norm_eps": 1e-06,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "rope_scaling_params": {
     "_raw": {
@@ -27265,7 +27400,6 @@
    "norm_eps": "rms_norm_eps",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "rope_scaling_params": "rope_parameters",
    "attention_kind": "derived",
@@ -27508,7 +27642,8 @@
     "_counts": {
      "linear_attention": 30,
      "full_attention": 10
-    }
+    },
+    "_ratio": "3:1"
    },
    "short_conv_kernel": 4,
    "linear_key_head_dim": 128,
@@ -27527,7 +27662,6 @@
    "shared_expert_intermediate_size": 512,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "rope_scaling_params": {
     "_raw": {
@@ -27545,7 +27679,9 @@
    "qk_norm": true,
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -27572,7 +27708,6 @@
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "rope_scaling_params": "rope_parameters",
    "attention_kind": "derived",
@@ -27581,7 +27716,9 @@
    "qk_norm": "implied by model_type qwen3_5_moe_text",
    "moe": "derived",
    "norm_type": "implied by model_type qwen3_5_moe_text",
-   "position_encoding_type": "implied by model_type qwen3_5_moe_text"
+   "position_encoding_type": "implied by model_type qwen3_5_moe_text",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 25
  },
@@ -27929,18 +28066,12 @@
     "_counts": {
      "kda": 34,
      "full_attention": 11
-    }
+    },
+    "_ratio": "3:1"
    },
    "max_position_embeddings": 1048576,
    "hyper_connections": true,
    "mla_nope": true,
-   "moe_layer_schedule": {
-    "_list_len": 45,
-    "_counts": {
-     "sparse": 42,
-     "dense": 3
-    }
-   },
    "moe_intermediate_size": 2048,
    "router_num_groups": 1,
    "num_experts": 288,
@@ -27996,7 +28127,6 @@
    "max_position_embeddings": "max_position_embeddings",
    "hyper_connections": "mhc",
    "mla_nope": "mla_use_nope",
-   "moe_layer_schedule": "mlp_layer_types",
    "moe_intermediate_size": "moe_intermediate_size",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
@@ -28308,7 +28438,8 @@
     "_counts": {
      "linear_attention": 36,
      "full_attention": 12
-    }
+    },
+    "_ratio": "3:1"
    },
    "short_conv_kernel": 4,
    "linear_key_head_dim": 128,
@@ -28333,7 +28464,6 @@
    "shared_expert_intermediate_size": 640,
    "tie_embeddings": false,
    "vocab_size": 248320,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "rope_scaling_params": {
     "_raw": {
@@ -28353,7 +28483,9 @@
    "sparse_attention": "QSA",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "router_normalize_weights": true,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -28390,7 +28522,6 @@
    "shared_expert_intermediate_size": "shared_expert_intermediate_size",
    "tie_embeddings": "tie_word_embeddings",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "rope_scaling_params": "rope_parameters",
    "attention_kind": "derived",
@@ -28401,7 +28532,9 @@
    "sparse_attention": "implied by model_type qwen4_exp_text",
    "moe": "derived",
    "norm_type": "implied by model_type qwen4_exp_text",
-   "position_encoding_type": "implied by model_type qwen4_exp_text"
+   "position_encoding_type": "implied by model_type qwen4_exp_text",
+   "router_normalize_weights": "default",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 40
  },
@@ -28668,13 +28801,6 @@
    },
    "attention_sinks": true,
    "max_position_embeddings": 1048576,
-   "moe_layer_schedule": {
-    "_list_len": 78,
-    "_counts": {
-     "sparse": 77,
-     "dense": 1
-    }
-   },
    "moe_intermediate_size": 2048,
    "router_num_groups": 1,
    "num_experts": 256,
@@ -28696,13 +28822,14 @@
    "mla": true,
    "v_head_dim": 256,
    "vocab_size": 120832,
-   "rope_scaling_type": "default",
    "rope_theta": 10000000,
    "attention_kind": "MLA",
    "sequence_mixer": "attention",
    "moe": true,
    "norm_type": "rmsnorm",
-   "position_encoding_type": "rope"
+   "position_encoding_type": "rope",
+   "dense_prefix_layers": 1,
+   "router_scoring": "softmax"
   },
   "config_canonical_raw_key": {
    "attention_bias": "attention_bias",
@@ -28723,7 +28850,6 @@
    "layer_types": "layer_types",
    "attention_sinks": "learnable_sink",
    "max_position_embeddings": "max_position_embeddings",
-   "moe_layer_schedule": "mlp_layer_types",
    "moe_intermediate_size": "moe_intermediate_size",
    "router_num_groups": "n_group",
    "num_experts": "n_routed_experts",
@@ -28745,13 +28871,14 @@
    "mla": "use_mla",
    "v_head_dim": "v_head_dim",
    "vocab_size": "vocab_size",
-   "rope_scaling_type": "rope_parameters.rope_type",
    "rope_theta": "rope_parameters.rope_theta",
    "attention_kind": "derived",
    "sequence_mixer": "derived",
    "moe": "derived",
    "norm_type": "implied by model_type hy_v4",
-   "position_encoding_type": "implied by model_type hy_v4"
+   "position_encoding_type": "implied by model_type hy_v4",
+   "dense_prefix_layers": "mlp_layer_types",
+   "router_scoring": "default"
   },
   "num_architecture_keys": 43
  },
@@ -29128,7 +29255,15 @@
    "moe": true,
    "norm_type": "rmsnorm",
    "position_encoding_type": "rope",
-   "bidirectional_attention": true
+   "bidirectional_attention": true,
+   "layer_types": {
+    "_list_len": 43,
+    "_counts": {
+     "sliding_attention": 5,
+     "full_attention": 38
+    },
+    "_ratio": "8:1"
+   }
   },
   "config_canonical_raw_key": {
    "vocab_size": "vocab_size",
@@ -29182,7 +29317,8 @@
    "moe": "derived",
    "norm_type": "implied by model_type deepseek_v41_text",
    "position_encoding_type": "implied by model_type deepseek_v41_text",
-   "bidirectional_attention": "implied by model_type deepseek_v41_text"
+   "bidirectional_attention": "implied by model_type deepseek_v41_text",
+   "layer_types": "derived"
   },
   "num_architecture_keys": 52
  }

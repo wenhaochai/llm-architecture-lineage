@@ -1,8 +1,10 @@
 # From 571 config keys to the canonical fields
 
-The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **155** that carry no architecture, and `schema.py` renames the remaining **416** into **170** canonical fields, every raw key covered exactly once. Nested sub-configs (`linear_attn_config`, `rope_scaling`, `attention_other_setting`, `sparse_attention_config`) are flattened into the same fields, per-layer index lists become layer schedules by kind, five canonical fields are derived (`attention_kind`, `sequence_mixer`, `local_global_ratio`, `mixer_attention_ratio`, `attention_residuals`), and traits the modeling class implies are filled in by `extract.py` with the implying model type recorded as their source.
+The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **155** that carry no architecture, and `schema.py` renames the remaining **416** into **170** canonical fields, every raw key covered exactly once. Nested sub-configs (`linear_attn_config`, `rope_scaling`, `attention_other_setting`, `sparse_attention_config`) are flattened into the same fields, per-layer index lists become layer schedules by kind with a rounded ratio, 5 canonical fields are derived (`attention_kind`, `attention_residuals`, `local_global_ratio`, `mixer_attention_ratio`, `sequence_mixer`), and traits the modeling class implies are filled in by `extract.py` with the implying model type recorded as their source.
 
-Fields sit in four sections that follow the forward pass of a decoder block; token mixing and channel mixing have subsections. Each field is tagged **design** (66), **scale** (65) or **tuning** (41). The change list between a model and a candidate parent: a design field counts when its value differs (per-layer schedules compared by the kinds of layer they contain); a scale field never counts by value, and 16 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields never count. Candidate parents are ranked by the number of changes among the mechanism-level fields (`MECHANISM`, 18 fields) first, then by the total.
+A key written with its default says what an absent key says: `NO_EFFECT` values are dropped, `DEFAULTS` and `DEFAULTS_IF_MOE` fill the absent ones. Fields sit in four sections that follow the forward pass of a decoder block; token mixing and channel mixing have subsections. Each field is tagged **design** (67), **scale** (66) or **tuning** (42), and 19 design fields are **mechanism**-level.
+
+The change list between a model and a candidate parent: a design field counts when its value differs (layer schedules compared by the kinds of layer they contain and their ratio); a scale field never counts by value, and 15 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields never count; `RESTATED` fields (6) say what the layer schedule already says; and a field in `CONDITIONAL` is skipped when the mechanism it belongs to is itself the change, so dense to MoE is one change.
 
 ## Dropped
 
@@ -41,7 +43,7 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Embeddings & output | `embedding_multiplier` | tuning | `embedding_multiplier` ×2, `embedding_multiplier_scale` ×1 |
 | Embeddings & output | `output_multiplier` | tuning | `logits_scaling` ×2, `output_multiplier` ×1, `output_multiplier_scale` ×1, `logits_mup_width_multiplier` ×1, `logit_scale` ×3 |
 | Embeddings & output | `final_logit_softcapping` | tuning | `final_logit_softcapping` ×10, `output_logit_soft_cap` ×1 |
-| Embeddings & output | `per_layer_embedding_dim` | scale · presence · mechanism | `hidden_size_per_layer_input` ×5, `ple_embed_dim` ×1 |
+| Embeddings & output | `per_layer_embedding_dim` | scale · mechanism · presence | `hidden_size_per_layer_input` ×5, `ple_embed_dim` ×1 |
 | Embeddings & output | `per_layer_embedding_vocab` | scale | `vocab_size_per_layer_input` ×5 |
 | Embeddings & output | `per_layer_embedding_layers` | design | `ple_layer_ids` ×1 |
 | Embeddings & output | `per_layer_embedding_conv` | design | `ple_conv_kernel_size` ×1 |
@@ -51,14 +53,14 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Embeddings & output | `ngram_embedding` | tuning | `ngram_size` ×1, `ngram_vocab_size_base` ×1, `ngram_vocab_size_ratio` ×1, `make_ngram_vocab_size_divisible_by` ×1, `split_ngram_parts` ×1, `heads_per_ngram` ×1, `emb_neighbor_num` ×1, `emb_split_num` ×1 |
 | Embeddings & output | `dspark` | tuning · mechanism | `dspark_block_size` ×1, `dspark_markov_rank` ×1, `dspark_n_routed_experts` ×1, `dspark_num_experts_per_tok` ×1, `dspark_target_layer_ids` ×1 |
 | Token mixing › Mixer kind & layer schedule | `sequence_mixer` | design · mechanism | *derived* |
-| Token mixing › Mixer kind & layer schedule | `layer_types` | design | `layer_types` ×35, `attn_type_list` ×3, `hybrid_layer_pattern` ×3, `local_layer_ids` ×1, `order_of_interleaved_layers` ×2, `layers_block_type` ×2, `hybrid_override_pattern` ×4 |
-| Token mixing › Mixer kind & layer schedule | `mixer_attention_ratio` | design | *derived* |
-| Token mixing › Mixer kind & layer schedule | `hybrid_attention_interval` | design | `full_attention_interval` ×8, `gqa_interval` ×1, `layer_group_size` ×3, `gqa_layers` ×1, `hybrid_block_size` ×1 |
-| Token mixing › Mixer kind & layer schedule | `local_global_ratio` | design | *derived* |
-| Token mixing › Mixer kind & layer schedule | `sliding_window` | scale · presence | `sliding_window` ×49, `sliding_window_size` ×5 |
-| Token mixing › Mixer kind & layer schedule | `sliding_window_enabled` | design | `use_sliding_window` ×13 |
-| Token mixing › Mixer kind & layer schedule | `sliding_window_pattern` | design | `sliding_window_pattern` ×2, `_sliding_window_pattern` ×3, `layer_switch` ×2, `sliding_window_period` ×1, `global_attn_every_n` ×1, `global_attn_every_n_layers` ×1, `prefix_dense_sliding_window_pattern` ×2 |
-| Token mixing › Mixer kind & layer schedule | `sliding_window_max_layers` | scale | `max_window_layers` ×15 |
+| Token mixing › Mixer kind & layer schedule | `layer_types` | design · mechanism | `layer_types` ×35, `attn_type_list` ×3, `hybrid_layer_pattern` ×3, `local_layer_ids` ×1, `order_of_interleaved_layers` ×2, `layers_block_type` ×2, `hybrid_override_pattern` ×4 |
+| Token mixing › Mixer kind & layer schedule | `mixer_attention_ratio` | design · restated | *derived* |
+| Token mixing › Mixer kind & layer schedule | `hybrid_attention_interval` | design · restated | `full_attention_interval` ×8, `gqa_interval` ×1, `layer_group_size` ×3, `gqa_layers` ×1, `hybrid_block_size` ×1 |
+| Token mixing › Mixer kind & layer schedule | `local_global_ratio` | design · restated | *derived* |
+| Token mixing › Mixer kind & layer schedule | `sliding_window` | scale | `sliding_window` ×49, `sliding_window_size` ×5 |
+| Token mixing › Mixer kind & layer schedule | `sliding_window_enabled` | design · restated | `use_sliding_window` ×13 |
+| Token mixing › Mixer kind & layer schedule | `sliding_window_pattern` | design · restated | `sliding_window_pattern` ×2, `_sliding_window_pattern` ×3, `layer_switch` ×2, `sliding_window_period` ×1, `global_attn_every_n` ×1, `global_attn_every_n_layers` ×1, `prefix_dense_sliding_window_pattern` ×2 |
+| Token mixing › Mixer kind & layer schedule | `sliding_window_max_layers` | scale · restated | `max_window_layers` ×15 |
 | Token mixing › Mixer kind & layer schedule | `chunked_attention_size` | scale · presence | `attention_chunk_size` ×4 |
 | Token mixing › Mixer kind & layer schedule | `bidirectional_attention` | design · mechanism | `use_bidirectional_attention` ×6 |
 | Token mixing › Attention heads & projections | `attention_kind` | design · mechanism | *derived* |
@@ -88,7 +90,7 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Token mixing › Attention heads & projections | `global_head_dim` | scale | `global_head_dim` ×5 |
 | Token mixing › Attention heads & projections | `global_num_kv_heads` | scale | `num_global_key_value_heads` ×5 |
 | Token mixing › Attention heads & projections | `global_kv_unified` | design | `attention_k_eq_v` ×5 |
-| Token mixing › Attention heads & projections | `kv_shared_layers` | scale · presence · mechanism | `num_kv_shared_layers` ×5, `kv_source_layer_ids` ×1 |
+| Token mixing › Attention heads & projections | `kv_shared_layers` | scale · mechanism · presence | `num_kv_shared_layers` ×5, `kv_source_layer_ids` ×1 |
 | Token mixing › Attention heads & projections | `attention_sinks` | design | `sink` ×1, `learnable_sink` ×1, `add_full_attention_sink_bias` ×3, `add_swa_attention_sink_bias` ×3 |
 | Token mixing › Latent attention | `mla` | design · mechanism | `use_mla` ×1 |
 | Token mixing › Latent attention | `q_lora_rank` | scale · presence | `q_lora_rank` ×24 |
@@ -140,7 +142,7 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Token mixing › Positions | `rope_theta_per_layer` | tuning | `layer_rope_theta` ×1 |
 | Token mixing › Positions | `rope_theta_local` | tuning | `rope_local_base_freq` ×2 |
 | Token mixing › Positions | `rope_scaling` | design | `rope_scaling` ×55, `rope_parameters` ×27 |
-| Token mixing › Positions | `rope_scaling_type` | design | `rope_type` ×1 |
+| Token mixing › Positions | `rope_scaling_type` | tuning | `rope_type` ×1 |
 | Token mixing › Positions | `rope_scaling_factor` | tuning | `rope_factor` ×1, `scaling_factor` ×1 |
 | Token mixing › Positions | `rope_scaling_params` | tuning | `mscale` ×1, `beta_fast` ×1, `beta_slow` ×1, `attn_factor` ×1, `extrapolation_factor` ×1 |
 | Token mixing › Positions | `rope_original_max_position` | tuning | `original_max_position_embeddings` ×2, `initial_context_length` ×2, `original_seq_len` ×1 |
@@ -207,5 +209,5 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Block structure & residual stream | `attention_residual_block` | scale | `attn_res_block_size` ×1 |
 | Block structure & residual stream | `residual_multiplier` | tuning | `residual_multiplier` ×2 |
 | Block structure & residual stream | `mup` | design | `mup_enabled` ×1 |
-| Block structure & residual stream | `loop_passes` | scale · presence · mechanism | `num_loops` ×1, `total_ut_steps` ×1 |
+| Block structure & residual stream | `loop_passes` | scale · mechanism · presence | `num_loops` ×1, `total_ut_steps` ×1 |
 | Block structure & residual stream | `loop_exit_threshold` | tuning | `early_exit_threshold` ×1 |

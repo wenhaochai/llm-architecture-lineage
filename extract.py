@@ -564,6 +564,33 @@ def extract(card):
         for k in ("short_conv_kernel", "conv_bias"):
             if str(raw_used.get(k, "")).startswith("mamba"):
                 norm.pop(k, None); raw_used.pop(k, None)
+    # one layer schedule per model, with the rounded mixer ratio, so the schedule alone states the mix
+    if "layer_types" not in norm:
+        if m["hybrid_mixer"] and m["linear_layers"] and m["full_attention_layers_in_hybrid"]:
+            norm["layer_types"] = schedule({m["hybrid_mixer"]: m["linear_layers"], "attention": m["full_attention_layers_in_hybrid"]},
+                                           m["linear_layers"] + m["full_attention_layers_in_hybrid"])
+            raw_used["layer_types"] = "derived"
+        elif m["swa"] and m["swa_local_layers"] and m["swa_global_layers"]:
+            norm["layer_types"] = schedule({"sliding_attention": m["swa_local_layers"], "full_attention": m["swa_global_layers"]},
+                                           m["swa_local_layers"] + m["swa_global_layers"])
+            raw_used["layer_types"] = "derived"
+    lt = norm.get("layer_types")
+    if isinstance(lt, dict) and lt.get("_counts"):
+        top = sorted(lt["_counts"].items(), key=lambda kv: -kv[1])
+        if len(top) >= 2 and top[1][1]:
+            lt["_ratio"] = f"{round(top[0][1] / top[1][1])}:1"
+    # a MoE schedule that is dense at the front says the same as a dense-prefix count
+    sched_raw = raw_used.get("moe_layer_schedule")
+    for key in ("moe_layer_freq", "mlp_layer_types", "mlp_only_layers"):
+        v = tc.get(key)
+        if isinstance(v, list) and v and sched_raw:
+            dense = [i for i, x in enumerate(v) if x in (0, False, "dense")] if key != "mlp_only_layers" else list(v)
+            if dense and dense == list(range(len(dense))):
+                norm.pop("moe_layer_schedule", None); raw_used.pop("moe_layer_schedule", None)
+                if not norm.get("dense_prefix_layers"):
+                    norm["dense_prefix_layers"] = len(dense); raw_used["dense_prefix_layers"] = key
+                break
+
     # bare switches (use_rmsnorm=True, use_pos_enc=True, use_dsa=True) name no design; give them the
     # value the rest of the gallery uses for the same thing, so spellings never read as changes
     if norm.get("sparse_attention") is True:
@@ -600,6 +627,19 @@ def extract(card):
             vals = list(v["_raw"].values())
             if all(json.dumps(x, sort_keys=True) == json.dumps(vals[0], sort_keys=True) for x in vals):
                 norm[k] = vals[0]; raw_used[k] = " / ".join(v["_raw"])
+    # defaults: a key written with its default says what an absent key says
+    if isinstance(norm.get("activation"), str):
+        norm["activation"] = schema.ACTIVATION_ALIAS.get(norm["activation"], norm["activation"])
+    for f, vals in schema.NO_EFFECT.items():
+        if norm.get(f) in vals:
+            del norm[f]; raw_used.pop(f, None)
+    for f, dv in schema.DEFAULTS.items():
+        if f not in norm:
+            norm[f] = dv; raw_used[f] = "default"
+    if norm.get("moe"):
+        for f, dv in schema.DEFAULTS_IF_MOE.items():
+            if f not in norm:
+                norm[f] = dv; raw_used[f] = "default"
     m["config_canonical"] = dict(norm)
     m["config_canonical_raw_key"] = raw_used
     m["num_architecture_keys"] = sum(1 for k in tc if k not in NON_ARCH)

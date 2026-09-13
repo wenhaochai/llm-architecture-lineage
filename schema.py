@@ -261,7 +261,7 @@ TUNING = {
     "norm_eps", "norm_eps_post", "norm_eps_cell", "norm_beta_attention", "norm_beta_linear_attention", "norm_beta_mlp",
     "activation_clamp", "activation_clamp_shared_expert", "activation_clamp_experts", "activation_situ_beta", "polynorm_output_scale",
     "polynorm_bias_clamp", "attention_scale", "attention_value_scale", "attention_logit_softcapping", "attention_temperature_tuning",
-    "attention_log_scaling", "rope_theta", "rope_theta_per_layer", "rope_theta_local", "rope_scaling_factor", "rope_scaling_params",
+    "attention_log_scaling", "rope_theta", "rope_theta_per_layer", "rope_theta_local", "rope_scaling_type", "rope_scaling_factor", "rope_scaling_params",
     "rope_original_max_position", "partial_rotary_factor", "swa_rope_theta", "compress_rope_theta", "router_scaling_factor",
     "router_logit_softcapping", "mamba_time_step", "mlstm_gate_softcap", "hyper_connection_params", "residual_multiplier",
     "embedding_multiplier", "output_multiplier", "final_logit_softcapping", "loop_exit_threshold", "kda_config", "candidate_selection",
@@ -275,12 +275,56 @@ NOT_A_CHANGE = set()  # kept for the change rule; multi-token-prediction heads a
 # Scale fields whose appearance marks a mechanism (their value never counts, their presence does).
 PRESENCE = {"kv_lora_rank", "q_lora_rank", "index_topk", "mamba_num_heads", "mamba_state_size", "linear_num_value_heads",
             "kv_shared_layers", "per_layer_embedding_dim", "hyper_connection_streams", "loop_passes", "moe_latent_size",
-            "engram_size", "sliding_window", "chunked_attention_size", "num_shared_experts", "dense_prefix_layers"}
+            "engram_size", "chunked_attention_size", "num_shared_experts", "dense_prefix_layers"}
 assert NOT_A_CHANGE <= set(ALIASES) and PRESENCE <= SCALE
 
 # Mechanism-level design fields: a candidate parent is ranked first by how many of these differ,
 # then by the total number of design changes, then by the tie rules of build_graph.py.
-MECHANISM = {"attention_kind", "sequence_mixer", "moe", "sparse_attention", "mla", "position_encoding_type", "nope_layers",
+MECHANISM = {"layer_types", "attention_kind", "sequence_mixer", "moe", "sparse_attention", "mla", "position_encoding_type", "nope_layers",
              "hyper_connections", "loop_passes", "per_layer_embedding_dim", "kv_shared_layers", "bidirectional_attention",
              "engram_layers", "dspark", "gated_attention", "qk_norm", "attention_residuals", "gated_residuals"}
 assert MECHANISM <= set(ALIASES)
+
+# ---- defaults and redundancy -------------------------------------------------------
+# A key written with its default value says the same thing as a key left out, so the
+# extractor fills absent fields with the default and drops values that mean "no effect".
+DEFAULTS = {"attention_bias": False, "tie_embeddings": False, "activation": "silu"}
+DEFAULTS_IF_MOE = {"router_normalize_weights": True, "router_scoring": "softmax"}
+NO_EFFECT = {"rope_scaling_type": ("default", "original"), "moe_layer_schedule": (1,),
+             "dense_prefix_layers": (0,), "num_shared_experts": (0,), "loop_passes": (1,)}
+ACTIVATION_ALIAS = {"gelu_new": "gelu", "gelu_pytorch_tanh": "gelu", "gelu_tanh": "gelu", "silu": "silu", "swish": "silu"}
+
+# One design decision is spelled by several keys: the layer schedule states the mixer mix and its
+# ratio, so the ratios, the interval and the window switches restate it. They stay on the card and
+# never enter the change list.
+RESTATED = {"local_global_ratio", "mixer_attention_ratio", "hybrid_attention_interval",
+            "sliding_window_pattern", "sliding_window_enabled", "sliding_window_max_layers"}
+# Fields that only exist when a mechanism is present. When the mechanism itself changes, that one
+# change says everything; its details are skipped so a dense-to-MoE step is not counted five times.
+CONDITIONAL = {}
+for _f in GROUPS["Channel mixing › Experts"] + GROUPS["Channel mixing › Router"]:
+    if _f != "moe":
+        CONDITIONAL[_f] = "moe"
+for _f in GROUPS["Token mixing › Latent attention"]:
+    if _f != "mla":
+        CONDITIONAL[_f] = "mla"
+for _f in GROUPS["Token mixing › Sparse attention & indexer"]:
+    if _f != "sparse_attention":
+        CONDITIONAL[_f] = "sparse_attention"
+for _f in GROUPS["Token mixing › Linear & recurrent mixers"]:
+    if _f != "sequence_mixer":
+        CONDITIONAL[_f] = "sequence_mixer"
+for _f in ("engram_size", "engram_heads"):
+    CONDITIONAL[_f] = "engram_layers"
+for _f in ("hyper_connection_streams", "hyper_connection_params"):
+    CONDITIONAL[_f] = "hyper_connections"
+for _f in ("per_layer_embedding_vocab", "per_layer_embedding_layers", "per_layer_embedding_conv"):
+    CONDITIONAL[_f] = "per_layer_embedding_dim"
+CONDITIONAL["attention_residual_block"] = "attention_residuals"
+CONDITIONAL["gated_attention_type"] = "gated_attention"
+CONDITIONAL["qk_norm_type"] = "qk_norm"
+CONDITIONAL["loop_exit_threshold"] = "loop_passes"
+CONDITIONAL["sequence_mixer"] = "layer_types"   # the schedule names the mixers and their ratio
+CONDITIONAL["mla"] = "attention_kind"           # the attention kind already says MLA
+
+assert set(DEFAULTS) | set(DEFAULTS_IF_MOE) | set(NO_EFFECT) | RESTATED | set(CONDITIONAL) <= set(ALIASES)

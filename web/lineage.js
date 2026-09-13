@@ -20,12 +20,13 @@
   var T = function (en, zh) { return (window.ArticleCharts && window.ArticleCharts.t) ? window.ArticleCharts.t(en, zh) : en; };
 
   /* ---------- schema: which canonical fields count ---------- */
-  var SCALE = {}, TUNING = {}, SKIP = {}, PRESENCE = {}, MECH = {}, ORDER = [];
+  var SCALE = {}, TUNING = {}, SKIP = {}, PRESENCE = {}, MECH = {}, RESTATED = {}, COND = D.schema_conditional || {}, ORDER = [];
   (D.schema_scale || []).forEach(function (f) { SCALE[f] = 1; });
   (D.schema_tuning || []).forEach(function (f) { TUNING[f] = 1; });
   (D.schema_not_a_change || []).forEach(function (f) { SKIP[f] = 1; });
   (D.schema_presence || []).forEach(function (f) { PRESENCE[f] = 1; });
   (D.schema_mechanism || []).forEach(function (f) { MECH[f] = 1; });
+  (D.schema_restated || []).forEach(function (f) { RESTATED[f] = 1; });
   function mechCount(ch) { var m = 0; ch.forEach(function (c) { if (MECH[c.field]) m++; }); return m; }
   Object.keys(D.schema_groups || {}).forEach(function (g) { D.schema_groups[g].forEach(function (f) { ORDER.push(f); }); });
 
@@ -34,7 +35,7 @@
       (typeof v === 'object' && !Array.isArray(v) && !v._list_len && !v._raw && !Object.keys(v).length);
   }
   function shape(v) {
-    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).sort(); // a longer copy of the same schedule is no change
+    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).sort().concat([v._ratio]); // a longer copy of the same schedule is no change
     if (v && typeof v === 'object' && v._indices) return 'indices';
     if (Array.isArray(v)) return v.slice().sort();
     return v;
@@ -52,7 +53,8 @@
     if (changeCache[ck]) return changeCache[ck];
     var a = p.config_canonical || {}, b = x.config_canonical || {}, out = [];
     ORDER.forEach(function (k) {
-      if (SKIP[k] || TUNING[k] || (SCALE[k] && !PRESENCE[k])) return;
+      if (SKIP[k] || TUNING[k] || RESTATED[k] || (SCALE[k] && !PRESENCE[k])) return;
+      if (COND[k] && !same(a[COND[k]], b[COND[k]])) return; // the mechanism itself already counted this
       var va = a[k], vb = b[k], hasA = !absent(va), hasB = !absent(vb);
       if (hasA && hasB) { if (!SCALE[k] && !same(va, vb)) out.push({ field: k, kind: 'change', from: va, to: vb }); }
       else if (hasB) out.push({ field: k, kind: 'add', to: vb });
@@ -204,14 +206,14 @@
     if (v === null || v === undefined) return 'null';
     if (Array.isArray(v)) return v.map(fmtVal).join(', ');
     if (typeof v === 'object' && v._raw) return Object.keys(v._raw).map(function (k) { return k + ' = ' + fmtVal(v._raw[k]); }).join(' · ');
-    if (typeof v === 'object' && v._list_len) return Object.keys(v._counts).map(function (k) { return v._counts[k] + ' × ' + k; }).join(' · ') + ' (' + v._list_len + T(' layers', ' 层') + ')';
+    if (typeof v === 'object' && v._list_len) return Object.keys(v._counts).map(function (k) { return v._counts[k] + ' × ' + k; }).join(' · ') + ' (' + v._list_len + T(' layers', ' 层') + (v._ratio ? ', ' + v._ratio : '') + ')';
     if (typeof v === 'object' && v._indices) return v._indices + T(' layers', ' 层') + (v._step ? T(', every ' + v._step, '，每 ' + v._step + ' 层一个') : '') + ' (' + v._min + '–' + v._max + ')';
     if (typeof v === 'object') return Object.keys(v).map(function (k) { return k + ' = ' + fmtVal(v[k]); }).join(' · ');
     return String(v);
   }
   function short(v) {
     if (v === true) return T('on', '开'); if (v === false) return T('off', '关'); if (v === null || v === undefined) return 'null';
-    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).join('/');
+    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).join('/') + (v._ratio ? ' ' + v._ratio : '');
     if (v && typeof v === 'object' && v._indices) return v._indices + T(' layers', ' 层');
     if (typeof v === 'object') return T('changed', '有变化');
     return String(v);

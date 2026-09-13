@@ -62,7 +62,7 @@ def absent(v):
 
 def shape(v):
     if isinstance(v, dict) and v.get("_list_len"):
-        return sorted(v["_counts"])
+        return sorted(v["_counts"]) + [v.get("_ratio")]
     if isinstance(v, dict) and v.get("_indices"):
         return "indices"
     if isinstance(v, list):
@@ -77,7 +77,10 @@ def same(a, b):
 def changes(x, p):
     a, b, out = p["config_canonical"], x["config_canonical"], []
     for k in ORDER:
-        if k in schema.NOT_A_CHANGE or k in schema.TUNING or (k in schema.SCALE and k not in schema.PRESENCE):
+        if k in schema.NOT_A_CHANGE or k in schema.TUNING or k in schema.RESTATED or (k in schema.SCALE and k not in schema.PRESENCE):
+            continue
+        cond = schema.CONDITIONAL.get(k)  # the mechanism itself already counted this
+        if cond and not same(a.get(cond), b.get(cond)):
             continue
         va, vb = a.get(k), b.get(k)
         has_a, has_b = not absent(va), not absent(vb)
