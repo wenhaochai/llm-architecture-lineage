@@ -19,7 +19,7 @@ the graph is a deterministic function of the configs.
 fetch_gallery.py   gallery page  -> data/cards.json          (103 cards, config.json links)
 fetch_configs.py   Hugging Face  -> data/configs/<key>.json  (103 configs, provenance recorded)
 key_taxonomy.py    hand-made lists of the 143 non-architecture keys (dropped)
-schema.py          alias table: 429 architecture keys -> 174 canonical fields (+4 derived) in 6 sections; design/scale/tuning kinds
+schema.py          alias table: 417 architecture keys -> 168 canonical fields (+4 derived) in 4 sections; design/scale/tuning kinds
 extract.py         configs       -> data/metadata.json       (canonical config + derived traits per model)
 build_graph.py     metadata      -> data/graph.json          (online insertion: parents, trait edges, generations)
 export_web.py      graph.json    -> web/data.js              (trimmed data for the viewer)
@@ -46,18 +46,20 @@ into the saved file under `_provenance`.
 
 ### 2. Key cleaning and renaming
 
-The 103 configs use 571 distinct keys. `key_taxonomy.py` lists by hand the 142 that carry no
+The 103 configs use 571 distinct keys. `key_taxonomy.py` lists by hand the 154 that carry no
 architecture: 68 decoding defaults, tokenizer ids and Hugging Face bookkeeping; 40 dtype,
 kernel, parallelism and implementation switches; 26 training-only settings; 8 multimodal
-leftovers. `schema.py` renames the remaining 429 architecture keys into 174 canonical fields
-(100 of them merge several spellings: seven names for the number of active experts, six for
-the norm epsilon), each assigned to one of six sections that follow the forward pass of a decoder
-block (token mixing and channel mixing carry subsections). `KEYS.md` lists every key's fate.
-Each canonical field is tagged design (67), scale (66) or tuning (41) in `schema.py`. The change
+leftovers, 10 multi-token-prediction heads, and the 2 keys naming the modeling code.
+`schema.py` renames the remaining 417 architecture keys into 168 canonical fields (98 of them
+merge several spellings: seven names for the number of active experts, six for
+the norm epsilon), each assigned to one of four sections that follow the forward pass of a decoder
+block (token mixing and channel mixing carry subsections). Nested sub-configs are flattened into
+the same fields and per-layer index lists become layer schedules by kind. `KEYS.md` lists every key's fate.
+Each canonical field is tagged design (66), scale (65) or tuning (41) in `schema.py`. The change
 line under a model compares canonical configs with the first parent: design fields count when
 their value differs (layer schedules by the kinds of layer they contain), scale fields never
 count by value and 17 of them count on appearance because they mark a mechanism (`PRESENCE`),
-tuning fields and MTP heads (`NOT_A_CHANGE`) never count. A wider or deeper copy of the same
+tuning fields never count. A wider or deeper copy of the same
 design therefore reads as no change. `extract.py` writes the canonical config per model (`config_canonical`, with the original
 spelling in `config_canonical_raw_key`) next to the derived traits used by the score. Where a
 modeling class fixes a trait the config does not spell out (QK-Norm in Gemma 3), the trait is
@@ -76,8 +78,8 @@ never be a parent. If even the closest placed model needs more than `ORIGIN_THRE
 (`trait`) comes from the earliest placed model that already carried it. Generation is one more
 than the largest generation among a node's parents and is the column in the figure.
 
-Result: 103 models, 24 folded as scale copies, 79 drawn nodes, 223 edges (78 parent, 145
-trait), 14 generations.
+Result: 103 models, 27 folded as scale copies, 76 drawn nodes, 226 edges (75 parent, 151
+trait), 15 generations.
 
 ## Caveats
 

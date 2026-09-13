@@ -1,8 +1,8 @@
 # From 571 config keys to the canonical fields
 
-The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **142** that carry no architecture, and `schema.py` renames the remaining **429** into **174** canonical fields, every raw key covered exactly once. Four more canonical fields are derived (`attention_kind`, `sequence_mixer`, `local_global_ratio`, `mixer_attention_ratio`), and traits the modeling class implies (QK-Norm in Gemma 3, gated attention in Qwen3-Next, ...) are filled in by `extract.py` with the implying model type recorded as their source.
+The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **154** that carry no architecture, and `schema.py` renames the remaining **417** into **168** canonical fields, every raw key covered exactly once. Nested sub-configs (`linear_attn_config`, `rope_scaling`, `attention_other_setting`, `sparse_attention_config`) are flattened into the same fields, per-layer index lists become layer schedules by kind, four canonical fields are derived (`attention_kind`, `sequence_mixer`, `local_global_ratio`, `mixer_attention_ratio`), and traits the modeling class implies are filled in by `extract.py` with the implying model type recorded as their source.
 
-Fields sit in six sections that follow the forward pass of a decoder block; token mixing and channel mixing have subsections. Each field is tagged **design** (71), **scale** (66) or **tuning** (41). The change list between a model and a candidate parent: a design field counts when its value differs (per-layer schedules compared by the kinds of layer they contain); a scale field never counts by value, and 17 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields and the fields in `NOT_A_CHANGE` never count.
+Fields sit in four sections that follow the forward pass of a decoder block; token mixing and channel mixing have subsections. Each field is tagged **design** (66), **scale** (65) or **tuning** (41). The change list between a model and a candidate parent: a design field counts when its value differs (per-layer schedules compared by the kinds of layer they contain); a scale field never counts by value, and 17 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields never count.
 
 ## Dropped
 
@@ -18,9 +18,17 @@ Fields sit in six sections that follow the forward pass of a decoder block; toke
 
 `initializer_range` ×90, `attention_dropout` ×87, `router_aux_loss_coef` ×19, `seq_aux` ×7, `hidden_dropout` ×6, `rescale_prenorm_residual` ×6, `embedding_dropout` ×5, `output_dropout` ×5, `aux_loss_alpha` ×4, `embd_pdrop` ×3, `mtp_loss_scaling_factor` ×3, `resid_pdrop` ×3, `block_mlp_init_scale` ×2, `block_out_init_scale` ×2, `block_use_xavier_init` ×2, `conv_use_xavier_init` ×2, `init_method` ×2, `load_balance_coeff` ×2, `router_jitter_noise` ×2, `add_embedding_dropout`, `attn_pdrop`, `igate_bias_init_range`, `learnable_sink_init`, `loop_loss_weights`, `mhc_identity_init`, `mtp_loss_factor`
 
+### Multi-token-prediction heads (10)
+
+`num_nextn_predict_layers` ×31, `mtp_num_hidden_layers` ×7, `mtp_use_dedicated_embeddings` ×7, `num_mtp_modules` ×4, `mtp_transformer_layers` ×3, `use_mtp` ×3, `mtp_layers_block_type` ×2, `mtp`, `mtp_hybrid_override_pattern`, `mtp_use_kda`
+
 ### Multimodal leftovers (8)
 
 `vision_config` ×2, `audio_config`, `image_token_id`, `processor_config`, `video_token_id`, `vision_end_token_id`, `vision_model_type`, `vision_start_token_id`
+
+### Identity of the modeling code (2)
+
+`model_type` ×100, `architectures` ×83
 
 ## Canonical fields
 
@@ -198,9 +206,3 @@ Fields sit in six sections that follow the forward pass of a decoder block; toke
 | Block structure & residual stream | `mup` | design | `mup_enabled` ×1 |
 | Block structure & residual stream | `loop_passes` | scale · presence | `num_loops` ×1, `total_ut_steps` ×1 |
 | Block structure & residual stream | `loop_exit_threshold` | tuning | `early_exit_threshold` ×1 |
-| Training heads | `mtp_layers` | scale · never | `num_nextn_predict_layers` ×31, `mtp_num_hidden_layers` ×7, `num_mtp_modules` ×4, `mtp_transformer_layers` ×3, `use_mtp` ×3, `mtp` ×1 |
-| Training heads | `mtp_layer_types` | design · never | `mtp_layers_block_type` ×2, `mtp_hybrid_override_pattern` ×1 |
-| Training heads | `mtp_dedicated_embeddings` | design · never | `mtp_use_dedicated_embeddings` ×7 |
-| Training heads | `mtp_use_kda` | design · never | `mtp_use_kda` ×1 |
-| Identity | `model_type` | design · never | `model_type` ×100 |
-| Identity | `architecture_class` | design · never | `architectures` ×83 |

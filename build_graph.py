@@ -60,6 +60,8 @@ def absent(v):
 def shape(v):
     if isinstance(v, dict) and v.get("_list_len"):
         return sorted(v["_counts"])
+    if isinstance(v, dict) and v.get("_indices"):
+        return "indices"
     if isinstance(v, list):
         return sorted(v, key=str)
     return v

@@ -33,6 +33,7 @@
   }
   function shape(v) {
     if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).sort(); // a longer copy of the same schedule is no change
+    if (v && typeof v === 'object' && v._indices) return 'indices';
     if (Array.isArray(v)) return v.slice().sort();
     return v;
   }
@@ -183,13 +184,15 @@
   function fmtVal(v) {
     if (v === null || v === undefined) return 'null';
     if (typeof v === 'object' && v._raw) return Object.keys(v._raw).map(function (k) { return k + ' = ' + fmtVal(v._raw[k]); }).join(' · ');
-    if (typeof v === 'object' && v._list_len) return T('list of ' + v._list_len + ': ', '共 ' + v._list_len + ' 项：') + Object.keys(v._counts).map(function (k) { return k + ' ×' + v._counts[k]; }).join(', ');
-    if (typeof v === 'object') return JSON.stringify(v);
+    if (typeof v === 'object' && v._list_len) return Object.keys(v._counts).map(function (k) { return v._counts[k] + ' ' + k; }).join(' · ') + T(' of ', '，共 ') + v._list_len + T(' layers', ' 层');
+    if (typeof v === 'object' && v._indices) return v._indices + T(' layers', ' 层') + (v._step ? T(', every ' + v._step, '，每 ' + v._step + ' 层一个') : '') + ' (' + v._min + '–' + v._max + ')';
+    if (typeof v === 'object') return Object.keys(v).map(function (k) { return k + ' = ' + fmtVal(v[k]); }).join(' · ');
     return String(v);
   }
   function short(v) {
     if (v === true) return T('on', '开'); if (v === false) return T('off', '关'); if (v === null || v === undefined) return 'null';
     if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).join('/');
+    if (v && typeof v === 'object' && v._indices) return v._indices + T(' layers', ' 层');
     if (typeof v === 'object') return T('changed', '有变化');
     return String(v);
   }

@@ -12,9 +12,6 @@ ALIASES = {
     "local_global_ratio": [],      # sliding-window : global layers, rounded
     "sequence_mixer": [],          # attention | gated_deltanet | kda | mamba2 | lightning | liv_conv | mlstm
     "mixer_attention_ratio": [],   # mixer : attention layers in a hybrid, rounded
-    # ---- identity ---------------------------------------------------------------
-    "model_type": ["model_type"],
-    "architecture_class": ["architectures"],
     # ---- shape ------------------------------------------------------------------
     "hidden_size": ["hidden_size", "n_embd", "embedding_dim", "block_dim"],
     "num_layers": ["num_hidden_layers", "n_layer", "num_layers", "num_blocks"],
@@ -149,11 +146,6 @@ ALIASES = {
     "zero_experts": ["zero_expert_num", "zero_expert_type"],
     "residual_moe": ["residual_moe"],
     "double_wide_mlp": ["use_double_wide_mlp"],
-    # ---- multi-token prediction ---------------------------------------------------
-    "mtp_layers": ["num_nextn_predict_layers", "mtp_num_hidden_layers", "num_mtp_modules", "mtp_transformer_layers", "use_mtp", "mtp"],
-    "mtp_layer_types": ["mtp_layers_block_type", "mtp_hybrid_override_pattern"],
-    "mtp_dedicated_embeddings": ["mtp_use_dedicated_embeddings"],
-    "mtp_use_kda": ["mtp_use_kda"],
     # ---- hybrid sequence mixers ---------------------------------------------------
     "linear_attention_config": ["linear_attn_config"],
     "hybrid_attention_interval": ["full_attention_interval", "gqa_interval", "layer_group_size", "gqa_layers", "hybrid_block_size"],
@@ -235,8 +227,6 @@ GROUPS = {
     "Block structure & residual stream": ["num_layers", "hidden_size", "norm_type", "norm_eps", "norm_eps_post", "norm_eps_cell", "norm_extra_placement", "norm_beta_attention",
                             "norm_beta_linear_attention", "norm_beta_mlp", "norm_zero_centered", "ngpt", "parallel_block", "hyper_connections", "hyper_connection_streams",
                             "hyper_connection_params", "attention_residual_block", "residual_multiplier", "mup", "loop_passes", "loop_exit_threshold"],
-    "Training heads": ["mtp_layers", "mtp_layer_types", "mtp_dedicated_embeddings", "mtp_use_kda"],
-    "Identity": ["model_type", "architecture_class"],
 }
 SECTIONS = {}
 for _g in GROUPS:
@@ -260,7 +250,7 @@ SCALE = {
     "global_num_kv_heads", "kv_shared_layers", "linear_num_key_heads", "linear_num_value_heads", "linear_key_head_dim",
     "linear_value_head_dim", "linear_group_norm_size", "mamba_num_heads", "mamba_head_dim", "mamba_state_size", "mamba_num_groups",
     "mamba_expand", "conv_dim", "short_conv_kernel", "hyper_connection_streams", "attention_residual_block", "per_layer_embedding_dim",
-    "per_layer_embedding_vocab", "engram_size", "engram_heads", "mtp_layers", "loop_passes", "attention_heads_per_layer",
+    "per_layer_embedding_vocab", "engram_size", "engram_heads", "loop_passes", "attention_heads_per_layer",
     "attention_cca_steps", "relative_position_bias", "ffn_round_to_multiple", "mlstm_dims", "ffn_width_multiplier",
 }
 # TUNING: continuous hyper-parameters (epsilons, thetas, scales, clamps). Same rule as SCALE.
@@ -278,7 +268,7 @@ DESIGN = set(ALIASES) - SCALE - TUNING
 assert SCALE <= set(ALIASES) and TUNING <= set(ALIASES) and not (SCALE & TUNING)
 
 # Never reported as a change: multi-token-prediction heads are a training aid, and identity fields name the code.
-NOT_A_CHANGE = {"mtp_layers", "mtp_layer_types", "mtp_dedicated_embeddings", "mtp_use_kda", "model_type", "architecture_class"}
+NOT_A_CHANGE = set()  # kept for the change rule; multi-token-prediction heads and identity keys are dropped upstream
 # Scale fields whose appearance marks a mechanism (their value never counts, their presence does).
 PRESENCE = {"kv_lora_rank", "q_lora_rank", "index_topk", "mamba_num_heads", "mamba_state_size", "linear_num_value_heads",
             "kv_shared_layers", "per_layer_embedding_dim", "hyper_connection_streams", "loop_passes", "moe_latent_size", "num_experts",

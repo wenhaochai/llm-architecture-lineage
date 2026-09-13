@@ -418,7 +418,7 @@ def extract(card):
     norm = collections.OrderedDict()
     raw_used = {}
     for k, v in tc.items():
-        if k in NON_ARCH or k == "architectures":
+        if k in NON_ARCH:
             continue
         canon = schema.RAW_TO_CANONICAL.get(k)
         if canon is None:
@@ -430,8 +430,91 @@ def extract(card):
         else:
             norm[canon] = compact(v)
             raw_used[canon] = k
-    if archs:
-        norm["architecture_class"] = archs[0]; raw_used["architecture_class"] = "architectures"
+    # ---- nested configs and layer-index lists -> flat fields and kind-count schedules ----
+    def schedule(counts, total):
+        return {"_list_len": total, "_counts": {k: v for k, v in counts.items() if v}}
+    def is_index_list(v):
+        return isinstance(v, dict) and v.get("_list_len") and all(c == 1 for c in v["_counts"].values()) and all(str(k).isdigit() for k in v["_counts"])
+    def put(canon, value, source):
+        if canon not in norm and value not in (None, "", [], {}):
+            norm[canon] = value; raw_used[canon] = source
+    lac = tc.get("linear_attn_config")
+    if isinstance(lac, dict):
+        norm.pop("linear_attention_config", None); raw_used.pop("linear_attention_config", None)
+        if isinstance(lac.get("kda_layers"), list) or isinstance(lac.get("full_attn_layers"), list):
+            n_kda, n_full = len(lac.get("kda_layers") or []), len(lac.get("full_attn_layers") or [])
+            norm["layer_types"] = schedule({"kda": n_kda, "full_attention": n_full}, n_kda + n_full); raw_used["layer_types"] = "linear_attn_config.kda_layers / full_attn_layers"
+        put("linear_num_value_heads", lac.get("num_heads"), "linear_attn_config.num_heads")
+        put("linear_num_key_heads", lac.get("num_kv_heads"), "linear_attn_config.num_kv_heads")
+        put("linear_value_head_dim", lac.get("head_dim"), "linear_attn_config.head_dim")
+        put("short_conv_kernel", lac.get("short_conv_kernel_size"), "linear_attn_config.short_conv_kernel_size")
+        extra = {k: v for k, v in lac.items() if k not in ("kda_layers", "full_attn_layers", "num_heads", "num_kv_heads", "head_dim", "short_conv_kernel_size")}
+        if extra:
+            if "kda_config" in norm:
+                cur = norm["kda_config"]; cur = cur["_raw"] if isinstance(cur, dict) and "_raw" in cur else {raw_used["kda_config"]: cur}
+                cur.update(extra); norm["kda_config"] = {"_raw": cur}
+            else:
+                norm["kda_config"] = {"_raw": extra}; raw_used["kda_config"] = "linear_attn_config"
+    aos = tc.get("attention_other_setting")
+    if isinstance(aos, dict):
+        norm.pop("swa_attention_config", None); raw_used.pop("swa_attention_config", None)
+        put("swa_num_heads", aos.get("num_attention_heads"), "attention_other_setting.num_attention_heads")
+        put("swa_num_kv_heads", aos.get("num_attention_groups"), "attention_other_setting.num_attention_groups")
+        put("swa_head_dim", aos.get("head_dim"), "attention_other_setting.head_dim")
+    sac = tc.get("sparse_attention_config")
+    if isinstance(sac, dict):
+        norm["sparse_attention"] = "QSA"; raw_used["sparse_attention"] = "sparse_attention_config"
+        if sac.get("sparse_topk_blocks") and sac.get("sparse_block_size"):
+            put("index_topk", sac["sparse_topk_blocks"] * sac["sparse_block_size"], "sparse_attention_config.sparse_topk_blocks × sparse_block_size")
+        put("index_num_heads", sac.get("sparse_num_index_heads"), "sparse_attention_config.sparse_num_index_heads")
+        put("index_head_dim", sac.get("sparse_index_dim"), "sparse_attention_config.sparse_index_dim")
+        put("index_layer_types", sac.get("sparse_attention_freq"), "sparse_attention_config.sparse_attention_freq")
+        rest = {k: v for k, v in sac.items() if k not in ("sparse_topk_blocks", "sparse_block_size", "sparse_num_index_heads", "sparse_index_dim", "sparse_attention_freq", "use_sparse_attention")}
+        if rest:
+            put("candidate_selection", {"_raw": rest}, "sparse_attention_config")
+    rs = norm.get("rope_scaling")
+    if isinstance(rs, dict) and "_raw" not in rs:
+        src = raw_used.get("rope_scaling", "rope_scaling")
+        rs = dict(rs)
+        put("rope_scaling_type", rs.pop("rope_type", None) or rs.pop("type", None), src + ".rope_type"); rs.pop("type", None)
+        put("rope_scaling_factor", rs.pop("factor", None), src + ".factor")
+        put("rope_original_max_position", rs.pop("original_max_position_embeddings", None), src + ".original_max_position_embeddings")
+        put("rope_theta", rs.pop("rope_theta", None), src + ".rope_theta")
+        put("partial_rotary_factor", rs.pop("partial_rotary_factor", None), src + ".partial_rotary_factor")
+        for lt_key, canon in (("full_attention", "rope_theta"), ("hybrid", "rope_theta"), ("sliding_attention", "rope_theta_local"), ("hybrid_sliding", "rope_theta_local")):
+            sub = rs.pop(lt_key, None)
+            if isinstance(sub, dict):
+                put(canon, sub.get("rope_theta"), src + "." + lt_key + ".rope_theta")
+                put("partial_rotary_factor", sub.get("partial_rotary_factor"), src + "." + lt_key + ".partial_rotary_factor")
+                put("rope_scaling_type", sub.get("rope_type"), src + "." + lt_key + ".rope_type")
+        if rs:
+            if "rope_scaling_params" in norm:
+                cur = norm["rope_scaling_params"]; cur = cur["_raw"] if isinstance(cur, dict) and "_raw" in cur else {raw_used["rope_scaling_params"]: cur}
+                cur.update(rs); norm["rope_scaling_params"] = {"_raw": cur}
+            else:
+                norm["rope_scaling_params"] = {"_raw": rs}; raw_used["rope_scaling_params"] = src
+        norm.pop("rope_scaling", None); raw_used.pop("rope_scaling", None)
+    # layer_types: always a kind-count schedule with readable kind names
+    lt_raw = raw_used.get("layer_types")
+    ltv = norm.get("layer_types")
+    if lt_raw == "hybrid_override_pattern" or lt_raw == "layers_block_type":
+        mix = m["layer_schedule"]
+        norm["layer_types"] = schedule({"mamba2": mix.get("mamba2", mix.get("mamba", 0)), "attention": mix.get("attention", 0), "moe": mix.get("moe", 0), "mlp": mix.get("mlp", 0)}, sum(v for v in mix.values() if isinstance(v, int)))
+    elif lt_raw == "hybrid_layer_pattern" and isinstance(ltv, dict):
+        c = ltv["_counts"]; norm["layer_types"] = schedule({"sliding_attention": c.get("1", 0), "full_attention": c.get("0", 0)}, ltv["_list_len"])
+    elif lt_raw == "local_layer_ids" and is_index_list(ltv) and layers:
+        norm["layer_types"] = schedule({"sliding_attention": ltv["_list_len"], "full_attention": layers - ltv["_list_len"]}, layers)
+    if "layer_types" not in norm and isinstance(tc.get("gqa_layers"), list) and layers:
+        n_full = len(tc["gqa_layers"]); norm["layer_types"] = schedule({"full_attention": n_full, "kda": layers - n_full}, layers); raw_used["layer_types"] = "gqa_layers"
+    if raw_used.get("hybrid_attention_interval") == "gqa_layers":
+        norm["hybrid_attention_interval"] = tc.get("gqa_interval", norm["hybrid_attention_interval"]); raw_used["hybrid_attention_interval"] = "gqa_interval"
+    # remaining index lists: keep the count and the range instead of one bucket per index
+    for k, v in list(norm.items()):
+        if is_index_list(v):
+            idx = sorted(int(i) for i in v["_counts"])
+            step = idx[1] - idx[0] if len(idx) > 1 and all(b - a == idx[1] - idx[0] for a, b in zip(idx, idx[1:])) else None
+            norm[k] = {"_indices": len(idx), "_min": idx[0], "_max": idx[-1], "_step": step}
+
     # traits the modeling class implies (QK-Norm in Gemma 3 / OLMo 2, gated attention in Qwen3-Next, ...) and
     # ratios that only exist as counts in the raw config become canonical fields too, so two configs are
     # compared on what the model computes rather than on which keys its family happened to spell out
