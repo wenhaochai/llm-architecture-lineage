@@ -303,7 +303,8 @@ def extract(card):
     # per-layer embeddings
     m["per_layer_embeddings"] = bool(first(tc, "hidden_size_per_layer_input", "ple_embed_dim"))
     # mHC / hyper-connections / attention residuals
-    m["mhc"] = bool(imp.get("mhc")) or bool(first(tc, "mhc", "hc_mult", "mhc_enabled", "enable_ihc", "hc_count", "attn_res_block_size"))
+    m["mhc"] = bool(imp.get("mhc")) or bool(first(tc, "mhc", "hc_mult", "mhc_enabled", "enable_ihc"))
+    m["attention_residuals"] = bool(first(tc, "attn_res_block_size"))
     m["hc_streams"] = first(tc, "hc_mult", "hc_count", "mhc_expansion_rate")
     # MTP
     mtp = first(tc, "num_nextn_predict_layers", "mtp_num_hidden_layers", "num_mtp_modules", "mtp_transformer_layers", "mtp_layers_block_type")
@@ -535,6 +536,7 @@ def extract(card):
     fill("mla", m["mla"], imp_src)
     fill("attention_sinks", m["attention_sinks"], imp_src)
     fill("hyper_connections", m["mhc"], imp_src)
+    fill("attention_residuals", m["attention_residuals"], "derived")
     fill("moe", m["is_moe"], "derived")
     fill("norm_type", m["norm_type"], imp_src)
     fill("position_encoding_type", m["position_encoding"], imp_src)
@@ -548,6 +550,20 @@ def extract(card):
         fill("per_layer_embedding_dim", m["hidden_size_per_layer_input"] or True, imp_src)
     if m["encoder_decoder"]:
         fill("bidirectional_attention", True, imp_src)
+    # a named gate type means the attention is gated; a disabled or non-positive window means no window
+    if norm.get("gated_attention_type") and "gated_attention" not in norm:
+        norm["gated_attention"] = True; raw_used["gated_attention"] = raw_used["gated_attention_type"]
+    if isinstance(norm.get("sliding_window"), (int, float)) and norm["sliding_window"] <= 0:
+        del norm["sliding_window"]; raw_used.pop("sliding_window", None)
+    if norm.get("sliding_window_enabled") is False or (not m["swa"] and mt in ("qwen3", "qwen3_moe", "qwen2", "minimax_m2", "glm4_moe", "mistral", "mistral4", "git")):
+        for k in ("sliding_window", "sliding_window_enabled", "sliding_window_max_layers"):
+            norm.pop(k, None); raw_used.pop(k, None)
+    if not m["hybrid_mixer"]:  # leftover Mamba defaults in a pure-attention config (Antares) describe no layer
+        for k in ("mamba_num_heads", "mamba_head_dim", "mamba_state_size", "mamba_num_groups", "mamba_expand", "mamba_activation", "mamba_proj_bias", "mamba_time_step"):
+            norm.pop(k, None); raw_used.pop(k, None)
+        for k in ("short_conv_kernel", "conv_bias"):
+            if str(raw_used.get(k, "")).startswith("mamba"):
+                norm.pop(k, None); raw_used.pop(k, None)
     # bare switches (use_rmsnorm=True, use_pos_enc=True, use_dsa=True) name no design; give them the
     # value the rest of the gallery uses for the same thing, so spellings never read as changes
     if norm.get("sparse_attention") is True:

@@ -43,5 +43,5 @@ VISION = {
 }
 IDENTITY = {"model_type", "architectures"}          # name the modeling code, not the architecture
 TRAINING_HEADS = {"num_nextn_predict_layers", "mtp_num_hidden_layers", "num_mtp_modules", "mtp_transformer_layers", "use_mtp", "mtp",
-                  "mtp_layers_block_type", "mtp_hybrid_override_pattern", "mtp_use_dedicated_embeddings", "mtp_use_kda"}  # multi-token-prediction heads
+                  "mtp_layers_block_type", "mtp_hybrid_override_pattern", "mtp_use_dedicated_embeddings", "mtp_use_kda", "index_share_for_mtp_iteration"}  # multi-token-prediction heads
 DROP = GENERATION | RUNTIME | TRAINING | VISION | IDENTITY | TRAINING_HEADS

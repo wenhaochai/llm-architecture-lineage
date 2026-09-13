@@ -1,8 +1,8 @@
 # From 571 config keys to the canonical fields
 
-The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **154** that carry no architecture, and `schema.py` renames the remaining **417** into **168** canonical fields, every raw key covered exactly once. Nested sub-configs (`linear_attn_config`, `rope_scaling`, `attention_other_setting`, `sparse_attention_config`) are flattened into the same fields, per-layer index lists become layer schedules by kind, four canonical fields are derived (`attention_kind`, `sequence_mixer`, `local_global_ratio`, `mixer_attention_ratio`), and traits the modeling class implies are filled in by `extract.py` with the implying model type recorded as their source.
+The 103 configs use **571 distinct keys** on their text sub-config. `key_taxonomy.py` drops **155** that carry no architecture, and `schema.py` renames the remaining **416** into **170** canonical fields, every raw key covered exactly once. Nested sub-configs (`linear_attn_config`, `rope_scaling`, `attention_other_setting`, `sparse_attention_config`) are flattened into the same fields, per-layer index lists become layer schedules by kind, five canonical fields are derived (`attention_kind`, `sequence_mixer`, `local_global_ratio`, `mixer_attention_ratio`, `attention_residuals`), and traits the modeling class implies are filled in by `extract.py` with the implying model type recorded as their source.
 
-Fields sit in four sections that follow the forward pass of a decoder block; token mixing and channel mixing have subsections. Each field is tagged **design** (66), **scale** (65) or **tuning** (41). The change list between a model and a candidate parent: a design field counts when its value differs (per-layer schedules compared by the kinds of layer they contain); a scale field never counts by value, and 16 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields never count. Candidate parents are ranked by the number of changes among the mechanism-level fields (`MECHANISM`, 16 fields) first, then by the total.
+Fields sit in four sections that follow the forward pass of a decoder block; token mixing and channel mixing have subsections. Each field is tagged **design** (66), **scale** (65) or **tuning** (41). The change list between a model and a candidate parent: a design field counts when its value differs (per-layer schedules compared by the kinds of layer they contain); a scale field never counts by value, and 16 of them (`PRESENCE`) count when they appear because their presence marks a mechanism; tuning fields never count. Candidate parents are ranked by the number of changes among the mechanism-level fields (`MECHANISM`, 18 fields) first, then by the total.
 
 ## Dropped
 
@@ -18,9 +18,9 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 
 `initializer_range` ×90, `attention_dropout` ×87, `router_aux_loss_coef` ×19, `seq_aux` ×7, `hidden_dropout` ×6, `rescale_prenorm_residual` ×6, `embedding_dropout` ×5, `output_dropout` ×5, `aux_loss_alpha` ×4, `embd_pdrop` ×3, `mtp_loss_scaling_factor` ×3, `resid_pdrop` ×3, `block_mlp_init_scale` ×2, `block_out_init_scale` ×2, `block_use_xavier_init` ×2, `conv_use_xavier_init` ×2, `init_method` ×2, `load_balance_coeff` ×2, `router_jitter_noise` ×2, `add_embedding_dropout`, `attn_pdrop`, `igate_bias_init_range`, `learnable_sink_init`, `loop_loss_weights`, `mhc_identity_init`, `mtp_loss_factor`
 
-### Multi-token-prediction heads (10)
+### Multi-token-prediction heads (11)
 
-`num_nextn_predict_layers` ×31, `mtp_num_hidden_layers` ×7, `mtp_use_dedicated_embeddings` ×7, `num_mtp_modules` ×4, `mtp_transformer_layers` ×3, `use_mtp` ×3, `mtp_layers_block_type` ×2, `mtp`, `mtp_hybrid_override_pattern`, `mtp_use_kda`
+`num_nextn_predict_layers` ×31, `mtp_num_hidden_layers` ×7, `mtp_use_dedicated_embeddings` ×7, `num_mtp_modules` ×4, `mtp_transformer_layers` ×3, `use_mtp` ×3, `index_share_for_mtp_iteration` ×2, `mtp_layers_block_type` ×2, `mtp`, `mtp_hybrid_override_pattern`, `mtp_use_kda`
 
 ### Multimodal leftovers (8)
 
@@ -104,9 +104,9 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Token mixing › Sparse attention & indexer | `index_num_heads` | scale | `index_n_heads` ×9, `indexer_n_heads` ×1 |
 | Token mixing › Sparse attention & indexer | `index_head_dim` | scale | `index_head_dim` ×9, `indexer_head_dim` ×1 |
 | Token mixing › Sparse attention & indexer | `index_kv_heads` | scale | `indexer_kv_heads` ×1 |
-| Token mixing › Sparse attention & indexer | `index_layer_types` | design | `indexer_types` ×3, `index_topk_pattern` ×1, `index_topk_freq` ×1, `index_skip_topk_offset` ×1 |
+| Token mixing › Sparse attention & indexer | `index_layer_types` | design | `indexer_types` ×3 |
 | Token mixing › Sparse attention & indexer | `index_kpool` | tuning | `index_kpool` ×1, `index_kpool_always_select_tail` ×1, `index_kpool_compress` ×1, `indexer_compress_ratio` ×1 |
-| Token mixing › Sparse attention & indexer | `index_share_layers` | design | `index_source_layer_ids` ×1, `index_share_for_mtp_iteration` ×2 |
+| Token mixing › Sparse attention & indexer | `index_share_layers` | design | `index_source_layer_ids` ×1, `index_topk_pattern` ×1, `index_topk_freq` ×1, `index_skip_topk_offset` ×1 |
 | Token mixing › Sparse attention & indexer | `index_rope_interleave` | design | `indexer_rope_interleave` ×4 |
 | Token mixing › Sparse attention & indexer | `compress_ratios` | design | `compress_ratios` ×3 |
 | Token mixing › Sparse attention & indexer | `compress_rope_theta` | tuning | `compress_rope_theta` ×3 |
@@ -119,7 +119,8 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Token mixing › Linear & recurrent mixers | `linear_group_norm_size` | scale | `group_norm_size` ×3 |
 | Token mixing › Linear & recurrent mixers | `linear_activation` | design | `linear_silu` ×3 |
 | Token mixing › Linear & recurrent mixers | `kda_config` | tuning | `kda_lower_bound` ×1, `kda_safe_gate` ×1, `kda_allow_neg_eigval` ×1, `kda_use_full_proj` ×1, `use_kda_lora` ×1, `no_kda_lora` ×1 |
-| Token mixing › Linear & recurrent mixers | `short_conv_kernel` | scale | `linear_conv_kernel_dim` ×8, `short_conv_kernel_size` ×1, `sconv_kernel_size` ×1, `use_sconv` ×1, `conv_kernel` ×6, `mamba_d_conv` ×1, `conv_L_cache` ×3 |
+| Token mixing › Linear & recurrent mixers | `short_conv_kernel` | scale | `linear_conv_kernel_dim` ×8, `short_conv_kernel_size` ×1, `sconv_kernel_size` ×1, `use_sconv` ×1, `conv_kernel` ×6, `mamba_d_conv` ×1 |
+| Token mixing › Linear & recurrent mixers | `conv_kernel` | scale | `conv_L_cache` ×3 |
 | Token mixing › Linear & recurrent mixers | `conv_dim` | scale | `conv_dim` ×2 |
 | Token mixing › Linear & recurrent mixers | `conv_bias` | design | `use_conv_bias` ×6, `mamba_conv_bias` ×1, `conv_bias` ×3 |
 | Token mixing › Linear & recurrent mixers | `mamba_num_heads` | scale · presence | `mamba_num_heads` ×6, `mamba_n_heads` ×1 |
@@ -199,8 +200,10 @@ Fields sit in four sections that follow the forward pass of a decoder block; tok
 | Block structure & residual stream | `ngpt` | design | `use_nGPT` ×1 |
 | Block structure & residual stream | `parallel_block` | design | `use_parallel_block` ×1, `transformer_block_type` ×2 |
 | Block structure & residual stream | `hyper_connections` | design · mechanism | `mhc` ×1, `mhc_enabled` ×1, `enable_ihc` ×1 |
-| Block structure & residual stream | `hyper_connection_streams` | scale · presence | `hc_mult` ×5, `hc_count` ×1, `mhc_expansion_rate` ×1 |
-| Block structure & residual stream | `hyper_connection_params` | tuning | `hc_eps` ×5, `hc_sinkhorn_iters` ×4, `mhc_sinkhorn_iters` ×1, `hc_lowrank` ×1, `hc_magnitude` ×1 |
+| Block structure & residual stream | `hyper_connection_streams` | scale · presence | `hc_mult` ×5, `mhc_expansion_rate` ×1 |
+| Block structure & residual stream | `hyper_connection_params` | tuning | `hc_eps` ×5, `hc_sinkhorn_iters` ×4, `mhc_sinkhorn_iters` ×1, `hc_magnitude` ×1 |
+| Block structure & residual stream | `gated_residuals` | design · mechanism | `hc_count` ×1, `hc_lowrank` ×1 |
+| Block structure & residual stream | `attention_residuals` | design · mechanism | *derived* |
 | Block structure & residual stream | `attention_residual_block` | scale | `attn_res_block_size` ×1 |
 | Block structure & residual stream | `residual_multiplier` | tuning | `residual_multiplier` ×2 |
 | Block structure & residual stream | `mup` | design | `mup_enabled` ×1 |

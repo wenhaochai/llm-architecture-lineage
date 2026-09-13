@@ -99,9 +99,9 @@ ALIASES = {
     "index_num_heads": ["index_n_heads", "indexer_n_heads"],
     "index_head_dim": ["index_head_dim", "indexer_head_dim"],
     "index_kv_heads": ["indexer_kv_heads"],
-    "index_layer_types": ["indexer_types", "index_topk_pattern", "index_topk_freq", "index_skip_topk_offset"],
+    "index_layer_types": ["indexer_types"],
     "index_kpool": ["index_kpool", "index_kpool_always_select_tail", "index_kpool_compress", "indexer_compress_ratio"],
-    "index_share_layers": ["index_source_layer_ids", "index_share_for_mtp_iteration"],
+    "index_share_layers": ["index_source_layer_ids", "index_topk_pattern", "index_topk_freq", "index_skip_topk_offset"],
     "index_rope_interleave": ["indexer_rope_interleave"],
     "compress_ratios": ["compress_ratios"],
     "compress_rope_theta": ["compress_rope_theta"],
@@ -156,7 +156,8 @@ ALIASES = {
     "linear_group_norm_size": ["group_norm_size"],
     "linear_activation": ["linear_silu"],
     "kda_config": ["kda_lower_bound", "kda_safe_gate", "kda_allow_neg_eigval", "kda_use_full_proj", "use_kda_lora", "no_kda_lora"],
-    "short_conv_kernel": ["linear_conv_kernel_dim", "short_conv_kernel_size", "sconv_kernel_size", "use_sconv", "conv_kernel", "mamba_d_conv", "conv_L_cache"],
+    "short_conv_kernel": ["linear_conv_kernel_dim", "short_conv_kernel_size", "sconv_kernel_size", "use_sconv", "conv_kernel", "mamba_d_conv"],
+    "conv_kernel": ["conv_L_cache"],                          # the LIV convolution operator of LFM2 itself
     "conv_dim": ["conv_dim"],
     "conv_bias": ["use_conv_bias", "mamba_conv_bias", "conv_bias"],
     "mamba_num_heads": ["mamba_num_heads", "mamba_n_heads"],
@@ -172,8 +173,10 @@ ALIASES = {
     "hash_layers": ["num_hash_layers"],
     # ---- residual stream ----------------------------------------------------------
     "hyper_connections": ["mhc", "mhc_enabled", "enable_ihc"],
-    "hyper_connection_streams": ["hc_mult", "hc_count", "mhc_expansion_rate"],
-    "hyper_connection_params": ["hc_eps", "hc_sinkhorn_iters", "mhc_sinkhorn_iters", "hc_lowrank", "hc_magnitude"],
+    "hyper_connection_streams": ["hc_mult", "mhc_expansion_rate"],
+    "hyper_connection_params": ["hc_eps", "hc_sinkhorn_iters", "mhc_sinkhorn_iters", "hc_magnitude"],
+    "gated_residuals": ["hc_count", "hc_lowrank"],          # Qwen3.8-Flash-Next: gated residual streams, a different mechanism from mHC
+    "attention_residuals": [],                              # derived: AttnRes (Kimi K3), present when attn_res_block_size is set
     "attention_residual_block": ["attn_res_block_size"],
     "residual_multiplier": ["residual_multiplier"],
     "embedding_multiplier": ["embedding_multiplier", "embedding_multiplier_scale"],
@@ -214,7 +217,7 @@ GROUPS = {
     "Token mixing › Sparse attention & indexer": ["sparse_attention", "index_topk", "index_num_heads", "index_head_dim", "index_kv_heads", "index_layer_types", "index_kpool",
                             "index_share_layers", "index_rope_interleave", "compress_ratios", "compress_rope_theta", "candidate_selection"],
     "Token mixing › Linear & recurrent mixers": ["linear_attention_config", "linear_num_key_heads", "linear_num_value_heads", "linear_key_head_dim", "linear_value_head_dim",
-                            "linear_group_norm_size", "linear_activation", "kda_config", "short_conv_kernel", "conv_dim", "conv_bias", "mamba_num_heads", "mamba_head_dim",
+                            "linear_group_norm_size", "linear_activation", "kda_config", "short_conv_kernel", "conv_kernel", "conv_dim", "conv_bias", "mamba_num_heads", "mamba_head_dim",
                             "mamba_state_size", "mamba_num_groups", "mamba_expand", "mamba_activation", "mamba_proj_bias", "mamba_time_step", "mlstm_dims", "mlstm_gate_softcap", "hash_layers"],
     "Token mixing › Positions": ["max_position_embeddings", "position_encoding_type", "rope_theta", "rope_theta_per_layer", "rope_theta_local", "rope_scaling", "rope_scaling_type", "rope_scaling_factor",
                             "rope_scaling_params", "rope_original_max_position", "rope_scaling_layer_types", "partial_rotary_factor", "rope_interleave", "nope_layers", "relative_position_bias"],
@@ -226,13 +229,13 @@ GROUPS = {
                             "router_expert_bias", "router_hidden_size", "router_input_scaling", "router_logit_softcapping"],
     "Block structure & residual stream": ["num_layers", "hidden_size", "norm_type", "norm_eps", "norm_eps_post", "norm_eps_cell", "norm_extra_placement", "norm_beta_attention",
                             "norm_beta_linear_attention", "norm_beta_mlp", "norm_zero_centered", "ngpt", "parallel_block", "hyper_connections", "hyper_connection_streams",
-                            "hyper_connection_params", "attention_residual_block", "residual_multiplier", "mup", "loop_passes", "loop_exit_threshold"],
+                            "hyper_connection_params", "gated_residuals", "attention_residuals", "attention_residual_block", "residual_multiplier", "mup", "loop_passes", "loop_exit_threshold"],
 }
 SECTIONS = {}
 for _g in GROUPS:
     SECTIONS.setdefault(_g.split(" › ")[0], []).append(_g)
 
-DERIVED = {"attention_kind", "local_global_ratio", "sequence_mixer", "mixer_attention_ratio"}
+DERIVED = {"attention_kind", "local_global_ratio", "sequence_mixer", "mixer_attention_ratio", "attention_residuals"}
 RAW_TO_CANONICAL = {raw: canon for canon, raws in ALIASES.items() for raw in raws}
 CANONICAL_GROUP = {canon: g for g, canons in GROUPS.items() for canon in canons}
 
@@ -249,7 +252,7 @@ SCALE = {
     "sliding_window_max_layers", "chunked_attention_size", "swa_num_heads", "swa_num_kv_heads", "swa_head_dim", "global_head_dim",
     "global_num_kv_heads", "kv_shared_layers", "linear_num_key_heads", "linear_num_value_heads", "linear_key_head_dim",
     "linear_value_head_dim", "linear_group_norm_size", "mamba_num_heads", "mamba_head_dim", "mamba_state_size", "mamba_num_groups",
-    "mamba_expand", "conv_dim", "short_conv_kernel", "hyper_connection_streams", "attention_residual_block", "per_layer_embedding_dim",
+    "mamba_expand", "conv_dim", "short_conv_kernel", "conv_kernel", "hyper_connection_streams", "attention_residual_block", "per_layer_embedding_dim",
     "per_layer_embedding_vocab", "engram_size", "engram_heads", "loop_passes", "attention_heads_per_layer",
     "attention_cca_steps", "relative_position_bias", "ffn_round_to_multiple", "mlstm_dims", "ffn_width_multiplier",
 }
@@ -279,5 +282,5 @@ assert NOT_A_CHANGE <= set(ALIASES) and PRESENCE <= SCALE
 # then by the total number of design changes, then by the tie rules of build_graph.py.
 MECHANISM = {"attention_kind", "sequence_mixer", "moe", "sparse_attention", "mla", "position_encoding_type", "nope_layers",
              "hyper_connections", "loop_passes", "per_layer_embedding_dim", "kv_shared_layers", "bidirectional_attention",
-             "engram_layers", "dspark", "gated_attention", "qk_norm"}
+             "engram_layers", "dspark", "gated_attention", "qk_norm", "attention_residuals", "gated_residuals"}
 assert MECHANISM <= set(ALIASES)

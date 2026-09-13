@@ -77,6 +77,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -277,6 +278,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -527,6 +529,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -776,6 +779,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -1009,6 +1013,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -1225,6 +1230,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -1438,6 +1444,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -1813,6 +1820,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -2104,6 +2112,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -2372,6 +2381,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -2643,6 +2653,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -2855,6 +2866,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -3219,6 +3231,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -3319,7 +3332,6 @@
     "hidden_size": 4096,
     "intermediate_size": 12288,
     "max_position_embeddings": 40960,
-    "sliding_window_max_layers": 94,
     "moe_intermediate_size": 1536,
     "router_normalize_weights": true,
     "num_heads": 64,
@@ -3330,7 +3342,6 @@
     "norm_eps": 1e-06,
     "rope_theta": 1000000.0,
     "tie_embeddings": false,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -3347,7 +3358,6 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "moe_intermediate_size": "moe_intermediate_size",
     "router_normalize_weights": "norm_topk_prob",
     "num_heads": "num_attention_heads",
@@ -3358,7 +3368,6 @@
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -3504,6 +3513,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -3595,14 +3605,12 @@
     "hidden_size": 5120,
     "intermediate_size": 25600,
     "max_position_embeddings": 40960,
-    "sliding_window_max_layers": 64,
     "num_heads": 64,
     "num_layers": 64,
     "num_kv_heads": 8,
     "norm_eps": 1e-06,
     "rope_theta": 1000000,
     "tie_embeddings": false,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -3617,14 +3625,12 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "num_heads": "num_attention_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -3750,6 +3756,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -3850,7 +3857,6 @@
     "hidden_size": 2048,
     "intermediate_size": 6144,
     "max_position_embeddings": 40960,
-    "sliding_window_max_layers": 48,
     "moe_intermediate_size": 768,
     "router_normalize_weights": true,
     "num_heads": 32,
@@ -3861,7 +3867,6 @@
     "norm_eps": 1e-06,
     "rope_theta": 1000000.0,
     "tie_embeddings": false,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -3878,7 +3883,6 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "moe_intermediate_size": "moe_intermediate_size",
     "router_normalize_weights": "norm_topk_prob",
     "num_heads": "num_attention_heads",
@@ -3889,7 +3893,6 @@
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -3987,6 +3990,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -4078,14 +4082,12 @@
     "hidden_size": 4096,
     "intermediate_size": 12288,
     "max_position_embeddings": 40960,
-    "sliding_window_max_layers": 36,
     "num_heads": 32,
     "num_layers": 36,
     "num_kv_heads": 8,
     "norm_eps": 1e-06,
     "rope_theta": 1000000,
     "tie_embeddings": false,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -4100,14 +4102,12 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "num_heads": "num_attention_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -4204,6 +4204,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -4295,14 +4296,12 @@
     "hidden_size": 2560,
     "intermediate_size": 9728,
     "max_position_embeddings": 40960,
-    "sliding_window_max_layers": 36,
     "num_heads": 32,
     "num_layers": 36,
     "num_kv_heads": 8,
     "norm_eps": 1e-06,
     "rope_theta": 1000000,
     "tie_embeddings": true,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -4317,14 +4316,12 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "num_heads": "num_attention_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -4433,6 +4430,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -4524,14 +4522,12 @@
     "hidden_size": 1024,
     "intermediate_size": 3072,
     "max_position_embeddings": 32768,
-    "sliding_window_max_layers": 28,
     "num_heads": 16,
     "num_layers": 28,
     "num_kv_heads": 8,
     "norm_eps": 1e-06,
     "rope_theta": 1000000,
     "tie_embeddings": true,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -4546,14 +4542,12 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "num_heads": "num_attention_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -4650,6 +4644,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -4748,7 +4743,6 @@
     "norm_eps": 1e-06,
     "rope_theta": 5000000.0,
     "tie_embeddings": true,
-    "sliding_window_enabled": false,
     "vocab_size": 128256,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -4768,7 +4762,6 @@
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -4872,6 +4865,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -5159,6 +5153,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -5437,6 +5432,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -5702,6 +5698,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -5802,7 +5799,6 @@
     "hidden_size": 2048,
     "intermediate_size": 6144,
     "max_position_embeddings": 262144,
-    "sliding_window_max_layers": 48,
     "moe_intermediate_size": 768,
     "router_normalize_weights": true,
     "num_heads": 32,
@@ -5813,7 +5809,6 @@
     "norm_eps": 1e-06,
     "rope_theta": 10000000,
     "tie_embeddings": false,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -5830,7 +5825,6 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "moe_intermediate_size": "moe_intermediate_size",
     "router_normalize_weights": "norm_topk_prob",
     "num_heads": "num_attention_heads",
@@ -5841,7 +5835,6 @@
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -5943,6 +5936,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -6258,6 +6252,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -6531,6 +6526,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -6787,6 +6783,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -6898,7 +6895,6 @@
     "router_logit_softcapping": 30.0,
     "rope_theta": 208533496,
     "attention_temperature_tuning": 1024,
-    "sliding_window": -1,
     "sliding_window_pattern": 1,
     "rope_scaling_type": "original",
     "rope_original_max_position": 8192,
@@ -6938,7 +6934,6 @@
     "router_logit_softcapping": "router_logit_softcapping",
     "rope_theta": "rope_theta",
     "attention_temperature_tuning": "attn_temperature_len",
-    "sliding_window": "sliding_window_size",
     "sliding_window_pattern": "global_attn_every_n",
     "rope_scaling_type": "rope_type",
     "rope_original_max_position": "original_max_position_embeddings",
@@ -6952,16 +6947,8 @@
    },
    "num_architecture_keys": 29,
    "is_root": false,
-   "primary_parent": "gpt-oss-120b",
+   "primary_parent": "glm-4-5-air",
    "changes": [
-    {
-     "field": "layer_types",
-     "kind": "drop"
-    },
-    {
-     "field": "local_global_ratio",
-     "kind": "drop"
-    },
     {
      "field": "sliding_window_pattern",
      "kind": "add"
@@ -6971,27 +6958,35 @@
      "kind": "drop"
     },
     {
-     "field": "attention_sinks",
-     "kind": "drop"
-    },
-    {
      "field": "rope_scaling_type",
-     "kind": "change"
+     "kind": "add"
     },
     {
      "field": "activation",
      "kind": "drop"
     },
     {
+     "field": "num_shared_experts",
+     "kind": "drop"
+    },
+    {
+     "field": "dense_prefix_layers",
+     "kind": "drop"
+    },
+    {
      "field": "residual_moe",
      "kind": "add"
+    },
+    {
+     "field": "router_normalize_weights",
+     "kind": "drop"
     }
    ],
    "scale_copy": false,
-   "generation": 8,
+   "generation": 7,
    "aliases": [],
    "merged_into": null,
-   "is_terminal": true
+   "is_terminal": false
   },
   {
    "key": "qwen3-next-80b-a3b",
@@ -7074,6 +7069,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -7196,7 +7192,6 @@
     "rope_theta": 10000000,
     "shared_expert_intermediate_size": 512,
     "tie_embeddings": false,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "gated_deltanet",
@@ -7232,7 +7227,6 @@
     "rope_theta": "rope_theta",
     "shared_expert_intermediate_size": "shared_expert_intermediate_size",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -7357,6 +7351,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 3,
    "mtp": true,
@@ -7660,6 +7655,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -7763,7 +7759,6 @@
      }
     },
     "max_position_embeddings": 65536,
-    "sliding_window_max_layers": 48,
     "num_heads": 16,
     "num_layers": 48,
     "num_kv_heads": 16,
@@ -7772,7 +7767,6 @@
     "tie_embeddings": false,
     "loop_passes": 4,
     "loop_exit_threshold": 1.0,
-    "sliding_window_enabled": false,
     "vocab_size": 49152,
     "attention_kind": "MHA",
     "sequence_mixer": "attention",
@@ -7786,7 +7780,6 @@
     "intermediate_size": "intermediate_size",
     "layer_types": "layer_types",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "num_heads": "num_attention_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
@@ -7795,7 +7788,6 @@
     "tie_embeddings": "tie_word_embeddings",
     "loop_passes": "total_ut_steps",
     "loop_exit_threshold": "early_exit_threshold",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -7906,6 +7898,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -8273,6 +8266,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -8542,6 +8536,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -8807,6 +8802,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -9059,6 +9055,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -9368,6 +9365,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -9671,6 +9669,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -10039,6 +10038,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -10392,6 +10392,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -10643,6 +10644,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -11014,6 +11016,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -11321,6 +11324,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -11672,6 +11676,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 3,
    "mtp": true,
@@ -12097,6 +12102,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -12314,6 +12320,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -12641,6 +12648,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 3,
    "mtp": true,
@@ -12904,6 +12912,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -13206,6 +13215,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -13565,6 +13575,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -13894,6 +13905,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -14198,6 +14210,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -14478,6 +14491,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -14795,6 +14809,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -15120,6 +15135,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -15414,6 +15430,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 3,
    "mtp": true,
@@ -15665,6 +15682,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -16000,6 +16018,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -16350,6 +16369,7 @@
    "kv_shared_layers": 18,
    "per_layer_embeddings": true,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -16667,6 +16687,7 @@
    "kv_shared_layers": 20,
    "per_layer_embeddings": true,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -16980,6 +17001,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -17285,6 +17307,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -17586,6 +17609,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -17951,6 +17975,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -18271,6 +18296,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -18660,6 +18686,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -18977,6 +19004,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -19294,6 +19322,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -19552,6 +19581,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": true,
+   "attention_residuals": false,
    "hc_streams": 4,
    "mtp_layers": 1,
    "mtp": true,
@@ -19936,6 +19966,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": true,
+   "attention_residuals": false,
    "hc_streams": 4,
    "mtp_layers": 1,
    "mtp": true,
@@ -20269,6 +20300,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -20612,6 +20644,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -20756,7 +20789,15 @@
    ],
    "scale_copy": false,
    "generation": 2,
-   "aliases": [],
+   "aliases": [
+    {
+     "key": "vibethinker-3b",
+     "title": "VibeThinker-3B (3B)",
+     "date": "2026-06-15",
+     "org": "Weibo",
+     "scale": "3B parameters"
+    }
+   ],
    "merged_into": null,
    "is_terminal": false
   },
@@ -20842,6 +20883,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -21015,7 +21057,7 @@
    },
    "num_architecture_keys": 22,
    "is_root": false,
-   "primary_parent": "glm-4-5-air",
+   "primary_parent": "grok-2-5-270b",
    "changes": [
     {
      "field": "tie_embeddings",
@@ -21026,32 +21068,28 @@
      "kind": "add"
     },
     {
+     "field": "sliding_window_pattern",
+     "kind": "drop"
+    },
+    {
      "field": "attention_kind",
      "kind": "change"
     },
     {
-     "field": "attention_bias",
-     "kind": "drop"
+     "field": "rope_scaling_type",
+     "kind": "change"
     },
     {
-     "field": "rope_scaling_type",
+     "field": "activation",
      "kind": "add"
     },
     {
-     "field": "num_shared_experts",
-     "kind": "drop"
-    },
-    {
-     "field": "dense_prefix_layers",
-     "kind": "drop"
-    },
-    {
-     "field": "router_normalize_weights",
+     "field": "residual_moe",
      "kind": "drop"
     }
    ],
    "scale_copy": false,
-   "generation": 7,
+   "generation": 8,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -21139,6 +21177,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -21502,6 +21541,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -21599,7 +21639,7 @@
     "vocab_size": 128000
    },
    "config_canonical": {
-    "short_conv_kernel": 3,
+    "conv_kernel": 3,
     "conv_bias": false,
     "hidden_size": 2048,
     "intermediate_size": 7168,
@@ -21634,7 +21674,7 @@
     "position_encoding_type": "rope"
    },
    "config_canonical_raw_key": {
-    "short_conv_kernel": "conv_L_cache",
+    "conv_kernel": "conv_L_cache",
     "conv_bias": "conv_bias",
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
@@ -21790,6 +21830,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -21902,7 +21943,7 @@
     "ffn_width_multiplier": 1.0,
     "norm_eps": 1e-05,
     "activation_gated": true,
-    "short_conv_kernel": 3,
+    "conv_kernel": 3,
     "conv_bias": false,
     "conv_dim": 2048,
     "layer_types": {
@@ -21932,7 +21973,7 @@
     "ffn_width_multiplier": "block_ffn_dim_multiplier",
     "norm_eps": "block_norm_eps / norm_eps",
     "activation_gated": "block_use_swiglu",
-    "short_conv_kernel": "conv_L_cache",
+    "conv_kernel": "conv_L_cache",
     "conv_bias": "conv_bias",
     "conv_dim": "conv_dim",
     "layer_types": "layer_types",
@@ -22061,6 +22102,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -22176,7 +22218,7 @@
     "ffn_width_multiplier": 1.0,
     "norm_eps": 1e-05,
     "activation_gated": true,
-    "short_conv_kernel": 3,
+    "conv_kernel": 3,
     "conv_bias": false,
     "conv_dim": 1024,
     "layer_types": {
@@ -22207,7 +22249,7 @@
     "ffn_width_multiplier": "block_ffn_dim_multiplier",
     "norm_eps": "block_norm_eps / norm_eps",
     "activation_gated": "block_use_swiglu",
-    "short_conv_kernel": "conv_L_cache",
+    "conv_kernel": "conv_L_cache",
     "conv_bias": "conv_bias",
     "conv_dim": "conv_dim",
     "layer_types": "layer_types",
@@ -22323,6 +22365,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -22632,6 +22675,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -22935,6 +22979,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -23278,6 +23323,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -23578,6 +23624,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -23943,6 +23990,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -24430,6 +24478,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -24517,15 +24566,12 @@
     "hidden_size": 2048,
     "intermediate_size": 11008,
     "max_position_embeddings": 131072,
-    "sliding_window_max_layers": 36,
     "num_heads": 16,
     "num_layers": 36,
     "num_kv_heads": 2,
     "norm_eps": 1e-06,
     "rope_theta": 1000000.0,
-    "sliding_window": 32768,
     "tie_embeddings": true,
-    "sliding_window_enabled": false,
     "vocab_size": 151936,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -24537,15 +24583,12 @@
     "hidden_size": "hidden_size",
     "intermediate_size": "intermediate_size",
     "max_position_embeddings": "max_position_embeddings",
-    "sliding_window_max_layers": "max_window_layers",
     "num_heads": "num_attention_heads",
     "num_layers": "num_hidden_layers",
     "num_kv_heads": "num_key_value_heads",
     "norm_eps": "rms_norm_eps",
     "rope_theta": "rope_theta",
-    "sliding_window": "sliding_window",
     "tie_embeddings": "tie_word_embeddings",
-    "sliding_window_enabled": "use_sliding_window",
     "vocab_size": "vocab_size",
     "attention_kind": "derived",
     "sequence_mixer": "derived",
@@ -24555,16 +24598,11 @@
    "num_architecture_keys": 15,
    "is_root": false,
    "primary_parent": "granite-4-1-30b",
-   "changes": [
-    {
-     "field": "sliding_window",
-     "kind": "add"
-    }
-   ],
-   "scale_copy": false,
+   "changes": [],
+   "scale_copy": true,
    "generation": 3,
    "aliases": [],
-   "merged_into": null,
+   "merged_into": "granite-4-1-30b",
    "is_terminal": true
   },
   {
@@ -24647,6 +24685,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -24796,22 +24835,21 @@
     "hidden_size": 6144,
     "index_head_dim": 128,
     "index_num_heads": 32,
-    "index_share_layers": true,
-    "index_layer_types": {
+    "index_share_layers": {
      "_raw": {
       "index_skip_topk_offset": 3,
-      "index_topk_freq": 4,
-      "indexer_types": {
-       "_list_len": 78,
-       "_counts": {
-        "shared": 57,
-        "full": 21
-       }
-      }
+      "index_topk_freq": 4
      }
     },
     "index_topk": 2048,
     "index_rope_interleave": true,
+    "index_layer_types": {
+     "_list_len": 78,
+     "_counts": {
+      "shared": 57,
+      "full": 21
+     }
+    },
     "intermediate_size": 12288,
     "kv_lora_rank": 512,
     "max_position_embeddings": 1048576,
@@ -24866,10 +24904,10 @@
     "hidden_size": "hidden_size",
     "index_head_dim": "index_head_dim",
     "index_num_heads": "index_n_heads",
-    "index_share_layers": "index_share_for_mtp_iteration",
-    "index_layer_types": "index_skip_topk_offset",
+    "index_share_layers": "index_skip_topk_offset",
     "index_topk": "index_topk",
     "index_rope_interleave": "indexer_rope_interleave",
+    "index_layer_types": "indexer_types",
     "intermediate_size": "intermediate_size",
     "kv_lora_rank": "kv_lora_rank",
     "max_position_embeddings": "max_position_embeddings",
@@ -24905,7 +24943,7 @@
     "norm_type": "implied by model_type glm_moe_dsa",
     "position_encoding_type": "implied by model_type glm_moe_dsa"
    },
-   "num_architecture_keys": 42,
+   "num_architecture_keys": 41,
    "is_root": false,
    "primary_parent": "glm-5-744b",
    "changes": [
@@ -25013,6 +25051,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -25373,6 +25412,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -25680,6 +25720,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -26091,6 +26132,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -26388,6 +26430,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": true,
+   "attention_residuals": false,
    "hc_streams": 4,
    "mtp_layers": 1,
    "mtp": true,
@@ -26788,6 +26831,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -27140,6 +27184,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -27365,6 +27410,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -27499,14 +27545,6 @@
      }
     },
     "output_multiplier": 8,
-    "conv_bias": true,
-    "short_conv_kernel": 4,
-    "mamba_head_dim": 32,
-    "mamba_state_size": 256,
-    "mamba_expand": 2,
-    "mamba_num_groups": 1,
-    "mamba_num_heads": 128,
-    "mamba_proj_bias": false,
     "max_position_embeddings": 131072,
     "norm_type": "rmsnorm",
     "num_heads": 16,
@@ -27519,18 +27557,6 @@
     "norm_eps": 1e-05,
     "shared_expert_intermediate_size": 4096,
     "tie_embeddings": true,
-    "mamba_time_step": {
-     "_raw": {
-      "time_step_limit": [
-       0.0,
-       {
-        "__float__": "Infinity"
-       }
-      ],
-      "time_step_max": 0.1,
-      "time_step_min": 0.001
-     }
-    },
     "vocab_size": 100352,
     "rope_theta": 10000000,
     "rope_scaling_type": "default",
@@ -27546,14 +27572,6 @@
     "intermediate_size": "intermediate_size",
     "layer_types": "layer_types",
     "output_multiplier": "logits_scaling",
-    "conv_bias": "mamba_conv_bias",
-    "short_conv_kernel": "mamba_d_conv",
-    "mamba_head_dim": "mamba_d_head",
-    "mamba_state_size": "mamba_d_state",
-    "mamba_expand": "mamba_expand",
-    "mamba_num_groups": "mamba_n_groups",
-    "mamba_num_heads": "mamba_n_heads",
-    "mamba_proj_bias": "mamba_proj_bias",
     "max_position_embeddings": "max_position_embeddings",
     "norm_type": "normalization_function",
     "num_heads": "num_attention_heads",
@@ -27566,7 +27584,6 @@
     "norm_eps": "rms_norm_eps",
     "shared_expert_intermediate_size": "shared_intermediate_size",
     "tie_embeddings": "tie_word_embeddings",
-    "mamba_time_step": "time_step_limit",
     "vocab_size": "vocab_size",
     "rope_theta": "rope_theta",
     "rope_scaling_type": "rope_parameters.rope_type",
@@ -27579,18 +27596,6 @@
    "changes": [
     {
      "field": "layer_types",
-     "kind": "add"
-    },
-    {
-     "field": "conv_bias",
-     "kind": "add"
-    },
-    {
-     "field": "mamba_num_heads",
-     "kind": "add"
-    },
-    {
-     "field": "mamba_state_size",
      "kind": "add"
     },
     {
@@ -27687,6 +27692,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -28037,7 +28043,8 @@
    "kv_sharing": false,
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
-   "mhc": true,
+   "mhc": false,
+   "attention_residuals": true,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -28393,7 +28400,7 @@
     "sequence_mixer": "kda",
     "mixer_attention_ratio": 3,
     "mla": true,
-    "hyper_connections": true,
+    "attention_residuals": true,
     "moe": true,
     "norm_type": "rmsnorm",
     "position_encoding_type": "rope",
@@ -28441,7 +28448,7 @@
     "sequence_mixer": "derived",
     "mixer_attention_ratio": "derived",
     "mla": "implied by model_type kimi_linear",
-    "hyper_connections": "implied by model_type kimi_linear",
+    "attention_residuals": "derived",
     "moe": "derived",
     "norm_type": "implied by model_type kimi_linear",
     "position_encoding_type": "implied by model_type kimi_linear",
@@ -28468,7 +28475,7 @@
      "kind": "change"
     },
     {
-     "field": "hyper_connections",
+     "field": "attention_residuals",
      "kind": "add"
     }
    ],
@@ -28476,7 +28483,7 @@
    "generation": 7,
    "aliases": [],
    "merged_into": null,
-   "is_terminal": false
+   "is_terminal": true
   },
   {
    "key": "ling-3-0-flash",
@@ -28560,6 +28567,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -28789,7 +28797,8 @@
     "mla": true,
     "moe": true,
     "norm_type": "rmsnorm",
-    "position_encoding_type": "rope"
+    "position_encoding_type": "rope",
+    "gated_attention": true
    },
    "config_canonical_raw_key": {
     "activation_clamp_experts": "expert_swiglu_limit_list",
@@ -28845,7 +28854,8 @@
     "mla": "implied by model_type bailing_hybrid",
     "moe": "derived",
     "norm_type": "implied by model_type bailing_hybrid",
-    "position_encoding_type": "implied by model_type bailing_hybrid"
+    "position_encoding_type": "implied by model_type bailing_hybrid",
+    "gated_attention": "gated_attention_proj_granularity_type"
    },
    "num_architecture_keys": 57,
    "is_root": false,
@@ -28862,6 +28872,10 @@
     {
      "field": "hybrid_attention_interval",
      "kind": "change"
+    },
+    {
+     "field": "gated_attention",
+     "kind": "add"
     },
     {
      "field": "gated_attention_type",
@@ -28971,6 +28985,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 0,
    "mtp": false,
@@ -29288,6 +29303,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -29616,6 +29632,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -29917,6 +29934,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": false,
+   "attention_residuals": false,
    "hc_streams": null,
    "mtp_layers": 1,
    "mtp": true,
@@ -30232,6 +30250,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": true,
+   "attention_residuals": false,
    "hc_streams": 4,
    "mtp_layers": 1,
    "mtp": true,
@@ -30474,7 +30493,6 @@
     },
     "index_num_heads": 32,
     "index_topk": 2048,
-    "index_share_layers": true,
     "index_rope_interleave": true,
     "index_layer_types": {
      "_list_len": 45,
@@ -30548,7 +30566,6 @@
     "index_kpool": "index_kpool",
     "index_num_heads": "index_n_heads",
     "index_topk": "index_topk",
-    "index_share_layers": "index_share_for_mtp_iteration",
     "index_rope_interleave": "indexer_rope_interleave",
     "index_layer_types": "indexer_types",
     "intermediate_size": "intermediate_size",
@@ -30593,13 +30610,17 @@
     "position_encoding_type": "implied by model_type glm5_next_text",
     "nope_layers": "implied by model_type glm5_next_text"
    },
-   "num_architecture_keys": 47,
+   "num_architecture_keys": 46,
    "is_root": false,
-   "primary_parent": "kimi-k3",
+   "primary_parent": "kimi-linear-48b-a3b",
    "changes": [
     {
      "field": "gated_attention",
      "kind": "drop"
+    },
+    {
+     "field": "q_lora_rank",
+     "kind": "add"
     },
     {
      "field": "sparse_attention",
@@ -30614,28 +30635,20 @@
      "kind": "add"
     },
     {
-     "field": "index_share_layers",
-     "kind": "add"
-    },
-    {
      "field": "index_rope_interleave",
      "kind": "add"
-    },
-    {
-     "field": "activation",
-     "kind": "change"
     },
     {
      "field": "moe_layer_schedule",
      "kind": "change"
     },
     {
-     "field": "moe_latent_norm",
-     "kind": "drop"
-    },
-    {
      "field": "router_topk_method",
      "kind": "change"
+    },
+    {
+     "field": "hyper_connections",
+     "kind": "add"
     },
     {
      "field": "hyper_connection_streams",
@@ -30643,7 +30656,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 8,
+   "generation": 7,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -30736,7 +30749,8 @@
    "kv_sharing": false,
    "kv_shared_layers": null,
    "per_layer_embeddings": true,
-   "mhc": true,
+   "mhc": false,
+   "attention_residuals": false,
    "hc_streams": 4,
    "mtp_layers": 1,
    "mtp": true,
@@ -30893,8 +30907,12 @@
    "config_canonical": {
     "attention_bias": false,
     "hybrid_attention_interval": 4,
-    "hyper_connection_streams": 4,
-    "hyper_connection_params": 320,
+    "gated_residuals": {
+     "_raw": {
+      "hc_count": 4,
+      "hc_lowrank": 320
+     }
+    },
     "head_dim": 256,
     "ngram_embedding": {
      "_raw": {
@@ -30960,7 +30978,6 @@
     "qk_norm": true,
     "gated_attention": true,
     "sparse_attention": "QSA",
-    "hyper_connections": true,
     "moe": true,
     "norm_type": "rmsnorm",
     "position_encoding_type": "rope"
@@ -30968,8 +30985,7 @@
    "config_canonical_raw_key": {
     "attention_bias": "attention_bias",
     "hybrid_attention_interval": "full_attention_interval",
-    "hyper_connection_streams": "hc_count",
-    "hyper_connection_params": "hc_lowrank",
+    "gated_residuals": "hc_count",
     "head_dim": "head_dim",
     "ngram_embedding": "heads_per_ngram",
     "activation": "hidden_act",
@@ -31010,7 +31026,6 @@
     "qk_norm": "implied by model_type qwen4_exp_text",
     "gated_attention": "implied by model_type qwen4_exp_text",
     "sparse_attention": "implied by model_type qwen4_exp_text",
-    "hyper_connections": "implied by model_type qwen4_exp_text",
     "moe": "derived",
     "norm_type": "implied by model_type qwen4_exp_text",
     "position_encoding_type": "implied by model_type qwen4_exp_text"
@@ -31044,11 +31059,7 @@
      "kind": "add"
     },
     {
-     "field": "hyper_connections",
-     "kind": "add"
-    },
-    {
-     "field": "hyper_connection_streams",
+     "field": "gated_residuals",
      "kind": "add"
     }
    ],
@@ -31143,6 +31154,7 @@
    "kv_shared_layers": null,
    "per_layer_embeddings": false,
    "mhc": true,
+   "attention_residuals": false,
    "hc_streams": 4,
    "mtp_layers": 1,
    "mtp": true,
@@ -31546,6 +31558,7 @@
    "kv_shared_layers": 4,
    "per_layer_embeddings": false,
    "mhc": true,
+   "attention_residuals": false,
    "hc_streams": 4,
    "mtp_layers": 3,
    "mtp": true,
@@ -32073,7 +32086,7 @@
    "mech": 1
   },
   {
-   "source": "gpt-oss-120b",
+   "source": "glm-4-5-air",
    "target": "grok-2-5-270b",
    "type": "parent",
    "fields": [],
@@ -32417,11 +32430,11 @@
    "mech": 0
   },
   {
-   "source": "glm-4-5-air",
+   "source": "grok-2-5-270b",
    "target": "zaya1-8b",
    "type": "parent",
    "fields": [],
-   "n": 8,
+   "n": 7,
    "mech": 1
   },
   {
@@ -32509,14 +32522,6 @@
    "mech": 1
   },
   {
-   "source": "granite-4-1-30b",
-   "target": "vibethinker-3b",
-   "type": "parent",
-   "fields": [],
-   "n": 1,
-   "mech": 0
-  },
-  {
    "source": "glm-5-744b",
    "target": "glm-5-2",
    "type": "parent",
@@ -32571,7 +32576,7 @@
    "target": "antares-1b",
    "type": "parent",
    "fields": [],
-   "n": 5,
+   "n": 2,
    "mech": 0
   },
   {
@@ -32601,22 +32606,12 @@
    "mech": 1
   },
   {
-   "source": "deepseek-v4-pro",
-   "target": "kimi-k3",
-   "type": "trait",
-   "fields": [
-    "hyper_connections"
-   ],
-   "n": 1,
-   "mech": null
-  },
-  {
    "source": "ling-2-5-1t",
    "target": "ling-3-0-flash",
    "type": "parent",
    "fields": [],
-   "n": 7,
-   "mech": 1
+   "n": 8,
+   "mech": 2
   },
   {
    "source": "kimi-linear-48b-a3b",
@@ -32637,30 +32632,30 @@
    "mech": 1
   },
   {
-   "source": "kimi-k3",
+   "source": "kimi-linear-48b-a3b",
    "target": "glm-5-3-flash",
    "type": "parent",
    "fields": [],
-   "n": 11,
-   "mech": 2
-  },
-  {
-   "source": "qwen3-5-397b",
-   "target": "qwen3-8-flash-next-125b-a6b",
-   "type": "parent",
-   "fields": [],
-   "n": 8,
+   "n": 10,
    "mech": 3
   },
   {
    "source": "deepseek-v4-pro",
-   "target": "qwen3-8-flash-next-125b-a6b",
+   "target": "glm-5-3-flash",
    "type": "trait",
    "fields": [
     "hyper_connections"
    ],
    "n": 1,
    "mech": null
+  },
+  {
+   "source": "qwen3-5-397b",
+   "target": "qwen3-8-flash-next-125b-a6b",
+   "type": "parent",
+   "fields": [],
+   "n": 7,
+   "mech": 3
   },
   {
    "source": "qwen3-next-80b-a3b",
