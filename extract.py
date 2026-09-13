@@ -576,6 +576,11 @@ def extract(card):
         if v is None or v == [] or v == {} or v == "":
             del norm[k]; raw_used.pop(k, None); continue
         if isinstance(v, dict) and "_raw" in v:
+            v["_raw"] = {rk: rv for rk, rv in v["_raw"].items() if rv not in (None, [], {}, "")}
+            if not v["_raw"]:
+                del norm[k]; raw_used.pop(k, None); continue
+            if len(v["_raw"]) == 1:
+                (rk, rv), = v["_raw"].items(); norm[k] = rv; raw_used[k] = rk; continue
             vals = list(v["_raw"].values())
             if all(json.dumps(x, sort_keys=True) == json.dumps(vals[0], sort_keys=True) for x in vals):
                 norm[k] = vals[0]; raw_used[k] = " / ".join(v["_raw"])

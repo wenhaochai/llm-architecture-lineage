@@ -3313,12 +3313,7 @@
    },
    "config_canonical": {
     "attention_bias": false,
-    "moe_layer_schedule": {
-     "_raw": {
-      "decoder_sparse_step": 1,
-      "mlp_only_layers": []
-     }
-    },
+    "moe_layer_schedule": 1,
     "head_dim": 128,
     "activation": "silu",
     "hidden_size": 4096,
@@ -3849,12 +3844,7 @@
    },
    "config_canonical": {
     "attention_bias": false,
-    "moe_layer_schedule": {
-     "_raw": {
-      "decoder_sparse_step": 1,
-      "mlp_only_layers": []
-     }
-    },
+    "moe_layer_schedule": 1,
     "head_dim": 128,
     "activation": "silu",
     "hidden_size": 2048,
@@ -5806,12 +5796,7 @@
    },
    "config_canonical": {
     "attention_bias": false,
-    "moe_layer_schedule": {
-     "_raw": {
-      "decoder_sparse_step": 1,
-      "mlp_only_layers": []
-     }
-    },
+    "moe_layer_schedule": 1,
     "head_dim": 128,
     "activation": "silu",
     "hidden_size": 2048,
@@ -7187,12 +7172,7 @@
     "vocab_size": 151936
    },
    "config_canonical": {
-    "moe_layer_schedule": {
-     "_raw": {
-      "decoder_sparse_step": 1,
-      "mlp_only_layers": []
-     }
-    },
+    "moe_layer_schedule": 1,
     "hybrid_attention_interval": 4,
     "head_dim": 256,
     "activation": "silu",
@@ -13034,12 +13014,7 @@
     "activation": "silu",
     "hidden_size": 2048,
     "intermediate_size": 11008,
-    "norm_eps": {
-     "_raw": {
-      "layer_norm_eps": 1e-05,
-      "rms_norm_eps": null
-     }
-    },
+    "norm_eps": 1e-05,
     "layer_types": {
      "_raw": {
       "layer_types": {
@@ -21303,12 +21278,7 @@
     "activation": "silu",
     "hidden_size": 4096,
     "intermediate_size": 4096,
-    "norm_eps": {
-     "_raw": {
-      "layer_norm_eps": 1e-05,
-      "rms_norm_eps": null
-     }
-    },
+    "norm_eps": 1e-05,
     "layer_types": {
      "_raw": {
       "layer_types": {
@@ -24831,7 +24801,6 @@
      "_raw": {
       "index_skip_topk_offset": 3,
       "index_topk_freq": 4,
-      "index_topk_pattern": null,
       "indexer_types": {
        "_list_len": 78,
        "_counts": {
@@ -26613,12 +26582,7 @@
     "vocab_size": 220160,
     "rope_scaling_factor": 64.0,
     "rope_original_max_position": 4096,
-    "polynorm_output_scale": {
-     "_raw": {
-      "polynorm_output_scale": 0.5,
-      "polynorm_output_scale_per_layer": {}
-     }
-    },
+    "polynorm_output_scale": 0.5,
     "polynorm_bias_clamp": 0.5,
     "activation_clamp": 1000000.0,
     "rope_scaling_type": "yarn",
