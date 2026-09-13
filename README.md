@@ -50,7 +50,7 @@ The 103 configs use 571 distinct keys. `key_taxonomy.py` lists by hand the 155 t
 architecture: 68 decoding defaults, tokenizer ids and Hugging Face bookkeeping; 40 dtype,
 kernel, parallelism and implementation switches; 26 training-only settings; 8 multimodal
 leftovers, 11 multi-token-prediction heads, and the 2 keys naming the modeling code.
-`schema.py` renames the remaining 416 architecture keys into 171 canonical fields (98 of them
+`schema.py` renames the remaining 416 architecture keys into 170 canonical fields (98 of them
 merge several spellings: seven names for the number of active experts, six for
 the norm epsilon), each assigned to one of four sections that follow the forward pass of a decoder
 block (token mixing and channel mixing carry subsections). Nested sub-configs are flattened into
