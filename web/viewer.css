@@ -46,38 +46,33 @@ html[data-theme="midnight"] { --lin-node: #5C5964; --lin-edge: rgba(200, 195, 18
 .sp-links { display: flex; gap: 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; padding-bottom: 6px; }
 .ar-main .sp-links a { color: var(--ink-3); border-bottom: 0; }
 .ar-main .sp-links a:hover { color: var(--accent); }
-.sp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 28px 40px; padding: 24px 0 8px; }
-.sp-group h4, .sp-rel h4 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin: 0 0 10px; }
-.sp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 4px 0; font-family: var(--font-sans); font-size: 14.5px; line-height: 1.45; }
-.sp-row span { color: var(--ink-4); }
-.sp-row b { font-weight: 500; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.sp-rels { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px 40px; margin-top: 34px; }
+.sp-config { margin-top: 34px; }
+.sp-config > .tp-eyebrow { margin-bottom: 6px; }
+.sp-sec { padding: 18px 0 6px; }
+.sp-sec > h4 { font-family: var(--font-serif); font-weight: 500; font-size: 21px; letter-spacing: -0.01em; color: var(--ink); margin: 0 0 6px; }
+.sp-sec .sp-group { break-inside: avoid; padding: 6px 0 4px; }
+.sp-sec { columns: 2; column-gap: 48px; }
+.sp-sec > h4 { column-span: all; }
+@media (max-width: 860px) { .sp-sec { columns: 1; } }
+.sp-group h5 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin: 8px 0 6px; }
+.sp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 4px 0; font-family: var(--font-sans); font-size: 14px; line-height: 1.45; }
+.sp-row span { color: var(--ink-3); font-family: var(--font-mono); font-size: 12.5px; }
+.sp-row span i { display: block; font-style: normal; color: var(--ink-4); font-size: 11px; }
+.sp-row b { font-weight: 500; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; max-width: 60%; }
+.sp-row.is-changed span, .sp-row.is-changed b { color: var(--accent); }
+.sp-chg { font-style: normal; display: inline-block; width: 12px; color: var(--accent); }
+.sp-rels { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px 40px; margin-top: 26px; }
+.sp-rel h4 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin: 0 0 10px; }
 .sp-node { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 5px 0; }
 .sp-node button { font-family: var(--font-serif); font-size: 18px; color: var(--ink); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; line-height: 1.3; }
 .sp-node button:hover { color: var(--accent); }
 .sp-node span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-4); text-align: right; white-space: nowrap; }
 .ar-main .sp-none { font-family: var(--font-sans) !important; font-size: 13.5px !important; color: var(--ink-4) !important; margin: 0 !important; }
-.lin-full { margin-top: 34px; }
-.cf-group { break-inside: avoid; margin-top: 16px; }
-.cf-group h5 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--accent); margin: 0 0 6px; }
-.lin-raw dt i { display: block; font-style: normal; color: var(--ink-4); font-size: 11px; }
 .sp-vs { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-4); margin-right: 10px; }
 .tp-sig .sp-vs, .tp-alias .sp-vs { display: block; margin: 0 0 3px; }
 .ar-main .tp-alias, .ar-main .sp-alias { font-family: var(--font-sans); font-size: 12px; line-height: 1.5; color: var(--ink-3); margin: 0 0 8px; max-width: none; }
 .ar-main .sp-alias { font-size: 15px; margin: 8px 0 0; }
 .tp-alias i, .sp-alias i { font-style: normal; font-family: var(--font-mono); font-size: 0.8em; color: var(--ink-4); }
 .sp-node button i { font-style: normal; font-family: var(--font-mono); font-size: 11px; color: var(--ink-4); margin-left: 6px; }
-.lin-full summary em { display: block; font-style: normal; text-transform: none; letter-spacing: 0; font-family: var(--font-sans); font-size: 12.5px; color: var(--ink-4); margin-top: 6px; }
-.lin-full summary { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); cursor: pointer; list-style: none; }
-.lin-full summary::-webkit-details-marker { display: none; }
-.lin-full summary::before { content: "+"; color: var(--accent); margin-right: 8px; }
-.lin-full[open] summary::before { content: "−"; }
-.lin-full summary span { color: var(--ink-4); margin-left: 8px; }
-.lin-raw { margin: 0; columns: 3; column-gap: 40px; }
-@media (max-width: 1100px) { .lin-raw { columns: 2; } }
-@media (max-width: 860px) { .lin-raw { columns: 1; } }
-.lin-raw > div { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 10px; padding: 2px 0; break-inside: avoid; font-size: 12.5px; }
-.lin-raw dt { font-family: var(--font-mono); color: var(--ink-3); overflow-wrap: anywhere; }
-.lin-raw dd { margin: 0; font-family: var(--font-mono); color: var(--ink-2); overflow-wrap: anywhere; }
 .lin-table { overflow-x: auto; margin-top: 14px; }
 .lin-table table { border-collapse: collapse; font-family: var(--font-sans); font-size: 12.5px; white-space: nowrap; min-width: 100%; }
