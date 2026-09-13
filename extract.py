@@ -548,6 +548,28 @@ def extract(card):
         fill("per_layer_embedding_dim", m["hidden_size_per_layer_input"] or True, imp_src)
     if m["encoder_decoder"]:
         fill("bidirectional_attention", True, imp_src)
+    # bare switches (use_rmsnorm=True, use_pos_enc=True, use_dsa=True) name no design; give them the
+    # value the rest of the gallery uses for the same thing, so spellings never read as changes
+    if norm.get("sparse_attention") is True:
+        norm["sparse_attention"] = m["sparse_attention"] or "sparse"
+    if norm.get("norm_type") in (True, "layer_norm", "rms_norm", "RMSNorm", "LayerNorm"):
+        norm["norm_type"] = m["norm_type"]
+    if norm.get("position_encoding_type") in (True, False, "rope_gptj"):
+        norm["position_encoding_type"] = m["position_encoding"]
+    if norm.get("router_scoring") is True:
+        norm["router_scoring"] = "sigmoid"
+    if norm.get("router_topk_method") is True:
+        norm["router_topk_method"] = "grouped"
+    if norm.get("router_topk_method") in ("sigmoid", "softmax"):  # expert_selection_fn names the scoring, not the top-k rule
+        if "router_scoring" not in norm:
+            norm["router_scoring"] = norm["router_topk_method"]; raw_used["router_scoring"] = raw_used["router_topk_method"]
+        del norm["router_topk_method"]; raw_used.pop("router_topk_method", None)
+    if norm.get("bidirectional_attention") == "vision":  # bidirectional only over image tokens: not a text-decoder design
+        del norm["bidirectional_attention"]; raw_used.pop("bidirectional_attention", None)
+    if isinstance(norm.get("parallel_block"), str):
+        norm["parallel_block"] = "parallel" in norm["parallel_block"].lower()
+    if norm.get("gated_attention_type") is True:
+        del norm["gated_attention_type"]; raw_used.pop("gated_attention_type", None)
     # null and empty values carry no information; several spellings with one value collapse to that value
     for k in list(norm):
         v = norm[k]

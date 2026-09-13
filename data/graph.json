@@ -8091,7 +8091,7 @@
     "router_scaling_factor": 2.446,
     "tie_embeddings": false,
     "router_topk_groups": 1,
-    "router_topk_method": true,
+    "router_topk_method": "grouped",
     "v_head_dim": 128,
     "vocab_size": 163840,
     "layer_types": {
@@ -12839,7 +12839,7 @@
     }
    ],
    "merged_into": null,
-   "is_terminal": true
+   "is_terminal": false
   },
   {
    "key": "tiny-aya-3-35b",
@@ -13054,7 +13054,7 @@
     },
     "output_multiplier": 1.0,
     "max_position_embeddings": 5000000,
-    "norm_type": "layer_norm",
+    "norm_type": "layernorm",
     "num_heads": 16,
     "num_layers": 36,
     "num_kv_heads": 4,
@@ -13067,7 +13067,7 @@
     "rope_theta": 50000,
     "partial_rotary_factor": 1.0,
     "sliding_window": 4096,
-    "parallel_block": "parallel",
+    "parallel_block": true,
     "tie_embeddings": true,
     "activation_gated": true,
     "qk_norm": false,
@@ -13151,7 +13151,7 @@
    "generation": 7,
    "aliases": [],
    "merged_into": null,
-   "is_terminal": false
+   "is_terminal": true
   },
   {
    "key": "ling-2-5-1t",
@@ -14352,7 +14352,7 @@
     "router_topk_groups": 1,
     "attention_bias": false,
     "qk_norm": true,
-    "norm_type": true,
+    "norm_type": "rmsnorm",
     "vocab_size": 262144,
     "attention_kind": "GQA",
     "sequence_mixer": "attention",
@@ -14408,10 +14408,6 @@
     {
      "field": "router_expert_bias",
      "kind": "add"
-    },
-    {
-     "field": "norm_type",
-     "kind": "change"
     }
    ],
    "scale_copy": false,
@@ -15857,7 +15853,6 @@
     "norm_eps": 1e-06,
     "sliding_window": 1024,
     "tie_embeddings": true,
-    "bidirectional_attention": "vision",
     "double_wide_mlp": false,
     "vocab_size": 262144,
     "per_layer_embedding_vocab": 262144,
@@ -15893,7 +15888,6 @@
     "norm_eps": "rms_norm_eps",
     "sliding_window": "sliding_window",
     "tie_embeddings": "tie_word_embeddings",
-    "bidirectional_attention": "use_bidirectional_attention",
     "double_wide_mlp": "use_double_wide_mlp",
     "vocab_size": "vocab_size",
     "per_layer_embedding_vocab": "vocab_size_per_layer_input",
@@ -15923,10 +15917,6 @@
     {
      "field": "sliding_window_pattern",
      "kind": "drop"
-    },
-    {
-     "field": "bidirectional_attention",
-     "kind": "add"
     },
     {
      "field": "global_kv_unified",
@@ -16201,7 +16191,6 @@
     "sliding_window": 1024,
     "tie_embeddings": true,
     "experts_per_tok": 8,
-    "bidirectional_attention": "vision",
     "double_wide_mlp": false,
     "vocab_size": 262144,
     "per_layer_embedding_vocab": 262144,
@@ -16240,7 +16229,6 @@
     "sliding_window": "sliding_window",
     "tie_embeddings": "tie_word_embeddings",
     "experts_per_tok": "top_k_experts",
-    "bidirectional_attention": "use_bidirectional_attention",
     "double_wide_mlp": "use_double_wide_mlp",
     "vocab_size": "vocab_size",
     "per_layer_embedding_vocab": "vocab_size_per_layer_input",
@@ -16257,11 +16245,43 @@
    },
    "num_architecture_keys": 28,
    "is_root": false,
-   "primary_parent": "gemma-4-31b",
+   "primary_parent": "qwen3-235b-a22b",
    "changes": [
     {
-     "field": "moe",
+     "field": "tie_embeddings",
      "kind": "add"
+    },
+    {
+     "field": "layer_types",
+     "kind": "add"
+    },
+    {
+     "field": "local_global_ratio",
+     "kind": "add"
+    },
+    {
+     "field": "sliding_window",
+     "kind": "add"
+    },
+    {
+     "field": "global_kv_unified",
+     "kind": "add"
+    },
+    {
+     "field": "rope_scaling_type",
+     "kind": "add"
+    },
+    {
+     "field": "activation",
+     "kind": "change"
+    },
+    {
+     "field": "moe_layer_schedule",
+     "kind": "drop"
+    },
+    {
+     "field": "router_normalize_weights",
+     "kind": "drop"
     }
    ],
    "scale_copy": false,
@@ -16567,35 +16587,23 @@
    },
    "num_architecture_keys": 28,
    "is_root": false,
-   "primary_parent": "gemma-3-27b",
+   "primary_parent": "gemma-4-31b",
    "changes": [
-    {
-     "field": "tie_embeddings",
-     "kind": "add"
-    },
     {
      "field": "per_layer_embedding_dim",
      "kind": "add"
     },
     {
-     "field": "layer_types",
-     "kind": "add"
-    },
-    {
-     "field": "sliding_window_pattern",
+     "field": "global_kv_unified",
      "kind": "drop"
     },
     {
      "field": "kv_shared_layers",
      "kind": "add"
-    },
-    {
-     "field": "rope_scaling_type",
-     "kind": "change"
     }
    ],
    "scale_copy": false,
-   "generation": 4,
+   "generation": 5,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -16912,7 +16920,7 @@
     }
    ],
    "scale_copy": false,
-   "generation": 5,
+   "generation": 6,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -19420,7 +19428,7 @@
     "intermediate_size": 13312,
     "max_position_embeddings": 262144,
     "router_expert_bias": true,
-    "router_scoring": true,
+    "router_scoring": "sigmoid",
     "num_heads": 64,
     "num_experts": 192,
     "experts_per_tok": 8,
@@ -19478,14 +19486,6 @@
     {
      "field": "rope_scaling_type",
      "kind": "add"
-    },
-    {
-     "field": "router_scoring",
-     "kind": "change"
-    },
-    {
-     "field": "norm_type",
-     "kind": "change"
     }
    ],
    "scale_copy": false,
@@ -20442,7 +20442,6 @@
     "moe_intermediate_size": 512,
     "shared_expert_intermediate_size": 512,
     "tie_embeddings": false,
-    "gated_attention_type": true,
     "sliding_window": 512,
     "layer_types": {
      "_list_len": 40,
@@ -20497,7 +20496,6 @@
     "moe_intermediate_size": "moe_intermediate_size",
     "shared_expert_intermediate_size": "shared_expert_intermediate_size",
     "tie_embeddings": "tie_word_embeddings",
-    "gated_attention_type": "gating",
     "sliding_window": "sliding_window",
     "layer_types": "layer_types",
     "router_input_scaling": "moe_apply_router_weight_on_input",
@@ -20525,10 +20523,6 @@
     {
      "field": "attention_impl_type",
      "kind": "drop"
-    },
-    {
-     "field": "gated_attention_type",
-     "kind": "add"
     },
     {
      "field": "rope_scaling_type",
@@ -21304,7 +21298,6 @@
      }
     },
     "attention_bias": false,
-    "router_topk_method": "sigmoid",
     "dense_prefix_layers": 0,
     "head_dim": 128,
     "activation": "silu",
@@ -21331,20 +21324,20 @@
     "output_multiplier": 1.0,
     "max_position_embeddings": 200000,
     "router_normalize_weights": true,
-    "norm_type": "layer_norm",
+    "norm_type": "layernorm",
     "num_heads": 128,
     "num_experts": 128,
     "experts_per_tok": 8,
     "num_layers": 32,
     "num_kv_heads": 8,
     "num_shared_experts": 4,
-    "position_encoding_type": "rope_gptj",
+    "position_encoding_type": "rope",
     "dense_prefix_intermediate_size": 16384,
     "rope_theta": 50000,
     "partial_rotary_factor": 1.0,
     "shared_expert_mode": "average",
     "sliding_window": 4096,
-    "parallel_block": "parallel",
+    "parallel_block": true,
     "tie_embeddings": true,
     "activation_gated": true,
     "qk_norm": false,
@@ -21353,12 +21346,12 @@
     "sequence_mixer": "attention",
     "local_global_ratio": 3,
     "moe": true,
-    "nope_layers": "global"
+    "nope_layers": "global",
+    "router_scoring": "sigmoid"
    },
    "config_canonical_raw_key": {
     "sliding_window_pattern": "_sliding_window_pattern",
     "attention_bias": "attention_bias",
-    "router_topk_method": "expert_selection_fn",
     "dense_prefix_layers": "first_k_dense_replace",
     "head_dim": "head_dim",
     "activation": "hidden_act",
@@ -21391,30 +21384,43 @@
     "sequence_mixer": "derived",
     "local_global_ratio": "derived",
     "moe": "derived",
-    "nope_layers": "implied by model_type cohere2_moe"
+    "nope_layers": "implied by model_type cohere2_moe",
+    "router_scoring": "expert_selection_fn"
    },
    "num_architecture_keys": 36,
    "is_root": false,
-   "primary_parent": "tiny-aya-3-35b",
+   "primary_parent": "glm-4-5-air",
    "changes": [
     {
-     "field": "layer_types",
-     "kind": "change"
-    },
-    {
-     "field": "sliding_window_pattern",
-     "kind": "change"
-    },
-    {
-     "field": "position_encoding_type",
-     "kind": "change"
-    },
-    {
-     "field": "moe",
+     "field": "tie_embeddings",
      "kind": "add"
     },
     {
-     "field": "num_shared_experts",
+     "field": "layer_types",
+     "kind": "add"
+    },
+    {
+     "field": "local_global_ratio",
+     "kind": "add"
+    },
+    {
+     "field": "sliding_window",
+     "kind": "add"
+    },
+    {
+     "field": "sliding_window_pattern",
+     "kind": "add"
+    },
+    {
+     "field": "attention_bias",
+     "kind": "drop"
+    },
+    {
+     "field": "nope_layers",
+     "kind": "add"
+    },
+    {
+     "field": "activation_gated",
      "kind": "add"
     },
     {
@@ -21422,16 +21428,24 @@
      "kind": "add"
     },
     {
-     "field": "router_topk_method",
+     "field": "dense_prefix_layers",
+     "kind": "drop"
+    },
+    {
+     "field": "router_scoring",
      "kind": "add"
     },
     {
-     "field": "router_normalize_weights",
+     "field": "norm_type",
+     "kind": "change"
+    },
+    {
+     "field": "parallel_block",
      "kind": "add"
     }
    ],
    "scale_copy": false,
-   "generation": 8,
+   "generation": 7,
    "aliases": [],
    "merged_into": null,
    "is_terminal": false
@@ -21934,7 +21948,7 @@
     "num_kv_heads": 8,
     "rope_theta": 1000000.0,
     "tie_embeddings": true,
-    "position_encoding_type": true,
+    "position_encoding_type": "rope",
     "vocab_size": 65536,
     "attention_kind": "GQA",
     "sequence_mixer": "liv_conv",
@@ -21980,10 +21994,6 @@
     {
      "field": "mixer_attention_ratio",
      "kind": "add"
-    },
-    {
-     "field": "position_encoding_type",
-     "kind": "change"
     },
     {
      "field": "activation",
@@ -22211,7 +22221,7 @@
     "num_layers": 16,
     "num_kv_heads": 8,
     "tie_embeddings": true,
-    "position_encoding_type": true,
+    "position_encoding_type": "rope",
     "vocab_size": 65536,
     "rope_scaling_type": "default",
     "rope_theta": 1000000.0,
@@ -22812,7 +22822,6 @@
     "norm_eps": 1e-06,
     "sliding_window": 1024,
     "tie_embeddings": true,
-    "bidirectional_attention": "vision",
     "double_wide_mlp": false,
     "vocab_size": 262144,
     "per_layer_embedding_vocab": 262144,
@@ -22848,7 +22857,6 @@
     "norm_eps": "rms_norm_eps",
     "sliding_window": "sliding_window",
     "tie_embeddings": "tie_word_embeddings",
-    "bidirectional_attention": "use_bidirectional_attention",
     "double_wide_mlp": "use_double_wide_mlp",
     "vocab_size": "vocab_size",
     "per_layer_embedding_vocab": "vocab_size_per_layer_input",
@@ -23406,7 +23414,6 @@
    },
    "config_canonical": {
     "attention_bias": false,
-    "router_topk_method": "sigmoid",
     "dense_prefix_layers": 1,
     "head_dim": 128,
     "activation": "silu",
@@ -23449,11 +23456,11 @@
     "moe": true,
     "norm_type": "layernorm",
     "position_encoding_type": "rope",
-    "nope_layers": "global"
+    "nope_layers": "global",
+    "router_scoring": "sigmoid"
    },
    "config_canonical_raw_key": {
     "attention_bias": "attention_bias",
-    "router_topk_method": "expert_selection_fn",
     "dense_prefix_layers": "first_k_dense_replace",
     "head_dim": "head_dim",
     "activation": "hidden_act",
@@ -23485,7 +23492,8 @@
     "moe": "derived",
     "norm_type": "implied by model_type cohere2_moe",
     "position_encoding_type": "implied by model_type cohere2_moe",
-    "nope_layers": "implied by model_type cohere2_moe"
+    "nope_layers": "implied by model_type cohere2_moe",
+    "router_scoring": "expert_selection_fn"
    },
    "num_architecture_keys": 29,
    "is_root": false,
@@ -23504,10 +23512,6 @@
      "kind": "change"
     },
     {
-     "field": "position_encoding_type",
-     "kind": "change"
-    },
-    {
      "field": "num_shared_experts",
      "kind": "drop"
     },
@@ -23518,18 +23522,10 @@
     {
      "field": "router_normalize_weights",
      "kind": "drop"
-    },
-    {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
-     "field": "parallel_block",
-     "kind": "change"
     }
    ],
    "scale_copy": false,
-   "generation": 9,
+   "generation": 8,
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -24132,7 +24128,7 @@
     "vocab_size": 200064,
     "max_position_embeddings": 1048576,
     "norm_eps": 1e-06,
-    "norm_type": true,
+    "norm_type": "rmsnorm",
     "gated_attention": false,
     "rope_theta": 5000000,
     "partial_rotary_factor": {
@@ -24345,11 +24341,15 @@
    },
    "num_architecture_keys": 30,
    "is_root": false,
-   "primary_parent": "sarvam-30b",
+   "primary_parent": "minimax-m2-5-230b",
    "changes": [
     {
+     "field": "layer_types",
+     "kind": "drop"
+    },
+    {
      "field": "qk_norm_type",
-     "kind": "add"
+     "kind": "change"
     },
     {
      "field": "sparse_attention",
@@ -24368,16 +24368,12 @@
      "kind": "change"
     },
     {
-     "field": "dense_prefix_layers",
-     "kind": "drop"
+     "field": "num_shared_experts",
+     "kind": "add"
     },
     {
      "field": "moe_layer_schedule",
      "kind": "add"
-    },
-    {
-     "field": "router_normalize_weights",
-     "kind": "drop"
     }
    ],
    "scale_copy": false,
@@ -25305,7 +25301,7 @@
    "changes": [
     {
      "field": "gated_attention_type",
-     "kind": "change"
+     "kind": "add"
     },
     {
      "field": "moe_layer_schedule",
@@ -26032,10 +26028,6 @@
      "kind": "add"
     },
     {
-     "field": "norm_type",
-     "kind": "change"
-    },
-    {
      "field": "norm_extra_placement",
      "kind": "add"
     }
@@ -26745,7 +26737,7 @@
    "parent_via": "deepseek-v4-pro",
    "aliases": [],
    "merged_into": null,
-   "is_terminal": false
+   "is_terminal": true
   },
   {
    "key": "laguna-s-2-1",
@@ -27855,7 +27847,7 @@
     "tie_embeddings": false,
     "max_position_embeddings": 1048576,
     "dense_prefix_layers": 0,
-    "position_encoding_type": false,
+    "position_encoding_type": "none",
     "hybrid_attention_interval": {
      "_raw": {
       "gqa_interval": 3,
@@ -27982,6 +27974,10 @@
     {
      "field": "mamba_activation",
      "kind": "drop"
+    },
+    {
+     "field": "position_encoding_type",
+     "kind": "add"
     },
     {
      "field": "activation",
@@ -31384,7 +31380,7 @@
     "activation_clamp": 10.0,
     "tie_embeddings": false,
     "router_topk_groups": 1,
-    "sparse_attention": true,
+    "sparse_attention": "DSA",
     "mla": true,
     "v_head_dim": 256,
     "vocab_size": 120832,
@@ -31447,54 +31443,22 @@
    },
    "num_architecture_keys": 43,
    "is_root": false,
-   "primary_parent": "motif-3-beta",
+   "primary_parent": "deepseek-v3-2",
    "changes": [
     {
      "field": "layer_types",
      "kind": "add"
     },
     {
-     "field": "local_global_ratio",
-     "kind": "drop"
-    },
-    {
-     "field": "sliding_window",
-     "kind": "drop"
-    },
-    {
-     "field": "sliding_window_enabled",
-     "kind": "drop"
-    },
-    {
-     "field": "sliding_window_pattern",
-     "kind": "drop"
-    },
-    {
-     "field": "attention_impl_type",
-     "kind": "drop"
-    },
-    {
      "field": "gated_attention",
-     "kind": "change"
+     "kind": "add"
     },
     {
      "field": "gated_attention_type",
      "kind": "add"
     },
     {
-     "field": "attention_differential",
-     "kind": "drop"
-    },
-    {
      "field": "attention_sinks",
-     "kind": "add"
-    },
-    {
-     "field": "sparse_attention",
-     "kind": "add"
-    },
-    {
-     "field": "index_topk",
      "kind": "add"
     },
     {
@@ -31503,10 +31467,6 @@
     },
     {
      "field": "rope_scaling_type",
-     "kind": "change"
-    },
-    {
-     "field": "activation",
      "kind": "change"
     },
     {
@@ -31520,10 +31480,23 @@
     {
      "field": "router_scoring",
      "kind": "drop"
+    },
+    {
+     "field": "router_topk_method",
+     "kind": "drop"
+    },
+    {
+     "field": "hyper_connections",
+     "kind": "add"
+    },
+    {
+     "field": "hyper_connection_streams",
+     "kind": "add"
     }
    ],
    "scale_copy": false,
    "generation": 6,
+   "parent_via": "deepseek-v4-pro",
    "aliases": [],
    "merged_into": null,
    "is_terminal": true
@@ -32354,7 +32327,7 @@
    "target": "sarvam-30b",
    "type": "parent",
    "fields": [],
-   "n": 4,
+   "n": 3,
    "mech": 0
   },
   {
@@ -32386,33 +32359,23 @@
    "target": "gemma-4-31b",
    "type": "parent",
    "fields": [],
-   "n": 6,
-   "mech": 1
+   "n": 5,
+   "mech": 0
+  },
+  {
+   "source": "qwen3-235b-a22b",
+   "target": "gemma-4-26b-a4b",
+   "type": "parent",
+   "fields": [],
+   "n": 9,
+   "mech": 0
   },
   {
    "source": "gemma-4-31b",
-   "target": "gemma-4-26b-a4b",
-   "type": "parent",
-   "fields": [],
-   "n": 1,
-   "mech": 1
-  },
-  {
-   "source": "deepseek-v3",
-   "target": "gemma-4-26b-a4b",
-   "type": "trait",
-   "fields": [
-    "moe"
-   ],
-   "n": 1,
-   "mech": null
-  },
-  {
-   "source": "gemma-3-27b",
    "target": "gemma-4-e4b",
    "type": "parent",
    "fields": [],
-   "n": 6,
+   "n": 3,
    "mech": 2
   },
   {
@@ -32462,7 +32425,7 @@
    "target": "tencent-hy3-preview-295b-a21b",
    "type": "parent",
    "fields": [],
-   "n": 3,
+   "n": 1,
    "mech": 0
   },
   {
@@ -32478,7 +32441,7 @@
    "target": "laguna-xs-2",
    "type": "parent",
    "fields": [],
-   "n": 9,
+   "n": 8,
    "mech": 0
   },
   {
@@ -32498,12 +32461,22 @@
    "mech": 1
   },
   {
-   "source": "tiny-aya-3-35b",
+   "source": "glm-4-5-air",
    "target": "command-a-218b-a25b",
    "type": "parent",
    "fields": [],
-   "n": 8,
-   "mech": 2
+   "n": 13,
+   "mech": 1
+  },
+  {
+   "source": "arcee-ai-trinity-large-400b",
+   "target": "command-a-218b-a25b",
+   "type": "trait",
+   "fields": [
+    "nope_layers"
+   ],
+   "n": 1,
+   "mech": null
   },
   {
    "source": "glm-4-5-air",
@@ -32518,8 +32491,8 @@
    "target": "lfm2-5-1-2b",
    "type": "parent",
    "fields": [],
-   "n": 6,
-   "mech": 2
+   "n": 5,
+   "mech": 1
   },
   {
    "source": "lfm2-5-8b-a1b",
@@ -32560,11 +32533,11 @@
    "target": "north-mini-code-30b-a3b",
    "type": "parent",
    "fields": [],
-   "n": 9,
-   "mech": 1
+   "n": 6,
+   "mech": 0
   },
   {
-   "source": "sarvam-30b",
+   "source": "minimax-m2-5-230b",
    "target": "minimax-m3-428b",
    "type": "parent",
    "fields": [],
@@ -32600,7 +32573,7 @@
    "target": "inkling",
    "type": "parent",
    "fields": [],
-   "n": 11,
+   "n": 10,
    "mech": 1
   },
   {
@@ -32642,8 +32615,8 @@
    "target": "solar-open-2",
    "type": "parent",
    "fields": [],
-   "n": 11,
-   "mech": 2
+   "n": 12,
+   "mech": 3
   },
   {
    "source": "kimi-linear-48b-a3b",
@@ -32726,19 +32699,21 @@
    "mech": null
   },
   {
-   "source": "motif-3-beta",
-   "target": "tencent-hy4-preview-770b-a49b",
-   "type": "parent",
-   "fields": [],
-   "n": 18,
-   "mech": 2
-  },
-  {
    "source": "qwen3-next-80b-a3b",
    "target": "tencent-hy4-preview-770b-a49b",
    "type": "trait",
    "fields": [
     "gated_attention"
+   ],
+   "n": 1,
+   "mech": null
+  },
+  {
+   "source": "deepseek-v4-pro",
+   "target": "tencent-hy4-preview-770b-a49b",
+   "type": "trait",
+   "fields": [
+    "hyper_connections"
    ],
    "n": 1,
    "mech": null

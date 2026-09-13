@@ -81,7 +81,7 @@ never be a parent. If even the closest placed model needs more than `ORIGIN_THRE
 (`trait`) comes from the earliest placed model that already carried it. Generation is one more
 than the largest generation among a node's parents and is the column in the figure.
 
-Result: 103 models, 27 folded as scale copies, 76 drawn nodes, 90 edges after reduction (70
+Result: 103 models, 27 folded as scale copies, 76 drawn nodes, 89 edges after reduction (69
 parent, 20 trait), 10 generations.
 
 ## Caveats
