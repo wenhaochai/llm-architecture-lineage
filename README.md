@@ -19,7 +19,7 @@ the graph is a deterministic function of the configs.
 fetch_gallery.py   gallery page  -> data/cards.json          (103 cards, config.json links)
 fetch_configs.py   Hugging Face  -> data/configs/<key>.json  (103 configs, provenance recorded)
 key_taxonomy.py    hand-made lists of the 143 non-architecture keys (dropped)
-schema.py          alias table: 428 architecture keys -> 174 canonical fields in 14 sections
+schema.py          alias table: 429 architecture keys -> 174 canonical fields in 14 sections; design/scale/tuning kinds
 extract.py         configs       -> data/metadata.json       (canonical config + derived traits per model)
 build_graph.py     metadata      -> data/graph.json          (83 nodes, edges, generations)
 export_web.py      graph.json    -> web/data.js              (trimmed data for the viewer)
@@ -46,13 +46,18 @@ into the saved file under `_provenance`.
 
 ### 2. Key cleaning and renaming
 
-The 103 configs use 571 distinct keys. `key_taxonomy.py` lists by hand the 143 that carry no
-architecture: 69 decoding defaults, tokenizer ids and Hugging Face bookkeeping; 40 dtype,
+The 103 configs use 571 distinct keys. `key_taxonomy.py` lists by hand the 142 that carry no
+architecture: 68 decoding defaults, tokenizer ids and Hugging Face bookkeeping; 40 dtype,
 kernel, parallelism and implementation switches; 26 training-only settings; 8 multimodal
-leftovers. `schema.py` renames the remaining 428 architecture keys into 174 canonical fields
+leftovers. `schema.py` renames the remaining 429 architecture keys into 174 canonical fields
 (100 of them merge several spellings: seven names for the number of active experts, six for
 the norm epsilon), each assigned to one of 14 sections. `KEYS.md` lists every key's fate.
-`extract.py` writes the canonical config per model (`config_canonical`, with the original
+Each canonical field is tagged design (67), scale (66) or tuning (41) in `schema.py`. The change
+line under a model compares canonical configs with the first parent: design fields count when
+their value differs (layer schedules by the kinds of layer they contain), scale fields never
+count by value and 17 of them count on appearance because they mark a mechanism (`PRESENCE`),
+tuning fields and MTP heads (`NOT_A_CHANGE`) never count. A wider or deeper copy of the same
+design therefore reads as no change. `extract.py` writes the canonical config per model (`config_canonical`, with the original
 spelling in `config_canonical_raw_key`) next to the derived traits used by the score. Where a
 modeling class fixes a trait the config does not spell out (QK-Norm in Gemma 3), the trait is
 attached by `model_type` in the `IMPLIED` table.

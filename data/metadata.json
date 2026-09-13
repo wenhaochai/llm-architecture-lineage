@@ -5901,6 +5901,7 @@
     "short_conv_kernel_size": 4
    },
    "mla_nope": true,
+   "max_position_embeddings": 1048576,
    "model_type": "kimi_linear",
    "moe_intermediate_size": 1024,
    "moe_layer_schedule": 1,
@@ -5937,6 +5938,7 @@
    "kv_lora_rank": "kv_lora_rank",
    "linear_attention_config": "linear_attn_config",
    "mla_nope": "mla_use_nope",
+   "max_position_embeddings": "model_max_length",
    "model_type": "model_type",
    "moe_intermediate_size": "moe_intermediate_size",
    "moe_layer_schedule": "moe_layer_freq",
@@ -5964,7 +5966,7 @@
    "vocab_size": "vocab_size",
    "architecture_class": "architectures"
   },
-  "num_architecture_keys": 34
+  "num_architecture_keys": 35
  },
  {
   "key": "olmo-3-32b",
@@ -23323,6 +23325,7 @@
    "vision_config": "<omitted sub-config>"
   },
   "config_canonical": {
+   "max_position_embeddings": 1048576,
    "hidden_size": 6144,
    "num_layers": 66,
    "vocab_size": 201024,
@@ -23445,6 +23448,7 @@
    "architecture_class": "InklingForConditionalGeneration"
   },
   "config_canonical_raw_key": {
+   "max_position_embeddings": "model_max_length",
    "hidden_size": "hidden_size",
    "num_layers": "num_hidden_layers",
    "vocab_size": "vocab_size",
@@ -23477,7 +23481,7 @@
    "router_normalize_weights": "norm_after_topk",
    "architecture_class": "architectures"
   },
-  "num_architecture_keys": 36
+  "num_architecture_keys": 37
  },
  {
   "key": "btl-3-27b",

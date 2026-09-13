@@ -19,7 +19,7 @@ ALIASES = {
     "ffn_round_to_multiple": ["ffn_round_up_to_multiple_of", "block_multiple_of", "block_auto_adjust_ff_dim", "mlstm_round_up_to_multiple_of"],
     "vocab_size": ["vocab_size"],
     "vocab_size_unpadded": ["unpadded_vocab_size"],
-    "max_position_embeddings": ["max_position_embeddings", "n_positions", "n_ctx", "max_seq_len"],
+    "max_position_embeddings": ["max_position_embeddings", "n_positions", "n_ctx", "max_seq_len", "model_max_length"],
     "tie_embeddings": ["tie_word_embeddings", "tie_embedding", "use_embedding_sharing"],
     "lm_head_bias": ["lm_head_bias"],
     "mlp_bias": ["mlp_bias"],
@@ -218,3 +218,42 @@ GROUPS = {
 
 RAW_TO_CANONICAL = {raw: canon for canon, raws in ALIASES.items() for raw in raws}
 CANONICAL_GROUP = {canon: g for g, canons in GROUPS.items() for canon in canons}
+
+
+# ---- which canonical fields count as a design change ---------------------------------
+# SCALE: sizes and counts that grow with the model. A change in value is a bigger or smaller
+# model, not a different architecture; only appearing or disappearing counts.
+SCALE = {
+    "hidden_size", "num_layers", "intermediate_size", "dense_prefix_intermediate_size", "vocab_size", "vocab_size_unpadded",
+    "max_position_embeddings", "num_heads", "num_kv_heads", "head_dim", "v_head_dim", "q_lora_rank", "kv_lora_rank", "o_lora_rank",
+    "o_groups", "qk_rope_head_dim", "qk_nope_head_dim", "num_experts", "experts_per_tok", "num_shared_experts",
+    "shared_expert_intermediate_size", "moe_intermediate_size", "dense_prefix_layers", "router_num_groups", "router_topk_groups",
+    "moe_latent_size", "router_hidden_size", "index_topk", "index_num_heads", "index_head_dim", "index_kv_heads", "sliding_window",
+    "sliding_window_max_layers", "chunked_attention_size", "swa_num_heads", "swa_num_kv_heads", "swa_head_dim", "global_head_dim",
+    "global_num_kv_heads", "kv_shared_layers", "linear_num_key_heads", "linear_num_value_heads", "linear_key_head_dim",
+    "linear_value_head_dim", "linear_group_norm_size", "mamba_num_heads", "mamba_head_dim", "mamba_state_size", "mamba_num_groups",
+    "mamba_expand", "conv_dim", "short_conv_kernel", "hyper_connection_streams", "attention_residual_block", "per_layer_embedding_dim",
+    "per_layer_embedding_vocab", "engram_size", "engram_heads", "mtp_layers", "loop_passes", "attention_heads_per_layer",
+    "attention_cca_steps", "relative_position_bias", "ffn_round_to_multiple", "mlstm_dims", "ffn_width_multiplier",
+}
+# TUNING: continuous hyper-parameters (epsilons, thetas, scales, clamps). Same rule as SCALE.
+TUNING = {
+    "norm_eps", "norm_eps_post", "norm_eps_cell", "norm_beta_attention", "norm_beta_linear_attention", "norm_beta_mlp",
+    "activation_clamp", "activation_clamp_shared_expert", "activation_clamp_experts", "activation_situ_beta", "polynorm_output_scale",
+    "polynorm_bias_clamp", "attention_scale", "attention_value_scale", "attention_logit_softcapping", "attention_temperature_tuning",
+    "attention_log_scaling", "rope_theta", "rope_theta_per_layer", "rope_theta_local", "rope_scaling_factor", "rope_scaling_params",
+    "rope_original_max_position", "partial_rotary_factor", "swa_rope_theta", "compress_rope_theta", "router_scaling_factor",
+    "router_logit_softcapping", "mamba_time_step", "mlstm_gate_softcap", "hyper_connection_params", "residual_multiplier",
+    "embedding_multiplier", "output_multiplier", "final_logit_softcapping", "loop_exit_threshold", "kda_config", "candidate_selection",
+    "index_kpool", "ngram_embedding", "dspark",
+}
+DESIGN = set(ALIASES) - SCALE - TUNING
+assert SCALE <= set(ALIASES) and TUNING <= set(ALIASES) and not (SCALE & TUNING)
+
+# Never reported as a change: multi-token-prediction heads are a training aid, and identity fields name the code.
+NOT_A_CHANGE = {"mtp_layers", "mtp_layer_types", "mtp_dedicated_embeddings", "mtp_use_kda", "model_type", "architecture_class"}
+# Scale fields whose appearance marks a mechanism (their value never counts, their presence does).
+PRESENCE = {"kv_lora_rank", "q_lora_rank", "index_topk", "mamba_num_heads", "mamba_state_size", "linear_num_value_heads",
+            "kv_shared_layers", "per_layer_embedding_dim", "hyper_connection_streams", "loop_passes", "moe_latent_size", "num_experts",
+            "engram_size", "sliding_window", "chunked_attention_size", "num_shared_experts", "dense_prefix_layers"}
+assert NOT_A_CHANGE <= set(ALIASES) and PRESENCE <= SCALE

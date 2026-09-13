@@ -90,32 +90,55 @@
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function shortName(n) { return n.name || n.title; }
-  var NEG = { no: 1, none: 1 };
-  function tl(k) { return (D.trait_labels || {})[k] || k; }
+  var SCALE = {}, TUNING = {}, SKIP = {}, PRESENCE = {};
+  (D.schema_scale || []).forEach(function (f) { SCALE[f] = 1; });
+  (D.schema_tuning || []).forEach(function (f) { TUNING[f] = 1; });
+  (D.schema_not_a_change || []).forEach(function (f) { SKIP[f] = 1; });
+  (D.schema_presence || []).forEach(function (f) { PRESENCE[f] = 1; });
+  function absent(v) { return v === undefined || v === null || v === false || v === 0 || (Array.isArray(v) && !v.length) || (typeof v === 'object' && !Array.isArray(v) && !v._list_len && !v._raw && !Object.keys(v).length); }
+  function shape(v) {
+    // compare lists by their distinct values, so a longer copy of the same schedule is not a change
+    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).sort();
+    if (Array.isArray(v)) return v.slice().sort();
+    return v;
+  }
+  function same(a, b) { return JSON.stringify(shape(a)) === JSON.stringify(shape(b)); }
+  function short(v) {
+    if (v === true) return T('on', '开'); if (v === false) return T('off', '关'); if (v === null || v === undefined) return 'null';
+    if (v && typeof v === 'object' && v._list_len) return Object.keys(v._counts).join('/');
+    if (typeof v === 'object') return T('changed', '有变化');
+    return String(v);
+  }
   function novelty(n) {
-    // what the model changes relative to its primary parent, read off the trait set; falls back to scale
+    // Design fields: a different value is a change. Scale fields: only a mechanism appearing counts.
+    // Tuning fields and MTP heads never count.
     var p = n.primary_parent ? byKey[n.primary_parent] : null;
     if (!p) return { parent: null, items: [signature(n)] };
-    var items = [], keys = {};
-    Object.keys(n.traits).concat(Object.keys(p.traits)).forEach(function (k) { keys[k] = 1; });
-    Object.keys(keys).forEach(function (k) {
-      var a = p.traits[k], b = n.traits[k];
-      if (a === b) return;
-      if (b === undefined || NEG[b]) items.push(T('drops ', '去掉 ') + tl(k) + (a && !NEG[a] && a !== 'yes' ? ' ' + a : ''));
-      else if (a === undefined || NEG[a]) items.push(T('adds ', '新增 ') + tl(k) + (b === 'yes' ? '' : ' ' + b));
-      else items.push(tl(k) + ' ' + a + ' → ' + b);
+    var a = p.config_canonical || {}, b = n.config_canonical || {}, items = [], keys = {};
+    Object.keys(a).concat(Object.keys(b)).forEach(function (k) { keys[k] = 1; });
+    var order = [];
+    Object.keys(D.schema_groups || {}).forEach(function (g) { D.schema_groups[g].forEach(function (f) { if (keys[f]) order.push(f); }); });
+    order.forEach(function (k) {
+      if (SKIP[k] || TUNING[k]) return;
+      if (SCALE[k] && !PRESENCE[k]) return;
+      var va = a[k], vb = b[k], hasA = !absent(va), hasB = !absent(vb);
+      if (hasA && hasB) {
+        if (SCALE[k] || same(va, vb)) return;
+        var sa = short(va), sb = short(vb);
+        items.push(sa === sb ? k + ' ' + sb : k + ' ' + sa + ' → ' + sb);
+      } else if (hasB) {
+        items.push('+ ' + k + (vb === true || SCALE[k] || typeof vb === 'object' ? '' : ' ' + short(vb)));
+      } else if (hasA) {
+        items.push('− ' + k);
+      }
     });
-    if (!items.length) {
-      [['num_layers', T('layers', '层')], ['hidden_size', 'd_model'], ['num_heads', T('heads', '头')], ['num_kv_heads', 'KV'], ['num_experts', T('experts', '专家')], ['experts_per_tok', 'top-k'], ['vocab_size', T('vocab', '词表')], ['max_position_embeddings', T('context', '上下文')]].forEach(function (f) {
-        if (n[f[0]] != null && p[f[0]] != null && n[f[0]] !== p[f[0]] && items.length < 4) items.push(f[1] + ' ' + p[f[0]].toLocaleString() + ' → ' + n[f[0]].toLocaleString());
-      });
-    }
-    if (!items.length) items.push(T('same design', '设计相同'));
+    if (!items.length) items.push(T('same design, different scale', '设计相同，只有规模不同'));
     return { parent: p, items: items };
   }
-  function noveltyHTML(n, cls) {
-    var d = novelty(n);
-    return '<p class="' + cls + '"><span class="sp-vs">' + (d.parent ? T('from ', '承自 ') + esc(shortName(d.parent)) : T('origin', '起点')) + '</span>' + esc(d.items.join(' · ')) + '</p>';
+  function noveltyHTML(n, cls, limit) {
+    var d = novelty(n), items = d.items;
+    if (limit && items.length > limit) items = items.slice(0, limit).concat([T('+' + (d.items.length - limit) + ' more', '还有 ' + (d.items.length - limit) + ' 项')]);
+    return '<p class="' + cls + '"><span class="sp-vs">' + (d.parent ? T('from ', '承自 ') + esc(shortName(d.parent)) : T('origin', '起点')) + '</span>' + esc(items.join(' · ')) + '</p>';
   }
 
   /* ---------- render ---------- */
@@ -197,7 +220,7 @@
   function showTip(n, ev) {
     tip.innerHTML = '<div class="tp-eyebrow">' + esc(n.org) + '<span>' + esc(n.date) + '</span></div>' +
       '<div class="tp-title">' + esc(shortName(n)) + '</div>' +
-      noveltyHTML(n, 'tp-sig') +
+      noveltyHTML(n, 'tp-sig', 4) +
       '<div class="tp-foot"><span>' + esc((n.gallery.scale || '').replace(/ \(.*\)$/, '')) + '</span><span>' + n.num_layers + ' ' + T('layers', '层') + ' · d ' + n.hidden_size + '</span></div>';
     tip.hidden = false;
     moveTip(ev);

@@ -13,7 +13,7 @@ GENERATION = {
     "chunk_size_feed_forward", "cross_attention_hidden_size", "decoder_start_token_id", "diversity_penalty", "do_sample", "early_stopping",
     "encoder_no_repeat_ngram_size", "eod_token_id", "eos_token_id", "exponential_decay_length_penalty", "finetuning_task", "force_bos_token_insert",
     "forced_bos_token_id", "forced_eos_token_id", "id2label", "is_decoder", "is_encoder_decoder", "label2id", "length_penalty", "max_length",
-    "min_length", "model_max_length", "no_repeat_ngram_size", "num_beam_groups", "num_beams", "num_return_sequences", "output_attentions",
+    "min_length", "no_repeat_ngram_size", "num_beam_groups", "num_beams", "num_return_sequences", "output_attentions",
     "output_hidden_states", "output_past", "output_router_logits", "output_scores", "pad_token_id", "prefix", "problem_type", "pruned_heads",
     "remove_invalid_values", "repetition_penalty", "return_dict", "return_dict_in_generate", "sep_token_id", "suppress_tokens",
     "task_specific_params", "temperature", "tf_legacy_loss", "tie_encoder_decoder", "tokenizer_class", "top_k", "top_p", "torchscript",

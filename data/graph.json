@@ -1512,11 +1512,11 @@
    "primary_parent": "gpt-2-xl-1-5b",
    "root_reason": null,
    "introduces": [
-    "MTP head = yes",
     "shared expert = yes",
+    "FFN = MoE",
     "attention = MLA",
-    "dense prefix layers = yes",
-    "FFN = MoE"
+    "MTP head = yes",
+    "dense prefix layers = yes"
    ],
    "lane_root": "gpt-2-xl-1-5b",
    "month": "2024-12",
@@ -2430,8 +2430,8 @@
    "primary_parent": "gpt-2-xl-1-5b",
    "root_reason": null,
    "introduces": [
-    "sequence mixer = mlstm",
     "attention = none (mLSTM)",
+    "sequence mixer = mlstm",
     "NoPE = full"
    ],
    "lane_root": "gpt-2-xl-1-5b",
@@ -6341,6 +6341,7 @@
      "short_conv_kernel_size": 4
     },
     "mla_nope": true,
+    "max_position_embeddings": 1048576,
     "model_type": "kimi_linear",
     "moe_intermediate_size": 1024,
     "moe_layer_schedule": 1,
@@ -6377,6 +6378,7 @@
     "kv_lora_rank": "kv_lora_rank",
     "linear_attention_config": "linear_attn_config",
     "mla_nope": "mla_use_nope",
+    "max_position_embeddings": "model_max_length",
     "model_type": "model_type",
     "moe_intermediate_size": "moe_intermediate_size",
     "moe_layer_schedule": "moe_layer_freq",
@@ -6404,7 +6406,7 @@
     "vocab_size": "vocab_size",
     "architecture_class": "architectures"
    },
-   "num_architecture_keys": 34,
+   "num_architecture_keys": 35,
    "traits": {
     "attn": "MLA",
     "moe": "MoE",
@@ -21703,6 +21705,7 @@
     "vision_config": "<omitted sub-config>"
    },
    "config_canonical": {
+    "max_position_embeddings": 1048576,
     "hidden_size": 6144,
     "num_layers": 66,
     "vocab_size": 201024,
@@ -21825,6 +21828,7 @@
     "architecture_class": "InklingForConditionalGeneration"
    },
    "config_canonical_raw_key": {
+    "max_position_embeddings": "model_max_length",
     "hidden_size": "hidden_size",
     "num_layers": "num_hidden_layers",
     "vocab_size": "vocab_size",
@@ -21857,7 +21861,7 @@
     "router_normalize_weights": "norm_after_topk",
     "architecture_class": "architectures"
    },
-   "num_architecture_keys": 36,
+   "num_architecture_keys": 37,
    "traits": {
     "attn": "GQA",
     "moe": "MoE",
@@ -27395,8 +27399,8 @@
    ],
    "primary_parent": "qwen3-5-397b",
    "introduces": [
-    "sparse attention = QSA",
-    "per-layer embeddings = yes"
+    "per-layer embeddings = yes",
+    "sparse attention = QSA"
    ],
    "lane_root": "gpt-2-xl-1-5b",
    "month": "2026-08",
@@ -28272,9 +28276,9 @@
    ],
    "primary_parent": "deepseek-v4-flash",
    "introduces": [
-    "encoder-decoder = yes",
+    "attention = CSA2",
     "cross-layer KV sharing = yes",
-    "attention = CSA2"
+    "encoder-decoder = yes"
    ],
    "lane_root": "gpt-2-xl-1-5b",
    "month": "2026-09",
@@ -31093,11 +31097,11 @@
    "numeric": 0.638,
    "bonus": {},
    "traits": [
-    "MTP head = yes",
     "shared expert = yes",
+    "MTP head = yes",
     "dense prefix layers = yes"
    ],
-   "why": "earliest gallery model carrying: MTP head = yes; shared expert = yes; dense prefix layers = yes"
+   "why": "earliest gallery model carrying: shared expert = yes; MTP head = yes; dense prefix layers = yes"
   },
   {
    "source": "gemma-3-27b",
@@ -31204,19 +31208,6 @@
    "why": "earliest gallery model carrying: sliding window = yes"
   },
   {
-   "source": "qwen3-next-80b-a3b",
-   "target": "arcee-ai-trinity-large-400b",
-   "type": "trait",
-   "score": 8.68,
-   "jaccard": 0.657,
-   "numeric": 0.526,
-   "bonus": {},
-   "traits": [
-    "gated attention = yes"
-   ],
-   "why": "earliest gallery model carrying: gated attention = yes"
-  },
-  {
    "source": "olmo-2-7b",
    "target": "arcee-ai-trinity-large-400b",
    "type": "trait",
@@ -31242,6 +31233,19 @@
     "dense prefix layers = yes"
    ],
    "why": "earliest gallery model carrying: shared expert = yes; dense prefix layers = yes"
+  },
+  {
+   "source": "qwen3-next-80b-a3b",
+   "target": "arcee-ai-trinity-large-400b",
+   "type": "trait",
+   "score": 8.68,
+   "jaccard": 0.657,
+   "numeric": 0.526,
+   "bonus": {},
+   "traits": [
+    "gated attention = yes"
+   ],
+   "why": "earliest gallery model carrying: gated attention = yes"
   },
   {
    "source": "deepseek-v3",
@@ -31357,10 +31361,10 @@
    "bonus": {},
    "traits": [
     "shared expert = yes",
-    "attention = MLA",
-    "FFN = MoE"
+    "FFN = MoE",
+    "attention = MLA"
    ],
-   "why": "earliest gallery model carrying: shared expert = yes; attention = MLA; FFN = MoE"
+   "why": "earliest gallery model carrying: shared expert = yes; FFN = MoE; attention = MLA"
   },
   {
    "source": "deepseek-v3",
@@ -31429,19 +31433,6 @@
    "why": "earliest gallery model carrying: shared expert = yes"
   },
   {
-   "source": "kimi-linear-48b-a3b",
-   "target": "inkling",
-   "type": "trait",
-   "score": 6.5,
-   "jaccard": 0.417,
-   "numeric": 0.583,
-   "bonus": {},
-   "traits": [
-    "short conv = yes"
-   ],
-   "why": "earliest gallery model carrying: short conv = yes"
-  },
-  {
    "source": "olmo-2-7b",
    "target": "inkling",
    "type": "trait",
@@ -31468,6 +31459,19 @@
    "why": "earliest gallery model carrying: shared expert = yes"
   },
   {
+   "source": "kimi-linear-48b-a3b",
+   "target": "inkling",
+   "type": "trait",
+   "score": 6.5,
+   "jaccard": 0.417,
+   "numeric": 0.583,
+   "bonus": {},
+   "traits": [
+    "short conv = yes"
+   ],
+   "why": "earliest gallery model carrying: short conv = yes"
+  },
+  {
    "source": "gpt-oss-120b",
    "target": "inkling",
    "type": "trait",
@@ -31479,19 +31483,6 @@
     "attention sinks = yes"
    ],
    "why": "earliest gallery model carrying: attention sinks = yes"
-  },
-  {
-   "source": "gemma-3-27b",
-   "target": "motif-3-beta",
-   "type": "trait",
-   "score": 7.45,
-   "jaccard": 0.444,
-   "numeric": 0.754,
-   "bonus": {},
-   "traits": [
-    "sliding window = yes"
-   ],
-   "why": "earliest gallery model carrying: sliding window = yes"
   },
   {
    "source": "deepseek-v4-flash",
@@ -31507,6 +31498,19 @@
    "why": "earliest gallery model carrying: mHC / hyper-connections = yes"
   },
   {
+   "source": "gemma-3-27b",
+   "target": "motif-3-beta",
+   "type": "trait",
+   "score": 7.45,
+   "jaccard": 0.444,
+   "numeric": 0.754,
+   "bonus": {},
+   "traits": [
+    "sliding window = yes"
+   ],
+   "why": "earliest gallery model carrying: sliding window = yes"
+  },
+  {
    "source": "ouro-thinking-2-6b",
    "target": "nanbeige-4-2-3b",
    "type": "trait",
@@ -31518,19 +31522,6 @@
     "looped depth sharing = yes"
    ],
    "why": "earliest gallery model carrying: looped depth sharing = yes"
-  },
-  {
-   "source": "qwen3-next-80b-a3b",
-   "target": "solar-open-2",
-   "type": "trait",
-   "score": 9.32,
-   "jaccard": 0.698,
-   "numeric": 0.587,
-   "bonus": {},
-   "traits": [
-    "gated attention = yes"
-   ],
-   "why": "earliest gallery model carrying: gated attention = yes"
   },
   {
    "source": "kimi-linear-48b-a3b",
@@ -31545,6 +31536,19 @@
     "sequence mixer = kda"
    ],
    "why": "earliest gallery model carrying: short conv = yes; sequence mixer = kda"
+  },
+  {
+   "source": "qwen3-next-80b-a3b",
+   "target": "solar-open-2",
+   "type": "trait",
+   "score": 9.32,
+   "jaccard": 0.698,
+   "numeric": 0.587,
+   "bonus": {},
+   "traits": [
+    "gated attention = yes"
+   ],
+   "why": "earliest gallery model carrying: gated attention = yes"
   },
   {
    "source": "deepseek-v4-pro",
@@ -31613,6 +31617,19 @@
    "why": "earliest gallery model carrying: MTP head = yes"
   },
   {
+   "source": "deepseek-v4-flash",
+   "target": "glm-5-3-flash",
+   "type": "trait",
+   "score": 9.38,
+   "jaccard": 0.627,
+   "numeric": 0.778,
+   "bonus": {},
+   "traits": [
+    "mHC / hyper-connections = yes"
+   ],
+   "why": "earliest gallery model carrying: mHC / hyper-connections = yes"
+  },
+  {
    "source": "kimi-linear-48b-a3b",
    "target": "glm-5-3-flash",
    "type": "trait",
@@ -31625,19 +31642,6 @@
     "sequence mixer = kda"
    ],
    "why": "earliest gallery model carrying: short conv = yes; sequence mixer = kda"
-  },
-  {
-   "source": "deepseek-v4-flash",
-   "target": "glm-5-3-flash",
-   "type": "trait",
-   "score": 9.38,
-   "jaccard": 0.627,
-   "numeric": 0.778,
-   "bonus": {},
-   "traits": [
-    "mHC / hyper-connections = yes"
-   ],
-   "why": "earliest gallery model carrying: mHC / hyper-connections = yes"
   },
   {
    "source": "llama-4-maverick",
@@ -31666,17 +31670,30 @@
    "why": "earliest gallery model carrying: mHC / hyper-connections = yes"
   },
   {
-   "source": "qwen3-next-80b-a3b",
+   "source": "deepseek-v4-flash",
    "target": "tencent-hy4-preview-770b-a49b",
    "type": "trait",
-   "score": 6.59,
-   "jaccard": 0.469,
-   "numeric": 0.474,
+   "score": 10.2,
+   "jaccard": 0.762,
+   "numeric": 0.644,
    "bonus": {},
    "traits": [
-    "gated attention = yes"
+    "mHC / hyper-connections = yes"
    ],
-   "why": "earliest gallery model carrying: gated attention = yes"
+   "why": "earliest gallery model carrying: mHC / hyper-connections = yes"
+  },
+  {
+   "source": "deepseek-v3",
+   "target": "tencent-hy4-preview-770b-a49b",
+   "type": "trait",
+   "score": 10.08,
+   "jaccard": 0.707,
+   "numeric": 0.751,
+   "bonus": {},
+   "traits": [
+    "attention = MLA"
+   ],
+   "why": "earliest gallery model carrying: attention = MLA"
   },
   {
    "source": "deepseek-v3-2",
@@ -31690,6 +31707,19 @@
     "sparse attention = DSA"
    ],
    "why": "earliest gallery model carrying: sparse attention = DSA"
+  },
+  {
+   "source": "qwen3-next-80b-a3b",
+   "target": "tencent-hy4-preview-770b-a49b",
+   "type": "trait",
+   "score": 6.59,
+   "jaccard": 0.469,
+   "numeric": 0.474,
+   "bonus": {},
+   "traits": [
+    "gated attention = yes"
+   ],
+   "why": "earliest gallery model carrying: gated attention = yes"
   },
   {
    "source": "glm-5-2",
@@ -31718,30 +31748,17 @@
    "why": "earliest gallery model carrying: attention sinks = yes"
   },
   {
-   "source": "deepseek-v4-flash",
-   "target": "tencent-hy4-preview-770b-a49b",
+   "source": "gemma-3-27b",
+   "target": "deepseek-v4-1-flash",
    "type": "trait",
-   "score": 10.2,
-   "jaccard": 0.762,
-   "numeric": 0.644,
+   "score": 5.18,
+   "jaccard": 0.325,
+   "numeric": 0.484,
    "bonus": {},
    "traits": [
-    "mHC / hyper-connections = yes"
+    "sliding window = yes"
    ],
-   "why": "earliest gallery model carrying: mHC / hyper-connections = yes"
-  },
-  {
-   "source": "deepseek-v3",
-   "target": "tencent-hy4-preview-770b-a49b",
-   "type": "trait",
-   "score": 10.08,
-   "jaccard": 0.707,
-   "numeric": 0.751,
-   "bonus": {},
-   "traits": [
-    "attention = MLA"
-   ],
-   "why": "earliest gallery model carrying: attention = MLA"
+   "why": "earliest gallery model carrying: sliding window = yes"
   },
   {
    "source": "glm-5-2",
@@ -31755,19 +31772,6 @@
     "IndexShare = yes"
    ],
    "why": "earliest gallery model carrying: IndexShare = yes"
-  },
-  {
-   "source": "gemma-3-27b",
-   "target": "deepseek-v4-1-flash",
-   "type": "trait",
-   "score": 5.18,
-   "jaccard": 0.325,
-   "numeric": 0.484,
-   "bonus": {},
-   "traits": [
-    "sliding window = yes"
-   ],
-   "why": "earliest gallery model carrying: sliding window = yes"
   }
  ],
  "size_variants": {
