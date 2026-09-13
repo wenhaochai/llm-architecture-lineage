@@ -322,7 +322,8 @@
     function specRows(fields) {
       return fields.filter(function (f) { return f in cc; }).map(function (f) {
         var r = rawOf[f], mark = changed[f] ? '<em class="sp-chg">' + (changed[f] === 'add' ? '+' : '·') + '</em>' : '';
-        return '<div class="sp-row' + (changed[f] ? ' is-changed' : '') + '"><span>' + mark + esc(f) + (r && r !== f ? '<i>' + esc(r) + '</i>' : '') + '</span><b>' + esc(val(cc[f])) + '</b></div>';
+        var v = val(cc[f]);
+        return '<div class="sp-row' + (changed[f] ? ' is-changed' : '') + (v.length > 28 ? ' is-long' : '') + '"><span>' + mark + esc(f) + (r && r !== f ? '<i>' + esc(r) + '</i>' : '') + '</span><b>' + esc(v) + '</b></div>';
       }).join('');
     }
     var sections = D.schema_sections || {}, groups = D.schema_groups || {};
@@ -356,7 +357,7 @@
       (n.gallery.report_url ? '<a href="' + esc(n.gallery.report_url) + '" target="_blank" rel="noopener">' + T('report', '技术报告') + '</a>' : '') +
       '<a href="' + esc(n.gallery.card_url) + '" target="_blank" rel="noopener">' + T('gallery', '图库') + '</a></div></div>';
     h += '<div class="sp-rels">' + rel(T('Parents', '父节点'), ps, 'up') + rel(T('Children', '子节点'), cs, 'down') + '</div>';
-    h += '<div class="sp-config"><div class="tp-eyebrow">' + T('Config after key drop and renaming', '清理并统一命名后的 config') + '<span>' + nCanon + ' ' + T('fields from ', '个字段，来自 ') + (n.num_architecture_keys || nCanon) + ' ' + T('architecture keys', '个架构 key') + '</span>' + (n.provenance ? '<span>' + esc(T('provenance: ', '来源：') + n.provenance) + '</span>' : '') + '</div>' + body + '</div>';
+    h += '<div class="sp-config"><div class="tp-eyebrow">' + T('Config after key drop and renaming', '清理并统一命名后的 config') + '<span>' + nCanon + ' ' + T('fields', '个字段') + '</span><span>' + (n.num_architecture_keys || nCanon) + ' ' + T('architecture keys in the config', '个架构 key') + '</span>' + (n.provenance ? '<span>' + esc(T('provenance: ', '来源：') + n.provenance) + '</span>' : '') + '</div>' + body + '</div>';
     panel.innerHTML = h;
     panel.querySelectorAll('[data-go]').forEach(function (b) { b.addEventListener('click', function () { state.selected = b.getAttribute('data-go'); draw(); panel.scrollIntoView({ block: 'nearest' }); }); });
   }
